@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Modules\Admin\Config\Admin;
-
 /**
  * @copyright  2020 Ad Aures
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html AGPL3
@@ -12,7 +10,7 @@ use Modules\Admin\Config\Admin;
 
 return [
     'label' => 'roll-istor',
-    config(Admin::class)
+    config('Admin')
         ->gateway => 'Degemer',
     'podcasts' => 'podkastoù',
     'episodes' => 'rannoù',
@@ -32,7 +30,7 @@ return [
     'unpublish' => 'diembannañ',
     'delete' => 'dilemel',
     'remove' => 'lemel',
-    'fediverse' => 'kevrebed',
+    'fediverse' => 'fediverse',
     'blocked-actors' => 'aktourien·ezed stanket',
     'blocked-domains' => 'domanioù stanket',
     'users' => 'implijerien·ezed',
@@ -52,8 +50,8 @@ return [
     'listening-time' => 'padelezh ar selaou',
     'time-periods' => 'mareoù ar selaou',
     'soundbites' => 'tennadoù son',
-    'video-clips' => 'tennadoù video',
+    'video-clips' => 'klipoù video',
     'embed' => 'lenner enkorfet',
     'notifications' => 'kemennoù',
-    'suspend' => 'astalañ',
+    'suspend' => 'ehanañ',
 ];

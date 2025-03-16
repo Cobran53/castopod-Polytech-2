@@ -78,34 +78,25 @@ class EpisodeController extends BaseController
             // Use LIKE operator as a fallback.
             if (strlen($query) < 4) {
                 $episodes = $episodeModel
-                    ->select('episodes.*, IFNULL(SUM(ape.hits),0) as downloads')
-                    ->join('analytics_podcasts_by_episode ape', 'episodes.id=ape.episode_id', 'left')
-                    ->where('episodes.podcast_id', $this->podcast->id)
+                    ->where('podcast_id', $this->podcast->id)
                     ->like('title', $episodeModel->db->escapeLikeString($query))
                     ->orLike('description_markdown', $episodeModel->db->escapeLikeString($query))
                     ->orLike('slug', $episodeModel->db->escapeLikeString($query))
                     ->orLike('location_name', $episodeModel->db->escapeLikeString($query))
-                    ->groupBy('episodes.id')
                     ->orderBy('-`published_at`', '', false)
                     ->orderBy('created_at', 'desc');
             } else {
                 $episodes = $episodeModel
-                    ->select('episodes.*, IFNULL(SUM(ape.hits),0) as downloads')
-                    ->join('analytics_podcasts_by_episode ape', 'episodes.id=ape.episode_id', 'left')
-                    ->where('episodes.podcast_id', $this->podcast->id)
+                    ->where('podcast_id', $this->podcast->id)
                     ->where(
                         "MATCH (title, description_markdown, slug, location_name) AGAINST ('{$episodeModel->db->escapeString(
                             $query
                         )}')"
-                    )
-                    ->groupBy('episodes.id');
+                    );
             }
         } else {
             $episodes = $episodeModel
-                ->select('episodes.*, IFNULL(SUM(ape.hits),0) as downloads')
-                ->join('analytics_podcasts_by_episode ape', 'episodes.id=ape.episode_id', 'left')
-                ->where('episodes.podcast_id', $this->podcast->id)
-                ->groupBy('episodes.id')
+                ->where('podcast_id', $this->podcast->id)
                 ->orderBy('-`published_at`', '', false)
                 ->orderBy('created_at', 'desc');
         }
@@ -179,8 +170,8 @@ class EpisodeController extends BaseController
             'title'           => 'required',
             'slug'            => 'required|max_length[128]',
             'cover'           => 'is_image[cover]|ext_in[cover,jpg,jpeg,png]|min_dims[cover,1400,1400]|is_image_ratio[cover,1,1]',
-            'transcript_file' => 'ext_in[transcript,srt]|permit_empty',
-            'chapters_file'   => 'ext_in[chapters,json]|permit_empty',
+            'transcript_file' => 'ext_in[transcript_file,srt,vtt]',
+            'chapters_file'   => 'ext_in[chapters_file,json]|is_json[chapters_file]',
         ];
 
         if ($this->request->getPost('audio_file_link')) {
@@ -354,10 +345,10 @@ class EpisodeController extends BaseController
         $rules = [
             'title'           => 'required',
             'slug'            => 'required|max_length[128]',
-            'audio_file'      => 'uploaded[audio_file]|ext_in[audio_file,mp3,m4a]|permit_empty',
+            'audio_file'      => 'ext_in[audio_file,mp3,m4a]',
             'cover'           => 'is_image[cover]|ext_in[cover,jpg,jpeg,png]|min_dims[cover,1400,1400]|is_image_ratio[cover,1,1]',
-            'transcript_file' => 'ext_in[transcript_file,txt,html,srt,json]|permit_empty',
-            'chapters_file'   => 'ext_in[chapters_file,json]|permit_empty',
+            'transcript_file' => 'ext_in[transcript_file,srt,vtt]',
+            'chapters_file'   => 'ext_in[chapters_file,json]|is_json[chapters_file]',
         ];
 
         if ($this->podcast->type === 'serial' && $this->request->getPost('type') === 'full') {
@@ -381,14 +372,10 @@ class EpisodeController extends BaseController
         );
         $this->episode->parental_advisory =
             $this->request->getPost('parental_advisory') !== 'undefined'
-            ? $this->request->getPost('parental_advisory')
-            : null;
-        $this->episode->number = $this->request->getPost('episode_number')
-            ? $this->request->getPost('episode_number')
-            : null;
-        $this->episode->season_number = $this->request->getPost('season_number')
-            ? $this->request->getPost('season_number')
-            : null;
+                ? $this->request->getPost('parental_advisory')
+                : null;
+        $this->episode->number = $this->request->getPost('episode_number') ?: null;
+        $this->episode->season_number = $this->request->getPost('season_number') ?: null;
         $this->episode->type = $this->request->getPost('type');
         $this->episode->is_blocked = $this->request->getPost('block') === 'yes';
         $this->episode->custom_rss_string = $this->request->getPost('custom_rss');
@@ -916,7 +903,7 @@ class EpisodeController extends BaseController
 
         // set podcast is_published_on_hubs to false to trigger websub push
         (new PodcastModel())->update($this->episode->podcast->id, [
-            'is_published_on_hubs' => false,
+            'is_published_on_hubs' => 0,
         ]);
 
         $db->transComplete();

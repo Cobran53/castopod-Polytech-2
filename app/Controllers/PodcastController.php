@@ -96,9 +96,7 @@ class PodcastController extends BaseController
             );
 
             return view('podcast/activity', $data, [
-                'cache' => $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
                 'cache_name' => $cacheName,
             ]);
         }
@@ -148,9 +146,7 @@ class PodcastController extends BaseController
             );
 
             return view('podcast/about', $data, [
-                'cache' => $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
                 'cache_name' => $cacheName,
             ]);
         }
@@ -270,9 +266,7 @@ class PodcastController extends BaseController
                 $this->podcast->id,
             );
             return view('podcast/episodes', $data, [
-                'cache' => $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
                 'cache_name' => $cacheName,
             ]);
         }
@@ -284,11 +278,11 @@ class PodcastController extends BaseController
     {
         if ($this->podcast->type === 'serial') {
             // podcast is serial
-            $episodes = model(EpisodeModel::class)
+            $episodes = model('EpisodeModel')
                 ->where('`published_at` <= UTC_TIMESTAMP()', null, false)
                 ->orderBy('season_number DESC, number ASC');
         } else {
-            $episodes = model(EpisodeModel::class)
+            $episodes = model('EpisodeModel')
                 ->where('`published_at` <= UTC_TIMESTAMP()', null, false)
                 ->orderBy('published_at', 'DESC');
         }

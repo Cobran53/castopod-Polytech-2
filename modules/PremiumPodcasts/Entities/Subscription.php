@@ -25,7 +25,7 @@ use RuntimeException;
  * @property string $token
  * @property string $status
  * @property string|null $status_message
- * @property Time $expires_at
+ * @property Time|null $expires_at
  * @property int $downloads_last_3_months
  *
  * @property int $created_by
@@ -38,7 +38,7 @@ class Subscription extends Entity
     protected ?Podcast $podcast = null;
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $dates = ['expires_at', 'created_at', 'updated_at'];
 

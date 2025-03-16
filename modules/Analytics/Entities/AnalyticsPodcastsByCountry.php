@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Modules\Analytics\Entities;
 
 use CodeIgniter\Entity\Entity;
+use CodeIgniter\I18n\Time;
 
 /**
  * @property int $podcast_id
@@ -26,7 +27,7 @@ use CodeIgniter\Entity\Entity;
 class AnalyticsPodcastsByCountry extends Entity
 {
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $dates = ['date', 'created_at', 'updated_at'];
 

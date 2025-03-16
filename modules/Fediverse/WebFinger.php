@@ -68,7 +68,7 @@ class WebFinger
             throw new Exception('Could not find actor');
         }
 
-        $this->aliases = [$actor->id];
+        $this->aliases = [$actor->uri];
         $this->links = [
             [
                 'rel'  => 'self',
@@ -101,7 +101,7 @@ class WebFinger
     /**
      * Split resource into its parts (username, domain)
      *
-     * @return array<string, string>|false
+     * @return array{0:string,username:non-empty-string,1:non-empty-string,2:non-empty-string,domain:non-falsy-string,3:non-falsy-string,4:non-falsy-string,5?:non-falsy-string}
      */
     private function splitResource(string $resource): bool|array
     {

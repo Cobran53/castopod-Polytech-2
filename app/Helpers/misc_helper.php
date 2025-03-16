@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Entities\Person;
 use App\Entities\Podcast;
 use Cocur\Slugify\Slugify;
-use Config\App;
 use Config\Images;
 use Modules\Media\Entities\Image;
 
@@ -25,7 +24,7 @@ if (! function_exists('get_browser_language')) {
     function get_browser_language(?string $httpAcceptLanguage = null): string
     {
         if ($httpAcceptLanguage === null) {
-            return config(App::class)->defaultLocale;
+            return config('App')->defaultLocale;
         }
 
         $langs = explode(',', $httpAcceptLanguage);
@@ -164,7 +163,7 @@ if (! function_exists('parse_size')) {
         $size = (float) preg_replace('~[^0-9\.]~', '', $size); // Remove the non-numeric characters from the size.
         if ($unit !== '') {
             // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-            return round($size * pow(1024, (float) stripos('bkmgtpezy', $unit[0])));
+            return round($size * 1024 ** ((float) stripos('bkmgtpezy', $unit[0])));
         }
 
         return round($size);
@@ -183,7 +182,7 @@ if (! function_exists('format_bytes')) {
         $pow = floor(($bytes ? log($bytes) : 0) / log($is_binary ? 1024 : 1000));
         $pow = min($pow, count($units) - 1);
 
-        $bytes /= pow($is_binary ? 1024 : 1000, $pow);
+        $bytes /= ($is_binary ? 1024 : 1000) ** $pow;
 
         return round($bytes, $precision) . $units[$pow];
     }
@@ -192,7 +191,7 @@ if (! function_exists('format_bytes')) {
 if (! function_exists('get_site_icon_url')) {
     function get_site_icon_url(string $size): string
     {
-        if (config(App::class)->siteIcon['ico'] === service('settings')->get('App.siteIcon')['ico']) {
+        if (config('App')->siteIcon['ico'] === service('settings')->get('App.siteIcon')['ico']) {
             // return default site icon url
             return base_url(service('settings')->get('App.siteIcon')[$size]);
         }
@@ -205,13 +204,13 @@ if (! function_exists('get_podcast_banner')) {
     function get_podcast_banner_url(Podcast $podcast, string $size): string
     {
         if (! $podcast->banner instanceof Image) {
-            $defaultBanner = config(Images::class)
+            $defaultBanner = config('Images')
                 ->podcastBannerDefaultPaths[service('settings')->get('App.theme')] ?? config(
                     Images::class
                 )->podcastBannerDefaultPaths['default'];
 
-            $sizes = config(Images::class)
-->podcastBannerSizes;
+            $sizes = config('Images')
+                ->podcastBannerSizes;
 
             $sizeConfig = $sizes[$size];
             helper('filesystem');
@@ -231,8 +230,8 @@ if (! function_exists('get_podcast_banner_mimetype')) {
     function get_podcast_banner_mimetype(Podcast $podcast, string $size): string
     {
         if (! $podcast->banner instanceof Image) {
-            $sizes = config(Images::class)
-->podcastBannerSizes;
+            $sizes = config('Images')
+                ->podcastBannerSizes;
 
             $sizeConfig = $sizes[$size];
             helper('filesystem');
@@ -252,11 +251,11 @@ if (! function_exists('get_avatar_url')) {
     function get_avatar_url(Person $person, string $size): string
     {
         if (! $person->avatar instanceof Image) {
-            $defaultAvatarPath = config(Images::class)
-->avatarDefaultPath;
+            $defaultAvatarPath = config('Images')
+                ->avatarDefaultPath;
 
-            $sizes = config(Images::class)
-->personAvatarSizes;
+            $sizes = config('Images')
+                ->personAvatarSizes;
 
             $sizeConfig = $sizes[$size];
 

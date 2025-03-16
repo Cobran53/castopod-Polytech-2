@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Modules\Admin\Config\Admin;
-
 /**
  * @copyright  2020 Ad Aures
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html AGPL3
@@ -12,7 +10,7 @@ use Modules\Admin\Config\Admin;
 
 return [
     'label' => 'Pfad',
-    config(Admin::class)
+    config('Admin')
         ->gateway => 'Startseite',
     'podcasts' => 'Podcasts',
     'episodes' => 'Folgen',
@@ -39,11 +37,11 @@ return [
     'my-account' => 'Mein Konto',
     'change-password' => 'Passwort ändern',
     'imports' => 'Importe',
-    'sync-feeds' => 'synchronize feeds',
+    'sync-feeds' => 'Feeds synchronisieren',
     'platforms' => 'Plattformen',
     'social' => 'soziale Netzwerke',
     'funding' => 'Finanzierung',
-    'monetization-other' => 'other monetization',
+    'monetization-other' => 'sonstige Monetarisierung',
     'analytics' => 'Statistiken',
     'locations' => 'Orte',
     'webpages' => 'Webseiten',

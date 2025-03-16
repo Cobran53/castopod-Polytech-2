@@ -10,7 +10,8 @@ declare(strict_types=1);
 
 return [
     'min_dims' =>
-        '{field} is either not an image, or it is not wide or tall enough.',
+        '{field} n\'eo ket ur skeudenn, peotrament n\'eo ket ledan a-walc\'h pe uhel a-walc\'h.',
     'is_image_ratio' =>
-        '{field} is either not an image or not of the right ratio.',
+        '{field} n\'eo ket ur skeudenn, peotrament n\'eo ket mat ar ratio.',
+    'is_json' => 'JSON direizh a zo e-barzh {field}.',
 ];

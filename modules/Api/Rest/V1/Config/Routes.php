@@ -9,7 +9,7 @@ use CodeIgniter\Router\RouteCollection;
 /** @var RouteCollection $routes */
 
 $routes->group(
-    config(RestApi::class)
+    config('RestApi')
         ->gateway . 'podcasts',
     [
         'namespace' => 'Modules\Api\Rest\V1\Controllers',
@@ -23,7 +23,7 @@ $routes->group(
 );
 
 $routes->group(
-    config(RestApi::class)
+    config('RestApi')
         ->gateway . 'episodes',
     [
         'namespace' => 'Modules\Api\Rest\V1\Controllers',
@@ -31,6 +31,8 @@ $routes->group(
     ],
     static function ($routes): void {
         $routes->get('/', 'EpisodeController::list');
+        $routes->post('/', 'EpisodeController::attemptCreate');
+        $routes->post('(:num)/publish', 'EpisodeController::attemptPublish/$1');
         $routes->get('(:num)', 'EpisodeController::view/$1');
         $routes->get('(:any)', 'ExceptionController::notFound');
     }

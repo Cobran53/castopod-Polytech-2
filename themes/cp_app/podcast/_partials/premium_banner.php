@@ -4,8 +4,10 @@ if ($podcast->is_premium): ?>
     <?php
         $isUnlocked = service('premium_podcasts')
             ->isUnlocked($podcast->handle);
-    $shownIcon = $isUnlocked ? 'lock-unlock' : 'lock';
-    $hiddenIcon = $isUnlocked ? 'lock' : 'lock-unlock';
+    // @icon("lock-unlock-fill")
+    // @icon("lock-fill")
+    $shownIcon = $isUnlocked ? 'lock-unlock-fill' : 'lock-fill';
+    $hiddenIcon = $isUnlocked ? 'lock-fill' : 'lock-unlock-fill';
     ?>
     <div class="flex flex-col items-center justify-between col-start-2 px-2 py-1 mt-2 sm:px-1 md:mt-4 rounded-conditional-full gap-y-2 sm:flex-row bg-accent-base gap-x-2 text-accent-contrast">
         <p class="inline-flex items-center text-sm md:pl-4 gap-x-2"><?= $isUnlocked ? lang('PremiumPodcasts.banner_lock') : lang('PremiumPodcasts.banner_unlock') ?></p>
@@ -17,12 +19,17 @@ if ($podcast->is_premium): ?>
                     size="small"
                     uri="<?= $isUnlocked ? route_to('premium-podcast-lock', $podcast->handle) : route_to('premium-podcast-unlock', $podcast->handle) ?>"
                 >
-                    <Icon glyph="<?= $shownIcon ?>" class="text-sm group-focus:hidden group-hover:hidden" />
-                    <Icon glyph="<?= $hiddenIcon ?>" class="hidden text-sm group-focus:block group-hover:block" />
+                    <?= icon($shownIcon, [
+                        'class' => 'text-sm group-focus:hidden group-hover:hidden',
+                    ]) ?>
+                    <?= icon($hiddenIcon, [
+                        'class' => 'hidden text-sm group-focus:block group-hover:block',
+                    ]) ?>
                     <?= $isUnlocked ? lang('PremiumPodcasts.lock') : lang('PremiumPodcasts.unlock') ?>
                 </Button>
+                <?php // @icon("external-link-fill")?>
                 <Button
-                    iconLeft="external-link"
+                    iconLeft="external-link-fill"
                     target="_blank"
                     rel="noopener noreferrer"
                     variant="secondary"
@@ -37,8 +44,12 @@ if ($podcast->is_premium): ?>
                 size="small"
                 uri="<?= $isUnlocked ? route_to('premium-podcast-lock', $podcast->handle) : route_to('premium-podcast-unlock', $podcast->handle) ?>"
             >
-                <Icon glyph="<?= $shownIcon ?>" class="text-sm group-focus:hidden group-hover:hidden" />
-                <Icon glyph="<?= $hiddenIcon ?>" class="hidden text-sm group-focus:block group-hover:block" />
+                <?= icon($shownIcon, [
+                    'class' => 'text-sm group-focus:hidden group-hover:hidden',
+                ]) ?>
+                <?= icon($hiddenIcon, [
+                    'class' => 'hidden text-sm group-focus:block group-hover:block',
+                ]) ?>
                 <?= $isUnlocked ? lang('PremiumPodcasts.lock') : lang('PremiumPodcasts.unlock') ?>
             </Button>
         <?php endif; ?>

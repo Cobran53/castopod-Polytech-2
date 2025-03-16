@@ -9,9 +9,7 @@ declare(strict_types=1);
  */
 
 use AdAures\Ipcat\IpDb;
-use Config\Services;
 use GeoIp2\Database\Reader;
-use Modules\Analytics\Config\Analytics;
 use Opawg\UserAgentsV2Php\UserAgents;
 use WhichBrowser\Parser;
 
@@ -41,11 +39,12 @@ if (! function_exists('client_ip')) {
      */
     function client_ip(): string
     {
-        if (! empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+        $superglobals = service('superglobals');
+        if (! empty($superglobals->server('HTTP_X_FORWARDED_FOR'))) {
+            return $superglobals->server('HTTP_X_FORWARDED_FOR');
         }
 
-        return $_SERVER['REMOTE_ADDR'];
+        return $superglobals->server('REMOTE_ADDR');
     }
 }
 
@@ -55,7 +54,7 @@ if (! function_exists('set_user_session_deny_list_ip')) {
      */
     function set_user_session_deny_list_ip(): void
     {
-        $session = Services::session();
+        $session = service('session');
 
         if (! $session->has('denyListIp')) {
             $session->set('denyListIp', IpDb::find(client_ip()) !== null);
@@ -69,7 +68,7 @@ if (! function_exists('set_user_session_location')) {
      */
     function set_user_session_location(): void
     {
-        $session = Services::session();
+        $session = service('session');
 
         $location = [
             'countryCode' => 'N/A',
@@ -85,14 +84,10 @@ if (! function_exists('set_user_session_location')) {
                 $city = $cityReader->city(client_ip());
 
                 $location = [
-                    'countryCode' => $city->country->isoCode === null
-                        ? 'N/A'
-                        : $city->country->isoCode,
-                    'regionCode' => $city->subdivisions[0]->isoCode === null
-                        ? 'N/A'
-                        : $city->subdivisions[0]->isoCode,
-                    'latitude'  => round($city->location->latitude, 3),
-                    'longitude' => round($city->location->longitude, 3),
+                    'countryCode' => $city->country->isoCode ?? 'N/A',
+                    'regionCode'  => $city->subdivisions[0]->isoCode ?? 'N/A',
+                    'latitude'    => round($city->location->latitude, 3),
+                    'longitude'   => round($city->location->longitude, 3),
                 ];
                 // If things go wrong the show must go on and the user must be able to download the file
             } catch (Exception) {
@@ -109,11 +104,12 @@ if (! function_exists('set_user_session_player')) {
      */
     function set_user_session_player(): void
     {
-        $session = Services::session();
+        $session = service('session');
 
         if (! $session->has('player')) {
             $playerFound = null;
-            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $userAgent = service('superglobals')
+                ->server('HTTP_USER_AGENT');
 
             try {
                 $playerFound = UserAgents::find($userAgent);
@@ -151,7 +147,7 @@ if (! function_exists('set_user_session_browser')) {
      */
     function set_user_session_browser(): void
     {
-        $session = Services::session();
+        $session = service('session');
 
         if (! $session->has('browser')) {
             $browserName = '- Other -';
@@ -177,11 +173,10 @@ if (! function_exists('set_user_session_referer')) {
      */
     function set_user_session_referer(): void
     {
-        $session = Services::session();
+        $session = service('session');
 
-        $newreferer = isset($_SERVER['HTTP_REFERER'])
-            ? $_SERVER['HTTP_REFERER']
-            : '- Direct -';
+        $newreferer = service('superglobals')
+            ->server('HTTP_REFERER') ?? '- Direct -';
         $newreferer =
             parse_url((string) $newreferer, PHP_URL_HOST) ===
             parse_url(current_url(false), PHP_URL_HOST)
@@ -199,9 +194,10 @@ if (! function_exists('set_user_session_entry_page')) {
      */
     function set_user_session_entry_page(): void
     {
-        $session = Services::session();
+        $session = service('session');
 
-        $entryPage = $_SERVER['REQUEST_URI'];
+        $entryPage = service('superglobals')
+            ->server('REQUEST_URI');
         if (! $session->has('entryPage')) {
             $session->set('entryPage', $entryPage);
         }
@@ -238,7 +234,7 @@ if (! function_exists('podcast_hit')) {
         string $serviceName,
         ?int $subscriptionId,
     ): void {
-        $session = Services::session();
+        $session = service('session');
 
         $clientIp = client_ip();
 
@@ -249,12 +245,11 @@ if (! function_exists('podcast_hit')) {
                 $session->get('player')['bot'] = true;
             }
 
+            $superglobals = service('superglobals');
             //We get the HTTP header field `Range`:
-            $httpRange = isset($_SERVER['HTTP_RANGE'])
-                ? $_SERVER['HTTP_RANGE']
-                : null;
+            $httpRange = $superglobals->server('HTTP_RANGE') ?? null;
 
-            $salt = config(Analytics::class)
+            $salt = config('Analytics')
                 ->salt;
             // We create a sha1 hash for this Salt+Current_Date+IP_Address+User_Agent+Episode_ID (used to count only once multiple episode downloads):
             $episodeListenerHashId =
@@ -262,11 +257,14 @@ if (! function_exists('podcast_hit')) {
                 sha1(
                     $salt . '_' . date(
                         'Y-m-d'
-                    ) . '_' . $clientIp . '_' . $_SERVER['HTTP_USER_AGENT'] . '_' . $episodeId
+                    ) . '_' . $clientIp . '_' . $superglobals->server('HTTP_USER_AGENT') . '_' . $episodeId
                 );
             // The cache expires at midnight:
             $secondsToMidnight = strtotime('tomorrow') - time();
+
+            /** @var int|null $downloadedBytes */
             $downloadedBytes = cache($episodeListenerHashId);
+
             if ($downloadedBytes === null) {
                 // If it was never downloaded that means that zero bytes were downloaded:
                 $downloadedBytes = 0;
@@ -287,8 +285,7 @@ if (! function_exists('podcast_hit')) {
                         $parts = explode('-', $range);
                         $downloadedBytes += array_key_exists(1, $parts)
                             ? $fileSize
-                            : (int) $parts[1] -
-                                (array_key_exists(0, $parts) ? 0 : (int) $parts[0]);
+                            : (int) $parts[1] - (int) $parts[0];
                     }
                 }
 
@@ -309,13 +306,16 @@ if (! function_exists('podcast_hit')) {
                         sha1(
                             $salt . '_' . date(
                                 'Y-m-d'
-                            ) . '_' . $clientIp . '_' . $_SERVER['HTTP_USER_AGENT'] . '_' . $podcastId
+                            ) . '_' . $clientIp . '_' . $superglobals->server('HTTP_USER_AGENT') . '_' . $podcastId
                         );
                     $newListener = 1;
+
                     // Has this listener already downloaded an episode today:
+                    /** @var int|null $downloadsByUser */
                     $downloadsByUser = cache($podcastListenerHashId);
+
                     // We add one download
-                    if ($downloadsByUser) {
+                    if ($downloadsByUser === null) {
                         $newListener = 0;
                         ++$downloadsByUser;
                     } else {

@@ -24,7 +24,7 @@ class Format extends BaseConfig
      * These formats are only checked when the data passed to the respond()
      * method is an array.
      *
-     * @var string[]
+     * @var list<string>
      */
     public array $supportedResponseFormats = [
         'application/json',
@@ -74,6 +74,6 @@ class Format extends BaseConfig
      */
     public function getFormatter(string $mime): FormatterInterface
     {
-        return Services::format()->getFormatter($mime);
+        return service('format')->getFormatter($mime);
     }
 }

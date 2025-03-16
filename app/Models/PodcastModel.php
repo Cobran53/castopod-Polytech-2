@@ -14,7 +14,6 @@ use App\Entities\Actor;
 use App\Entities\Podcast;
 use CodeIgniter\HTTP\URI;
 use CodeIgniter\Model;
-use Config\Fediverse;
 use phpseclib\Crypt\RSA;
 
 class PodcastModel extends Model
@@ -30,7 +29,7 @@ class PodcastModel extends Model
     protected $primaryKey = 'id';
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $allowedFields = [
         'id',
@@ -61,6 +60,7 @@ class PodcastModel extends Model
         'location_name',
         'location_geo',
         'location_osm',
+        'verify_txt',
         'payment_pointer',
         'custom_rss',
         'is_published_on_hubs',
@@ -103,29 +103,29 @@ class PodcastModel extends Model
     ];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $beforeInsert = ['setPodcastGUID', 'createPodcastActor'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterInsert = ['setActorAvatar'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterUpdate = ['updatePodcastActor'];
 
     /**
      * clear cache before update if by any chance, the podcast name changes, so will the podcast link
      *
-     * @var string[]
+     * @var list<string>
      */
     protected $beforeUpdate = ['clearCache'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $beforeDelete = ['clearCache'];
 
@@ -258,13 +258,7 @@ class PodcastModel extends Model
             $secondsToNextUnpublishedEpisode = $episodeModel->getSecondsToNextUnpublishedEpisode($podcastId);
 
             cache()
-                ->save(
-                    $cacheName,
-                    $found,
-                    $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
-                );
+                ->save($cacheName, $found, $secondsToNextUnpublishedEpisode ?: DECADE);
         }
 
         return $found;
@@ -294,13 +288,7 @@ class PodcastModel extends Model
             $secondsToNextUnpublishedEpisode = $episodeModel->getSecondsToNextUnpublishedEpisode($podcastId);
 
             cache()
-                ->save(
-                    $cacheName,
-                    $found,
-                    $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
-                );
+                ->save($cacheName, $found, $secondsToNextUnpublishedEpisode ?: DECADE);
         }
 
         return $found;
@@ -334,11 +322,7 @@ class PodcastModel extends Model
             $secondsToNextUnpublishedEpisode = (new EpisodeModel())->getSecondsToNextUnpublishedEpisode($podcastId);
 
             cache()
-                ->save(
-                    $cacheName,
-                    $defaultQuery,
-                    $secondsToNextUnpublishedEpisode ? $secondsToNextUnpublishedEpisode : DECADE
-                );
+                ->save($cacheName, $defaultQuery, $secondsToNextUnpublishedEpisode ?: DECADE);
         }
 
         return $defaultQuery;
@@ -351,7 +335,7 @@ class PodcastModel extends Model
      */
     public function clearCache(array $data): array
     {
-        $podcast = (new self())->getPodcastById(is_array($data['id']) ? $data['id'][0] : $data['id']);
+        $podcast = (new self())->find((int) (is_array($data['id']) ? $data['id'][0] : $data['id']));
 
         // delete cache for users' podcasts
         cache()
@@ -364,7 +348,7 @@ class PodcastModel extends Model
 
             // delete all cache for podcast actor
             cache()
-                ->deleteMatching(config(Fediverse::class) ->cachePrefix . "actor#{$podcast->actor_id}*");
+                ->deleteMatching(config('Fediverse') ->cachePrefix . "actor#{$podcast->actor_id}*");
 
             // delete model requests cache, includes feed / query / episode lists, etc.
             cache()
@@ -443,7 +427,7 @@ class PodcastModel extends Model
      */
     protected function setActorAvatar(array $data): array
     {
-        $podcast = (new self())->getPodcastById(is_array($data['id']) ? $data['id'][0] : $data['id']);
+        $podcast = (new self())->find((int) (is_array($data['id']) ? $data['id'][0] : $data['id']));
 
         if ($podcast instanceof Podcast) {
             $podcastActor = (new ActorModel())->find($podcast->actor_id);
@@ -468,7 +452,7 @@ class PodcastModel extends Model
      */
     protected function updatePodcastActor(array $data): array
     {
-        $podcast = (new self())->getPodcastById(is_array($data['id']) ? $data['id'][0] : $data['id']);
+        $podcast = (new self())->find((int) (is_array($data['id']) ? $data['id'][0] : $data['id']));
 
         if ($podcast instanceof Podcast) {
             $actorModel = new ActorModel();

@@ -22,7 +22,7 @@ class ContributorController extends BaseController
 {
     protected Podcast $podcast;
 
-    protected ?User $contributor;
+    protected ?User $contributor = null;
 
     public function _remap(string $method, string ...$params): mixed
     {
@@ -115,6 +115,7 @@ class ContributorController extends BaseController
 
     public function attemptCreate(): RedirectResponse
     {
+        /** @var User $user */
         $user = (new UserModel())->find((int) $this->request->getPost('user'));
 
         if (get_podcast_group($user, $this->podcast->id)) {

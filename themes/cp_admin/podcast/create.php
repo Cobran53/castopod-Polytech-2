@@ -141,7 +141,7 @@
     hint="<?= esc(lang('Podcast.form.owner_email_hint')) ?>"
     required="true" />
 
-<Forms.Toggler class="mt-2" name="is_owner_email_removed_from_feed" value="yes" checked="false" hint="<?= esc(lang('Podcast.form.is_owner_email_removed_from_feed_hint')) ?>">
+<Forms.Toggler class="mt-2" name="is_owner_email_removed_from_feed" value="yes" checked="true" hint="<?= esc(lang('Podcast.form.is_owner_email_removed_from_feed_hint')) ?>">
     <?= lang('Podcast.form.is_owner_email_removed_from_feed') ?></Forms.Toggler>
 
 <Forms.Field
@@ -161,7 +161,9 @@
     <div class="flex flex-col">
         <Forms.Label for="handle" hint="<?= esc(lang('Podcast.form.handle_hint')) ?>"><?= lang('Podcast.form.handle') ?></Forms.Label>
         <div class="relative">
-            <Icon glyph="at" class="absolute inset-0 h-full text-xl opacity-40 left-3" />
+            <?= icon('at-line', [
+                'class' => 'absolute inset-0 h-full text-xl opacity-40 left-3',
+            ]) ?>
             <Forms.Input name="handle" class="w-full pl-8" required="true" />
         </div>
     </div>
@@ -183,7 +185,9 @@
     title="<?= lang('Podcast.form.op3') ?>"
     subtitle="<?= lang('Podcast.form.op3_hint') ?>">
 
-    <a href="https://op3.dev" target="_blank" rel="noopener noreferrer" class="inline-flex self-start text-xs font-semibold underline gap-x-1 text-skin-muted hover:no-underline focus:ring-accent"><Icon glyph="link" class="text-sm"/>op3.dev</a>
+    <a href="https://op3.dev" target="_blank" rel="noopener noreferrer" class="inline-flex self-start text-xs font-semibold underline gap-x-1 text-skin-muted hover:no-underline focus:ring-accent"><?= icon('link', [
+        'class' => 'text-sm',
+    ]) ?>op3.dev</a>
     <Forms.Toggler name="enable_op3" value="yes" checked="false" hint="<?= esc(lang('Podcast.form.op3_enable_hint')) ?>"><?= lang('Podcast.form.op3_enable') ?></Forms.Toggler>
 </Forms.Section>
 
@@ -205,7 +209,16 @@
     as="XMLEditor"
     name="custom_rss"
     label="<?= esc(lang('Podcast.form.custom_rss')) ?>"
-    hint="<?= esc(lang('Podcast.form.custom_rss_hint')) ?>" />
+    hint="<?= esc(lang('Podcast.form.custom_rss_hint')) ?>"
+    rows="8" />
+
+<Forms.Field
+    as="Textarea"
+    name="verify_txt"
+    label="<?= esc(lang('Podcast.form.verify_txt')) ?>"
+    hint="<?= esc(lang('Podcast.form.verify_txt_hint')) ?>"
+    helper="<?= esc(lang('Podcast.form.verify_txt_helper')) ?>"
+    rows="5" />
 
 <Forms.Toggler class="mb-2" name="lock" value="yes" checked="true" hint="<?= esc(lang('Podcast.form.lock_hint')) ?>">
     <?= lang('Podcast.form.lock') ?>

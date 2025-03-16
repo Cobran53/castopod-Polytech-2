@@ -62,7 +62,7 @@ class EpisodeModel extends UuidModel
     protected $table = 'episodes';
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $allowedFields = [
         'id',
@@ -89,6 +89,7 @@ class EpisodeModel extends UuidModel
         'location_osm',
         'custom_rss',
         'is_published_on_hubs',
+        'downloads_count',
         'posts_count',
         'comments_count',
         'is_premium',
@@ -127,17 +128,17 @@ class EpisodeModel extends UuidModel
     ];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterInsert = ['writeEnclosureMetadata', 'clearCache'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterUpdate = ['clearCache', 'writeEnclosureMetadata'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $beforeDelete = ['clearCache'];
 
@@ -197,7 +198,7 @@ class EpisodeModel extends UuidModel
 
     public function getEpisodeByPreviewId(string $previewId): ?Episode
     {
-        $cacheName = "podcast_episode#preview-{$previewId}";
+        $cacheName = "podcast_episode-preview#{$previewId}";
         if (! ($found = cache($cacheName))) {
             $builder = $this->where([
                 'preview_id' => $this->uuid->fromString($previewId)
@@ -218,7 +219,6 @@ class EpisodeModel extends UuidModel
         /** @var LazyUuidFromString $uuid */
         $uuid = $this->uuid->{$this->uuidVersion}();
 
-        // @phpstan-ignore-next-line
         if (! $this->update($episodeId, [
             'preview_id' => $uuid,
         ])) {
@@ -273,13 +273,7 @@ class EpisodeModel extends UuidModel
             $secondsToNextUnpublishedEpisode = $this->getSecondsToNextUnpublishedEpisode($podcastId);
 
             cache()
-                ->save(
-                    $cacheName,
-                    $found,
-                    $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
-                );
+                ->save($cacheName, $found, $secondsToNextUnpublishedEpisode ?: DECADE);
         }
 
         return $found;
@@ -448,7 +442,7 @@ class EpisodeModel extends UuidModel
         cache()
             ->deleteMatching("podcast-{$episode->podcast->handle}*");
         cache()
-            ->delete("podcast_episode#{$episode->id}");
+            ->deleteMatching('podcast_episode*');
         cache()
             ->deleteMatching("page_podcast#{$episode->podcast_id}*");
         cache()

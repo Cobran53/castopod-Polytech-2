@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Modules\Fediverse\Entities;
 
+use CodeIgniter\I18n\Time;
 use Michalsn\Uuid\UuidEntity;
 use RuntimeException;
 
@@ -41,7 +42,7 @@ class Activity extends UuidEntity
     protected $uuids = ['id', 'post_id'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $dates = ['scheduled_at', 'created_at'];
 

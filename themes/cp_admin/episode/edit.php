@@ -44,8 +44,7 @@
     label="<?= esc(lang('Episode.form.title')) ?>"
     hint="<?= esc(lang('Episode.form.title_hint')) ?>"
     value="<?= esc($episode->title) ?>"
-    required="true"
-    data-slugify="title" />
+    required="true" />
 
 <div>
     <Forms.Label for="slug"><?= lang('Episode.form.permalink') ?></Forms.Label>
@@ -173,7 +172,9 @@
                 <div class="flex items-center mb-1 gap-x-2">
                     <?= anchor(
                         $episode->transcript->file_url,
-                        icon('file-download', 'mr-1 text-skin-muted text-xl') . lang('Episode.form.transcript_download'),
+                        icon('file-download-fill', [
+                            'class' => 'mr-1 text-skin-muted text-xl',
+                        ]) . lang('Episode.form.transcript_download'),
                         [
                             'class'    => 'flex-1 font-semibold hover:underline inline-flex items-center text-xs',
                             'download' => '',
@@ -185,7 +186,9 @@
                                 $podcast->id,
                                 $episode->id,
                             ),
-                            icon('delete-bin', 'mx-auto'),
+                            icon('delete-bin-fill', [
+                                'class' => 'mx-auto',
+                            ]),
                             [
                                 'class'        => 'p-1 text-sm bg-red-100 rounded-full text-red-700 hover:text-red-900 focus:ring-accent',
                                 'data-tooltip' => 'bottom',
@@ -227,7 +230,9 @@
                 <div class="flex mb-1 gap-x-2">
                     <?= anchor(
                         $episode->chapters->file_url,
-                        icon('file-download', 'mr-1 text-skin-muted text-xl') . lang('Episode.form.chapters_download'),
+                        icon('file-download-fill', [
+                            'class' => 'mr-1 text-skin-muted text-xl',
+                        ]) . lang('Episode.form.chapters_download'),
                         [
                             'class'    => 'flex-1 font-semibold hover:underline inline-flex items-center text-xs',
                             'download' => '',
@@ -239,7 +244,9 @@
                             $podcast->id,
                             $episode->id,
                         ),
-                        icon('delete-bin', 'mx-auto'),
+                        icon('delete-bin-fill', [
+                            'class' => 'mx-auto',
+                        ]),
                         [
                             'class'        => 'text-sm p-1 bg-red-100 rounded-full text-red-700 hover:text-red-900 focus:ring-accent',
                             'data-tooltip' => 'bottom',
@@ -281,9 +288,11 @@
 </form>
 
 <?php if ($episode->published_at === null): ?>
-    <Button class="mt-8" variant="danger" uri="<?= route_to('episode-delete', $podcast->id, $episode->id) ?>" iconLeft="delete-bin"><?= lang('Episode.delete') ?></Button>    
+    <?php // @icon("delete-bin-fill")?>
+    <Button class="mt-8" variant="danger" uri="<?= route_to('episode-delete', $podcast->id, $episode->id) ?>" iconLeft="delete-bin-fill"><?= lang('Episode.delete') ?></Button>    
 <?php else: ?>
-    <Button class="mt-8" variant="disabled" iconLeft="forbid" data-tooltip="right" title="<?= lang('Episode.messages.unpublishBeforeDeleteTip') ?>"><?= lang('Episode.delete') ?></Button>
+    <?php // @icon("forbid-fill")?>
+    <Button class="mt-8" variant="disabled" iconLeft="forbid-fill" data-tooltip="right" title="<?= lang('Episode.messages.unpublishBeforeDeleteTip') ?>"><?= lang('Episode.delete') ?></Button>
 <?php endif ?>
 
 

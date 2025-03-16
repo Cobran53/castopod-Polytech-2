@@ -18,7 +18,6 @@ use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\Router\Exceptions\RedirectException;
 use CodeIgniter\Router\Exceptions\RouterException;
 use CodeIgniter\Router\Router as CodeIgniterRouter;
-use Config\Services;
 
 class Router extends CodeIgniterRouter
 {
@@ -48,7 +47,7 @@ class Router extends CodeIgniterRouter
             $matchedKey = $routeKey;
 
             // Are we dealing with a locale?
-            if (strpos($routeKey, '{locale}') !== false) {
+            if (str_contains($routeKey, '{locale}')) {
                 $routeKey = str_replace('{locale}', '[^/]+', $routeKey);
             }
 
@@ -73,7 +72,7 @@ class Router extends CodeIgniterRouter
 
                 // Store our locale so CodeIgniter object can
                 // assign it to the Request.
-                if (strpos($matchedKey, '{locale}') !== false) {
+                if (str_contains($matchedKey, '{locale}')) {
                     preg_match(
                         '#^' . str_replace('{locale}', '(?<locale>[^/]+)', $matchedKey) . '$#u',
                         $uri,
@@ -81,7 +80,7 @@ class Router extends CodeIgniterRouter
                     );
 
                     if ($this->collection->shouldUseSupportedLocalesOnly()
-                        && ! in_array($matched['locale'], config(App::class)->supportedLocales, true)) {
+                        && ! in_array($matched['locale'], config('App')->supportedLocales, true)) {
                         // Throw exception to prevent the autorouter, if enabled,
                         // from trying to find a route
                         throw PageNotFoundException::forLocaleNotSupported($matched['locale']);
@@ -115,8 +114,8 @@ class Router extends CodeIgniterRouter
                     array_key_exists('alternate-content', $this->matchedRouteOptions) &&
                     is_array($this->matchedRouteOptions['alternate-content'])
                 ) {
-                    $request = Services::request();
-                    $negotiate = Services::negotiator();
+                    $request = service('request');
+                    $negotiate = service('negotiator');
 
                     // Accept header is mandatory
                     if ($request->header('Accept') === null) {
@@ -183,13 +182,13 @@ class Router extends CodeIgniterRouter
                 [$controller] = explode('::', (string) $handler);
 
                 // Checks `/` in controller name
-                if (strpos($controller, '/') !== false) {
+                if (str_contains($controller, '/')) {
                     throw RouterException::forInvalidControllerName($handler);
                 }
 
-                if (strpos((string) $handler, '$') !== false && strpos($routeKey, '(') !== false) {
+                if (str_contains((string) $handler, '$') && str_contains($routeKey, '(')) {
                     // Checks dynamic controller
-                    if (strpos($controller, '$') !== false) {
+                    if (str_contains($controller, '$')) {
                         throw RouterException::forDynamicController($handler);
                     }
 

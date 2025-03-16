@@ -8,21 +8,18 @@ use AdAures\PodcastPersonsTaxonomy\ReversedTaxonomy;
 use App\Entities\Episode;
 use App\Entities\Location;
 use App\Entities\Person;
-use App\Entities\Platform;
 use App\Entities\Podcast;
 use App\Models\EpisodeModel;
 use App\Models\PersonModel;
-use App\Models\PlatformModel;
 use App\Models\PodcastModel;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\Shield\Entities\User;
-use Config\Services;
 use Exception;
 use League\HTMLToMarkdown\HtmlConverter;
-use Modules\Auth\Config\AuthGroups;
 use Modules\Auth\Models\UserModel;
+use Modules\Platforms\Models\PlatformModel;
 use Modules\PodcastImport\Entities\PodcastImportTask;
 use Modules\PodcastImport\Entities\TaskStatus;
 use PodcastFeed\PodcastFeed;
@@ -46,15 +43,15 @@ class PodcastImport extends BaseCommand
 
     protected ?Podcast $podcast = null;
 
-    public function init(): void
+    public function init(): bool
     {
         helper('podcast_import');
 
         $importQueue = get_import_tasks();
 
-        $currentImport = current(array_filter($importQueue, static function ($task): bool {
-            return $task->status === TaskStatus::Running;
-        }));
+        $currentImport = current(
+            array_filter($importQueue, static fn ($task): bool => $task->status === TaskStatus::Running)
+        );
 
         if ($currentImport instanceof PodcastImportTask) {
             $currentImport->syncWithProcess();
@@ -68,14 +65,12 @@ class PodcastImport extends BaseCommand
         }
 
         // Get the next queued import
-        $queuedImports = array_filter($importQueue, static function ($task): bool {
-            return $task->status === TaskStatus::Queued;
-        });
+        $queuedImports = array_filter($importQueue, static fn ($task): bool => $task->status === TaskStatus::Queued);
         $nextImport = end($queuedImports);
 
         if (! $nextImport instanceof PodcastImportTask) {
-            // no queued import task, stop process.
-            exit(0);
+            // no queued import task, nothing to init
+            return false;
         }
 
         $this->importTask = $nextImport;
@@ -93,16 +88,21 @@ class PodcastImport extends BaseCommand
 
         ini_set('user_agent', 'Castopod/' . CP_VERSION);
         $this->podcastFeed = new PodcastFeed($this->importTask->feed_url);
+
+        return true;
     }
 
     public function run(array $params): void
     {
         // FIXME: getting named routes doesn't work from v4.3 anymore, so loading all routes before importing
-        Services::routes()->loadRoutes();
-
-        $this->init();
+        service('routes')
+            ->loadRoutes();
 
         try {
+            if (! $this->init()) {
+                return;
+            }
+
             CLI::write('All good! Feed was parsed successfully!');
 
             CLI::write(
@@ -162,7 +162,7 @@ class PodcastImport extends BaseCommand
 
             $podcastModel = new PodcastModel();
             if (! $podcastModel->update($this->podcast->id, $this->podcast)) {
-                throw new Exception((string) print_r($podcastModel->errors()));
+                throw new Exception(print_r($podcastModel->errors(), true));
             }
 
             CLI::showProgress(false);
@@ -173,7 +173,7 @@ class PodcastImport extends BaseCommand
             $this->error($exception->getMessage());
             log_message(
                 'critical',
-                'Error when importing ' . $this->importTask->feed_url . PHP_EOL . $exception->getTraceAsString()
+                'Error when importing ' . $this->importTask?->feed_url . PHP_EOL . $exception->getMessage() . PHP_EOL . $exception->getTraceAsString()
             );
         }
     }
@@ -196,9 +196,6 @@ class PodcastImport extends BaseCommand
 
     private function importPodcast(): Podcast
     {
-        $db = db_connect();
-        $db->transStart();
-
         $location = null;
         if ($this->podcastFeed->channel->podcast_location->getValue() !== null) {
             $location = new Location(
@@ -213,13 +210,28 @@ class PodcastImport extends BaseCommand
         }
 
         if (($coverUrl = $this->getCoverUrl($this->podcastFeed->channel)) === null) {
-            throw new Exception('Missing podcast cover. Please include an <itunes:image> tag');
+            throw new Exception('Missing podcast cover. Please include an <itunes:image> tag.');
+        }
+
+        if (($ownerName = $this->podcastFeed->channel->itunes_owner->itunes_name->getValue()) === null) {
+            throw new Exception(
+                'Missing podcast owner name. Please include an <itunes:name> tag inside the <itunes:owner> tag.'
+            );
+        }
+
+        if (($ownerEmail = $this->podcastFeed->channel->itunes_owner->itunes_email->getValue()) === null) {
+            throw new Exception(
+                'Missing podcast owner email. Please include an <itunes:email> tag inside the <itunes:owner> tag.'
+            );
         }
 
         $parentalAdvisory = null;
         if ($this->podcastFeed->channel->itunes_explicit->getValue() !== null) {
             $parentalAdvisory = $this->podcastFeed->channel->itunes_explicit->getValue() ? 'explicit' : 'clean';
         }
+
+        $db = db_connect();
+        $db->transStart();
 
         $htmlConverter = new HtmlConverter();
         $podcast = new Podcast([
@@ -237,8 +249,8 @@ class PodcastImport extends BaseCommand
             'language_code'        => $this->importTask->language,
             'category_id'          => $this->importTask->category,
             'parental_advisory'    => $parentalAdvisory,
-            'owner_name'           => $this->podcastFeed->channel->itunes_owner->itunes_name->getValue(),
-            'owner_email'          => $this->podcastFeed->channel->itunes_owner->itunes_email->getValue(),
+            'owner_name'           => $ownerName,
+            'owner_email'          => $ownerEmail,
             'publisher'            => $this->podcastFeed->channel->itunes_author->getValue(),
             'type'                 => $this->podcastFeed->channel->itunes_type->getValue(),
             'copyright'            => $this->podcastFeed->channel->copyright->getValue(),
@@ -250,14 +262,14 @@ class PodcastImport extends BaseCommand
         $podcastModel = new PodcastModel();
         if (! ($podcastId = $podcastModel->insert($podcast, true))) {
             $db->transRollback();
-            throw new Exception((string) print_r($podcastModel->errors()));
+            throw new Exception(print_r($podcastModel->errors(), true));
         }
 
         $podcast->id = $podcastId;
 
         // set current user as podcast admin
         // 1. create new group
-        config(AuthGroups::class)
+        config('AuthGroups')
             ->generatePodcastAuthorizations($podcast->id);
         add_podcast_group($this->user, $podcast->id, 'admin');
 
@@ -316,28 +328,24 @@ class PodcastImport extends BaseCommand
                 ]);
 
                 if (! $newPersonId = $personModel->insert($newPodcastPerson)) {
-                    throw new Exception((string) print_r($personModel->errors()));
+                    throw new Exception(print_r($personModel->errors(), true));
                 }
             }
 
             $personGroup = $person->getAttribute('group');
             $personRole = $person->getAttribute('role');
 
-            $isTaxonomyFound = false;
+            // set default group and role if taxonomy is not found
+            $personGroupSlug = 'cast';
+            $personRoleSlug = 'host';
+
             if (array_key_exists(strtolower((string) $personGroup), ReversedTaxonomy::$taxonomy)) {
                 $personGroup = ReversedTaxonomy::$taxonomy[strtolower((string) $personGroup)];
                 $personGroupSlug = $personGroup['slug'];
 
                 if (array_key_exists(strtolower((string) $personRole), $personGroup['roles'])) {
                     $personRoleSlug = $personGroup['roles'][strtolower((string) $personRole)]['slug'];
-                    $isTaxonomyFound = true;
                 }
-            }
-
-            if (! $isTaxonomyFound) {
-                // taxonomy was not found, set default group and role
-                $personGroupSlug = 'cast';
-                $personRoleSlug = 'host';
             }
 
             $podcastPersonModel = new PersonModel();
@@ -347,7 +355,7 @@ class PodcastImport extends BaseCommand
                 $personGroupSlug,
                 $personRoleSlug
             )) {
-                throw new Exception((string) print_r($podcastPersonModel->errors()));
+                throw new Exception(print_r($podcastPersonModel->errors(), true));
             }
         }
 
@@ -380,27 +388,32 @@ class PodcastImport extends BaseCommand
             ],
         ];
 
+        $platforms = service('platforms');
         $platformModel = new PlatformModel();
         foreach ($platformTypes as $platformType) {
-            $podcastsPlatformsData = [];
+            $platformsData = [];
             $currPlatformStep = 1; // for progress
             CLI::write($platformType['name'] . ' - ' . $platformType['count'] . ' elements');
             foreach ($platformType['elements'] as $platform) {
                 CLI::showProgress($currPlatformStep++, $platformType['count']);
-                $platformLabel = $platform->getAttribute('platform');
-                $platformSlug = slugify((string) $platformLabel);
-                if ($platformModel->getPlatform($platformSlug) instanceof Platform) {
-                    $podcastsPlatformsData[] = [
-                        'platform_slug' => $platformSlug,
-                        'podcast_id'    => $this->podcast->id,
-                        'link_url'      => $platform->getAttribute($platformType['account_url_key']),
-                        'account_id'    => $platform->getAttribute($platformType['account_id_key']),
-                        'is_visible'    => false,
-                    ];
+                $platformSlug = $platform->getAttribute('platform');
+                $platformData = $platforms->findPlatformBySlug($platformType['name'], $platformSlug);
+
+                if ($platformData === null) {
+                    continue;
                 }
+
+                $platformsData[] = [
+                    'podcast_id' => $this->podcast->id,
+                    'type'       => $platformType['name'],
+                    'slug'       => $platformSlug,
+                    'link_url'   => $platform->getAttribute($platformType['account_url_key']),
+                    'account_id' => $platform->getAttribute($platformType['account_id_key']),
+                    'is_visible' => 0,
+                ];
             }
 
-            $platformModel->savePodcastPlatforms($this->podcast->id, $platformType['name'], $podcastsPlatformsData);
+            $platformModel->savePlatforms($this->podcast->id, $platformType['name'], $platformsData);
             CLI::showProgress(false);
         }
     }
@@ -446,6 +459,7 @@ class PodcastImport extends BaseCommand
             }
 
             if (($showNotes = $this->getShowNotes($item)) === null) {
+                $db->transRollback();
                 throw new Exception('Missing item show notes. Please include a <description> tag to item ' . $key);
             }
 
@@ -478,6 +492,7 @@ class PodcastImport extends BaseCommand
                 'type'                 => $item->itunes_episodeType->getValue(),
                 'is_blocked'           => $item->itunes_block->getValue(),
                 'location'             => $location,
+                'is_premium'           => $this->podcast->is_premium_by_default,
                 'published_at'         => $item->pubDate->getValue(),
             ]);
 
@@ -485,7 +500,7 @@ class PodcastImport extends BaseCommand
 
             if (! ($episodeId = $episodeModel->insert($episode, true))) {
                 $db->transRollback();
-                throw new Exception((string) print_r($episodeModel->errors()));
+                throw new Exception(print_r($episodeModel->errors(), true));
             }
 
             $this->importEpisodePersons($episodeId, $item->podcast_persons);
@@ -508,9 +523,7 @@ class PodcastImport extends BaseCommand
             ->get()
             ->getResultArray();
 
-        return array_map(static function (array $element) {
-            return $element['guid'];
-        }, $result);
+        return array_map(static fn (array $element) => $element['guid'], $result);
     }
 
     /**
@@ -535,28 +548,24 @@ class PodcastImport extends BaseCommand
                 ]);
 
                 if (! ($newPersonId = $personModel->insert($newPerson))) {
-                    throw new Exception((string) print_r($personModel->errors()));
+                    throw new Exception(print_r($personModel->errors(), true));
                 }
             }
 
             $personGroup = $person->getAttribute('group');
             $personRole = $person->getAttribute('role');
 
-            $isTaxonomyFound = false;
+            // set default group and role if taxonomy is not found
+            $personGroupSlug = 'cast';
+            $personRoleSlug = 'host';
+
             if (array_key_exists(strtolower((string) $personGroup), ReversedTaxonomy::$taxonomy)) {
                 $personGroup = ReversedTaxonomy::$taxonomy[strtolower((string) $personGroup)];
                 $personGroupSlug = $personGroup['slug'];
 
                 if (array_key_exists(strtolower((string) $personRole), $personGroup['roles'])) {
                     $personRoleSlug = $personGroup['roles'][strtolower((string) $personRole)]['slug'];
-                    $isTaxonomyFound = true;
                 }
-            }
-
-            if (! $isTaxonomyFound) {
-                // taxonomy was not found, set default group and role
-                $personGroupSlug = 'cast';
-                $personRoleSlug = 'host';
             }
 
             $episodePersonModel = new PersonModel();
@@ -567,7 +576,7 @@ class PodcastImport extends BaseCommand
                 $personGroupSlug,
                 $personRoleSlug
             )) {
-                throw new Exception((string) print_r($episodePersonModel->errors()));
+                throw new Exception(print_r($episodePersonModel->errors(), true));
             }
         }
     }

@@ -13,7 +13,7 @@ return [
     'view' => "Perzh {username} e {podcastTitle}",
     'add' => 'Ouzhpennañ ur perzhiad pe ur berzhiadez',
     'add_contributor' => 'Ouzhpennañ ur perzhiad pe ur berzhiadez da {0}',
-    'edit_role' => 'Hizivaat roll {0}',
+    'edit_role' => 'Nevesaat roll {0}',
     'edit' => 'Kemmañ',
     'remove' => 'Lemel',
     'list' => [
@@ -26,18 +26,18 @@ return [
         'role' => 'Roll',
         'role_placeholder' => 'Dibabit e·he roll…',
         'submit_add' => 'Ouzhpennañ ur perzhiad pe ur berzhiadez',
-        'submit_edit' => 'Hizivaat ar roll',
+        'submit_edit' => 'Nevesaat ar roll',
     ],
     'delete_form' => [
-        'title' => 'Remove {contributor}',
+        'title' => 'Dilemel {contributor}',
         'disclaimer' =>
-            'You are about to remove {contributor} from contributors. They will not be able to access "{podcastTitle}" anymore.',
-        'understand' => 'I understand, I want to remove {contributor} from "{podcastTitle}"',
-        'submit' => 'Remove',
+            'Emaoc\'h o vont da lemel {contributor} eus ar berzhidi/perzhiadezed. Ne c\'hallo ket gwelet "{podcastTitle}" ken.',
+        'understand' => 'Komprenet em eus. Fellout a ra din lemel {contributor} eus "{podcastTitle}"',
+        'submit' => 'Lemel',
     ],
     'messages' => [
-        'editSuccess' => 'Role successfully changed!',
-        'editOwnerError' => "You can't edit the podcast owner!",
+        'editSuccess' => 'Cheñchet eo bet ar roll gant berzh!',
+        'editOwnerError' => "Ne c'hellit ket kemmañ perc'henn·ez ar podkast!",
         'removeOwnerError' => "Ne c'hellit ket lemel perc'henn ar podkast!",
         'removeSuccess' =>
             'Lamet ho peus {username} diouzh {podcastTitle} gant berzh',

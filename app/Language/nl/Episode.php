@@ -23,6 +23,8 @@ return [
     'back_to_episodes' => 'Terug naar de afleveringen van {podcast}',
     'comments' => 'Reacties',
     'activity' => 'Activiteiten',
+    'chapters' => 'Hoofdstukken',
+    'transcript' => 'Transcriptie',
     'description' => 'Omschrijving aflevering',
     'number_of_comments' => '{numberOfComments, plural,
         one {# reactie}
@@ -42,4 +44,7 @@ return [
         'publish' => 'Publiceer',
         'publish_edit' => 'Publicatie bewerken',
     ],
+    'no_chapters' => 'Voor deze aflevering zijn geen hoofdstukken beschikbaar.',
+    'download_transcript' => 'Transcriptie downloaden ({extension})',
+    'no_transcript' => 'Geen transcript beschikbaar voor deze aflevering.',
 ];

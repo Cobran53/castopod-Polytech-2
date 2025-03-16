@@ -14,7 +14,6 @@ use CodeIgniter\Database\BaseResult;
 use CodeIgniter\I18n\Time;
 use DateTimeInterface;
 use Michalsn\Uuid\UuidModel;
-use Modules\Fediverse\Config\Fediverse;
 use Modules\Fediverse\Entities\Activity;
 
 class ActivityModel extends UuidModel
@@ -35,17 +34,17 @@ class ActivityModel extends UuidModel
     protected $uuidFields = ['id', 'post_id'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterInsert = ['notify'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterUpdate = ['notify'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $allowedFields = [
         'id',
@@ -78,7 +77,7 @@ class ActivityModel extends UuidModel
     public function getActivityById(string $activityId): ?Activity
     {
         $cacheName =
-            config(Fediverse::class)
+            config('Fediverse')
                 ->cachePrefix . "activity#{$activityId}";
         if (! ($found = cache($cacheName))) {
             $found = $this->find($activityId);
@@ -124,20 +123,22 @@ class ActivityModel extends UuidModel
     /**
      * @return Activity[]
      */
-    public function getScheduledActivities(): array
+    public function getScheduledActivities(int $limit = 10): array
     {
         return $this->where('`scheduled_at` <= UTC_TIMESTAMP()', null, false)
             ->where('status', 'queued')
             ->orderBy('scheduled_at', 'ASC')
+            ->limit($limit)
             ->findAll();
     }
 
     /**
-     * @param array<string, array<string|int, mixed>> $data
+     * @param array<mixed> $data
      * @return array<string, array<string|int, mixed>>
      */
     protected function notify(array $data): array
     {
+        /** @var ?Activity $activity */
         $activity = (new self())->find(is_array($data['id']) ? $data['id'][0] : $data['id']);
 
         if (! $activity instanceof Activity) {

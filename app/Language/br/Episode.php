@@ -16,25 +16,24 @@ return [
     'season_episode' => 'Koulzad {seasonNumber} rann {episodeNumber}',
     'season_episode_abbr' => 'K{seasonNumber}:R{episodeNumber}',
     'persons' => '{personsCount, plural,
-        0 {den ebet}
         one {# den}
         two {# zen}
+        few {# den}
+        many {# den}
         other {# den}
-        22 {# zen}
-        32 {# zen}
-        42 {# zen}
-        52 {# zen}
-        62 {# zen}
-        82 {# zen}
     }',
     'persons_list' => 'Emellerien·ezed',
     'back_to_episodes' => 'Mont da rannoù {podcast}',
     'comments' => 'Evezhiadennoù',
     'activity' => 'Oberiantiz',
+    'chapters' => 'Chabistroù',
+    'transcript' => 'Transcript',
     'description' => 'Deskrivadur ar rann',
     'number_of_comments' => '{numberOfComments, plural,
-        0 {evezhiadenn ebet}
         one {# evezhiadenn}
+        two {# evezhiadenn}
+        few {# evezhiadenn}
+        many {# evezhiadenn}
         other {# evezhiadenn}
     }',
     'all_podcast_episodes' => 'Holl rannoù ar podkast',
@@ -51,4 +50,7 @@ return [
         'publish' => 'Embann',
         'publish_edit' => 'Kemmañ an embannadur',
     ],
+    'no_chapters' => 'N\'eus chabistr ebet evit ar rann.',
+    'download_transcript' => 'Download transcript ({extension})',
+    'no_transcript' => 'No transcript available for this episode.',
 ];

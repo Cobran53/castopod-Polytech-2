@@ -9,29 +9,29 @@ declare(strict_types=1);
  */
 
 return [
-    'your_handle' => 'Your handle',
-    'your_handle_hint' => 'Enter the @username@domain you want to act from.',
+    'your_handle' => 'あなたのユーザー ID',
+    'your_handle_hint' => 'フォームに「@username@domain」の形式で入力してください',
     'follow' => [
         'label' => 'フォロー',
         'title' => '{actorDisplayName} をフォロー',
-        'subtitle' => 'You are going to follow:',
+        'subtitle' => 'フォロー中:',
         'accountNotFound' => 'アカウントが見つかりませんでした',
-        'remoteFollowNotAllowed' => 'Seems like the account server does not allow remote follows…',
-        'submit' => 'Proceed to follow',
+        'remoteFollowNotAllowed' => 'このアカウントサーバーはリモートフォローを許可しておりません',
+        'submit' => 'フォローする',
     ],
     'favourite' => [
-        'title' => "Favourite {actorDisplayName}'s post",
-        'subtitle' => 'You are going to favourite:',
-        'submit' => 'Proceed to favourite',
+        'title' => "お気に入りの {actorDisplayName}の投稿",
+        'subtitle' => 'お気に入りに登録中:',
+        'submit' => 'お気に入り登録する',
     ],
     'reblog' => [
-        'title' => "Share {actorDisplayName}'s post",
-        'subtitle' => 'You are going to share:',
-        'submit' => 'Proceed to share',
+        'title' => "{actorDisplayName} の投稿を共有する",
+        'subtitle' => '共有中:',
+        'submit' => '共有する',
     ],
     'reply' => [
-        'title' => "Reply to {actorDisplayName}'s post",
-        'subtitle' => 'You are going to reply to:',
-        'submit' => 'Proceed to reply',
+        'title' => "{actorDisplayName} の投稿に返信する",
+        'subtitle' => '返信中:',
+        'submit' => '返信する',
     ],
 ];

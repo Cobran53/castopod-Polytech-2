@@ -1,3 +1,255 @@
+## [1.13.4](https://code.castopod.org/adaures/castopod/compare/v1.13.3...v1.13.4) (2025-02-24)
+
+### Bug Fixes
+
+- **platforms:** add podcast id when deleting platforms on save
+  ([019fbaf](https://code.castopod.org/adaures/castopod/commit/019fbaf74ddd7427c3b7dfaef0d2e4409aab0e7c))
+- return method instead of throwing a 404 when submitting a post
+  ([44ad651](https://code.castopod.org/adaures/castopod/commit/44ad65117635b6292b4653bca7e22acecb025146)),
+  closes [#550](https://code.castopod.org/adaures/castopod/issues/550)
+
+## [1.13.3](https://code.castopod.org/adaures/castopod/compare/v1.13.2...v1.13.3) (2025-01-08)
+
+### Bug Fixes
+
+- remove exit function from podcast:import command to allow for
+  episodes:compute-downloads to run
+  ([3359abf](https://code.castopod.org/adaures/castopod/commit/3359abf3fc7d6ddf9db2cacc3e25f7c6d99e33a6))
+
+## [1.13.2](https://code.castopod.org/adaures/castopod/compare/v1.13.1...v1.13.2) (2024-12-28)
+
+### Bug Fixes
+
+- add downloads_count to episodes table, computed every hour
+  ([5182d5d](https://code.castopod.org/adaures/castopod/commit/5182d5d67aa3c6f7906d4603efcec4b48f048991))
+
+## [1.13.1](https://code.castopod.org/adaures/castopod/compare/v1.13.0...v1.13.1) (2024-12-05)
+
+### Bug Fixes
+
+- **api:** cast integers when creating episode
+  ([7ca501d](https://code.castopod.org/adaures/castopod/commit/7ca501dd6f426a1d50ffb1ea759f1e2cc91c1d13))
+
+# [1.13.0](https://code.castopod.org/adaures/castopod/compare/v1.12.11...v1.13.0) (2024-10-25)
+
+### Features
+
+- **api:** add Episode create and publish endpoints
+  ([75cf78e](https://code.castopod.org/adaures/castopod/commit/75cf78e972c52528dc38be050dcb1eb1f8e626fa))
+- **rss:** add option for 301 redirect to new feed url
+  ([3a7d26f](https://code.castopod.org/adaures/castopod/commit/3a7d26fdf9bfeffb9247f8efe06d9040ae2fe5ff))
+
+## [1.12.11](https://code.castopod.org/adaures/castopod/compare/v1.12.10...v1.12.11) (2024-10-16)
+
+### Bug Fixes
+
+- allow passing json to app.proxyIPs config to set it
+  ([7d1460b](https://code.castopod.org/adaures/castopod/commit/7d1460b8e08beb447389c604995efd931c84fd72))
+
+## [1.12.10](https://code.castopod.org/adaures/castopod/compare/v1.12.9...v1.12.10) (2024-10-03)
+
+### Bug Fixes
+
+- set user as www-data when running cron jobs in docker's supervisord config
+  ([be3b6db](https://code.castopod.org/adaures/castopod/commit/be3b6db207204e14c9ad5d4d84384b15e0dbfa84))
+
+## [1.12.9](https://code.castopod.org/adaures/castopod/compare/v1.12.8...v1.12.9) (2024-08-16)
+
+### Bug Fixes
+
+- **fediverse:** add "processing" and "failed" statuses to better manage
+  broadcast load
+  ([cf9e072](https://code.castopod.org/adaures/castopod/commit/cf9e0724fcdb8d0194676880cc3b088b221f5a38)),
+  closes [#511](https://code.castopod.org/adaures/castopod/issues/511)
+
+## [1.12.8](https://code.castopod.org/adaures/castopod/compare/v1.12.7...v1.12.8) (2024-08-16)
+
+### Bug Fixes
+
+- **podcast-model:** always query podcast from database when clearing cache
+  ([995ca5b](https://code.castopod.org/adaures/castopod/commit/995ca5b197f8f917102a108dd07d1f81e99cc8e6))
+
+## [1.12.7](https://code.castopod.org/adaures/castopod/compare/v1.12.6...v1.12.7) (2024-08-14)
+
+### Bug Fixes
+
+- **episode:** do not change slug when editing episode title
+  ([89bf73b](https://code.castopod.org/adaures/castopod/commit/89bf73b869c28c2fcffa3dcbc3660fac3b6bf988)),
+  closes [#513](https://code.castopod.org/adaures/castopod/issues/513)
+- **preview:** delete episode preview cache after editing episode
+  ([6a2cdd0](https://code.castopod.org/adaures/castopod/commit/6a2cdd066ee13efc6489901bbdcbcc5fea35cd71)),
+  closes [#514](https://code.castopod.org/adaures/castopod/issues/514)
+
+## [1.12.6](https://code.castopod.org/adaures/castopod/compare/v1.12.5...v1.12.6) (2024-08-09)
+
+### Bug Fixes
+
+- **docker-image:** clear cache to account for new assets and data structure
+  changes
+  ([e41245d](https://code.castopod.org/adaures/castopod/commit/e41245d2e758bce2a404749398bef89998638561)),
+  closes [#510](https://code.castopod.org/adaures/castopod/issues/510)
+
+## [1.12.5](https://code.castopod.org/adaures/castopod/compare/v1.12.4...v1.12.5) (2024-07-30)
+
+### Bug Fixes
+
+- **rss:** add subscription id to cache name to prevent premium feeds from
+  overlapping
+  ([5310d86](https://code.castopod.org/adaures/castopod/commit/5310d8648af6d43b9090f8d9f8066f7b3a8f0aa7))
+
+## [1.12.4](https://code.castopod.org/adaures/castopod/compare/v1.12.3...v1.12.4) (2024-07-30)
+
+### Bug Fixes
+
+- **icons:** set correct names for lock and lock-unlock icons in premium banner
+  ([94deaab](https://code.castopod.org/adaures/castopod/commit/94deaab3cd0912ff1a585bee174a096a84c68384))
+- **premium-podcasts:** update query to validate subscription
+  ([0e6d294](https://code.castopod.org/adaures/castopod/commit/0e6d2945f215453abbe7d9f90afd012d2507846b))
+
+## [1.12.3](https://code.castopod.org/adaures/castopod/compare/v1.12.2...v1.12.3) (2024-07-04)
+
+### Bug Fixes
+
+- **audio-player:** set player icons to default instead of missing Castopod's
+  ([c89d298](https://code.castopod.org/adaures/castopod/commit/c89d29867e122fe7d4d5563f0ab1e9993e2ece16))
+
+## [1.12.2](https://code.castopod.org/adaures/castopod/compare/v1.12.1...v1.12.2) (2024-07-03)
+
+### Bug Fixes
+
+- broken icon call in frontend default pages template
+  ([d8d2eb9](https://code.castopod.org/adaures/castopod/commit/d8d2eb92b741ecfc956b416db481f8c2dee84864))
+
+## [1.12.1](https://code.castopod.org/adaures/castopod/compare/v1.12.0...v1.12.1) (2024-07-01)
+
+### Bug Fixes
+
+- set correct icons parameters in map and funding links views
+  ([b129813](https://code.castopod.org/adaures/castopod/commit/b129813ea5d38436563639b51ec9ed2882644228)),
+  closes [#500](https://code.castopod.org/adaures/castopod/issues/500)
+
+# [1.12.0](https://code.castopod.org/adaures/castopod/compare/v1.11.0...v1.12.0) (6/28/2024)
+
+### Bug Fixes
+
+- add missing php-icons config file to bundle
+  ([56612f0](https://code.castopod.org/adaures/castopod/commit/56612f0c762aa2d98e3c8c77fba88ffdf6f46a44))
+- **docs:** add base to og image using env variable
+  ([fe67659](https://code.castopod.org/adaures/castopod/commit/fe676590f23a33bdbe8905d234760923c029e350))
+- **import:** rewrite download_file helper to output curl response directly to
+  file
+  ([eb7ad2f](https://code.castopod.org/adaures/castopod/commit/eb7ad2f7e1c0137f222f47e47062887de42c4824))
+- include app/Resources/icons folder to bundle
+  ([3fd5efc](https://code.castopod.org/adaures/castopod/commit/3fd5efc7956977acc19e53182f25b12813964a7d))
+- **platforms:** add platforms service + reduce memory consumption when
+  rendering platform cards
+  ([fe73e9f](https://code.castopod.org/adaures/castopod/commit/fe73e9fae9ea5d5ce946680aec194308bb2e620c))
+- set owner email visibility when editing podcast
+  ([fc4f982](https://code.castopod.org/adaures/castopod/commit/fc4f9825568cd4384c5b3cfe972accd146548807)),
+  closes [#473](https://code.castopod.org/adaures/castopod/issues/473)
+
+### Features
+
+- set owner email to hidden by default in podcast create form
+  ([7a6d9df](https://code.castopod.org/adaures/castopod/commit/7a6d9df6db8a6184b8250ced0475f3e741dde7f4))
+- support podcast:txt tag with verify use case
+  ([57e459e](https://code.castopod.org/adaures/castopod/commit/57e459e187ed048430f4137172e22396cd02bf81)),
+  closes [#468](https://code.castopod.org/adaures/castopod/issues/468)
+
+# [1.11.0](https://code.castopod.org/adaures/castopod/compare/v1.10.5...v1.11.0) (4/17/2024)
+
+### Bug Fixes
+
+- **premium:** set itunes:block on premium feeds to prevent indexing
+  ([88851b0](https://code.castopod.org/adaures/castopod/commit/88851b022663d575a816f0e2f33f0353767dd52d))
+- **rss:** generate podcast guid if empty
+  ([a5aef2a](https://code.castopod.org/adaures/castopod/commit/a5aef2a63e464632f3941649d455672835989e6c)),
+  closes [#450](https://code.castopod.org/adaures/castopod/issues/450)
+
+### Features
+
+- add trailer tags to rss if trailer episodes are present
+  ([80fdd9c](https://code.castopod.org/adaures/castopod/commit/80fdd9cfb4a95feac6ed0000435a013fc83e6892))
+- add transcript display to episode page
+  ([4d141fc](https://code.castopod.org/adaures/castopod/commit/4d141fceae56fa9e666b42c32a830ff9c68989db)),
+  closes [#411](https://code.castopod.org/adaures/castopod/issues/411)
+- **platforms:** add telegram to socials
+  ([004f804](https://code.castopod.org/adaures/castopod/commit/004f804045cd8e884361bb4318109fbdd7afc9a8))
+- **platforms:** add truefans.fm and episodes.fm
+  ([d046ecc](https://code.castopod.org/adaures/castopod/commit/d046ecc52f6ccd41d09f6de48e00d2c61d25d7f0)),
+  closes [#458](https://code.castopod.org/adaures/castopod/issues/458)
+  [#459](https://code.castopod.org/adaures/castopod/issues/459)
+
+## [1.10.5](https://code.castopod.org/adaures/castopod/compare/v1.10.4...v1.10.5) (3/12/2024)
+
+### Bug Fixes
+
+- **file-uploads:** validate chapters json content + remove permit_empty rule to
+  uploaded files
+  ([6289c42](https://code.castopod.org/adaures/castopod/commit/6289c42b1189f074c7e4e4cd9fbfd73bf26625c9)),
+  closes [#445](https://code.castopod.org/adaures/castopod/issues/445)
+
+## [1.10.4](https://code.castopod.org/adaures/castopod/compare/v1.10.3...v1.10.4) (2/26/2024)
+
+### Bug Fixes
+
+- display chapters in episode preview page
+  ([797516a](https://code.castopod.org/adaures/castopod/commit/797516a2ec7d88704412a5cca50421e8eef38eec)),
+  closes [#445](https://code.castopod.org/adaures/castopod/issues/445)
+
+## [1.10.3](https://code.castopod.org/adaures/castopod/compare/v1.10.2...v1.10.3) (2/21/2024)
+
+### Bug Fixes
+
+- **chapters:** use episode cover when chapter img is an empty string
+  ([a343de4](https://code.castopod.org/adaures/castopod/commit/a343de4cf6ba38561b8fe675fa9c38d9f0ecfec7)),
+  closes [#444](https://code.castopod.org/adaures/castopod/issues/444)
+- **import:** set episodes as premium if podcast is set as premium by default
+  ([dfd66be](https://code.castopod.org/adaures/castopod/commit/dfd66beebfcca1670b0a9d389e8e3f8d2d08d2f2))
+
+## [1.10.2](https://code.castopod.org/adaures/castopod/compare/v1.10.1...v1.10.2) (2/20/2024)
+
+### Bug Fixes
+
+- **podcast-import:** move closing parenthasis when checking for owner name and
+  email existence
+  ([cec7815](https://code.castopod.org/adaures/castopod/commit/cec78155f94a222edcf7964c0a2f3a3e0f46a98d))
+
+## [1.10.1](https://code.castopod.org/adaures/castopod/compare/v1.10.0...v1.10.1) (2/20/2024)
+
+### Bug Fixes
+
+- **fediverse:** use config name to get Fediverse config properties instead of
+  hardcoded class string
+  ([5fd0980](https://code.castopod.org/adaures/castopod/commit/5fd0980ff7101d45051a2daa3f635694f85609d7))
+
+# [1.10.0](https://code.castopod.org/adaures/castopod/compare/v1.9.0...v1.10.0) (2/19/2024)
+
+### Bug Fixes
+
+- **op3:** move op3 prefix to enclosure url instead of audio proxy
+  ([d580369](https://code.castopod.org/adaures/castopod/commit/d5803692357952d82d54efd8d3aa71de3a1c9571))
+- **podcast-import:** rollback transaction before exception is thrown
+  ([419bb04](https://code.castopod.org/adaures/castopod/commit/419bb04716088586b87b2c8f24a954ca8cfd6c76)),
+  closes [#429](https://code.castopod.org/adaures/castopod/issues/429)
+  [#319](https://code.castopod.org/adaures/castopod/issues/319)
+  [#443](https://code.castopod.org/adaures/castopod/issues/443)
+  [#438](https://code.castopod.org/adaures/castopod/issues/438)
+
+### Features
+
+- add podcast:season and podcast:episode tags to rss feed
+  ([98c6658](https://code.castopod.org/adaures/castopod/commit/98c6658840eedd55bd6d8042f8a69c342b87cd71))
+- add support for podcasting 2.0 "medium" tag with podcast, music and audiobook
+  ([630e788](https://code.castopod.org/adaures/castopod/commit/630e788f0e1ddfe5de229bd415a8e15361efa746)),
+  closes [#439](https://code.castopod.org/adaures/castopod/issues/439)
+- display chapters in episode's public page
+  ([87cc437](https://code.castopod.org/adaures/castopod/commit/87cc437e1ead5486ed46ca37e2055aaf5c9445c1)),
+  closes [#423](https://code.castopod.org/adaures/castopod/issues/423)
+- support VTT transcript file format in addition to SRT
+  ([7071b4b](https://code.castopod.org/adaures/castopod/commit/7071b4b6f48cb9a2f766064f3a5c23f92b293718)),
+  closes [#433](https://code.castopod.org/adaures/castopod/issues/433)
+
 # [1.9.0](https://code.castopod.org/adaures/castopod/compare/v1.8.2...v1.9.0) (1/31/2024)
 
 ### Bug Fixes

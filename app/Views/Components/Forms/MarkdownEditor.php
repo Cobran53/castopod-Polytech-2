@@ -24,9 +24,11 @@ class MarkdownEditor extends FormComponent
         $this->attributes['rows'] = 6;
 
         $textarea = form_textarea($this->attributes, old($this->name, $this->value));
-        $markdownIcon = icon(
-            'markdown',
-            'mr-1 text-lg opacity-40'
+        $markdownIcon = (string) icon(
+            'markdown-fill',
+            [
+                'class' => 'mr-1 text-lg opacity-40',
+            ]
         );
         $translations = [
             'write'   => lang('Common.forms.editor.write'),
@@ -39,46 +41,41 @@ class MarkdownEditor extends FormComponent
                 [
                     'name' => 'header',
                     'tag'  => 'md-header',
-                    'icon' => icon('heading'),
+                    'icon' => (string) icon('heading'),
                 ],
                 [
                     'name' => 'bold',
                     'tag'  => 'md-bold',
-                    'icon' => icon('bold'),
+                    'icon' => (string) icon('bold'),
                 ],
                 [
                     'name' => 'italic',
                     'tag'  => 'md-italic',
-                    'icon' => icon('italic'),
+                    'icon' => (string) icon('italic'),
                 ],
             ],
             [
                 [
                     'name' => 'unordered-list',
                     'tag'  => 'md-unordered-list',
-                    'icon' => icon('list-unordered'),
+                    'icon' => (string) icon('list-unordered'),
                 ],
                 [
                     'name' => 'ordered-list',
                     'tag'  => 'md-ordered-list ',
-                    'icon' => icon('list-ordered'),
+                    'icon' => (string) icon('list-ordered-2'),
                 ],
             ],
             [
                 [
-                    'name' => 'quote',
-                    'tag'  => 'md-quote',
-                    'icon' => icon('quote'),
-                ],
-                [
                     'name' => 'link',
                     'tag'  => 'md-link',
-                    'icon' => icon('link'),
+                    'icon' => (string) icon('link'),
                 ],
                 [
                     'name' => 'image',
                     'tag'  => 'md-image',
-                    'icon' => icon('image-add'),
+                    'icon' => (string) icon('image-add-fill'),
                 ],
             ],
         ];

@@ -12,6 +12,7 @@ return [
     'toggle_sidebar' => 'Prepnúť postranný panel',
     'go_to_website' => 'Prejsť na webstránku',
     'go_to_admin' => 'Spravovať',
+    'not-authorized' => 'Neautorizovaný',
     'dashboard' => 'Nástenka',
     'admin' => 'Úvod',
     'podcasts' => 'Podcasty',
@@ -34,7 +35,7 @@ return [
     'settings' => 'Nastavenia',
     'settings-general' => 'Všeobecné',
     'settings-theme' => 'Vzhľad',
-    'admin-about' => 'About',
+    'admin-about' => 'O aplikácii',
     'account' => [
         'my-account' => 'Môj účet',
         'change-password' => 'Zmeniť heslo',

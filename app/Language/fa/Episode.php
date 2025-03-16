@@ -22,6 +22,8 @@ return [
     'back_to_episodes' => 'بازگشت به قسمت‌های {podcast}',
     'comments' => 'دیدگاه‌ها',
     'activity' => 'فعّالیت',
+    'chapters' => 'Chapters',
+    'transcript' => 'Transcript',
     'description' => 'شرح قسمت',
     'number_of_comments' => '{numberOfComments, plural,
         other {# نظر}
@@ -40,4 +42,7 @@ return [
         'publish' => 'Publish',
         'publish_edit' => 'Edit publication',
     ],
+    'no_chapters' => 'No chapters are available for this episode.',
+    'download_transcript' => 'Download transcript ({extension})',
+    'no_transcript' => 'No transcript available for this episode.',
 ];

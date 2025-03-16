@@ -13,7 +13,7 @@ namespace App\Controllers;
 use App\Entities\Episode;
 use App\Models\EpisodeModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
-use CodeIgniter\HTTP\RedirectResponse;
+use Modules\Media\FileManagers\FileManagerInterface;
 
 class EpisodePreviewController extends BaseController
 {
@@ -44,7 +44,7 @@ class EpisodePreviewController extends BaseController
         return $this->{$method}(...$params);
     }
 
-    public function index(): RedirectResponse | string
+    public function index(): string
     {
         helper('form');
 
@@ -54,7 +54,7 @@ class EpisodePreviewController extends BaseController
         ]);
     }
 
-    public function activity(): RedirectResponse | string
+    public function activity(): string
     {
         helper('form');
 
@@ -64,11 +64,49 @@ class EpisodePreviewController extends BaseController
         ]);
     }
 
-    public function chapters(): RedirectResponse | string
+    public function chapters(): string
     {
-        return view('episode/preview-chapters', [
+        $data = [
             'podcast' => $this->episode->podcast,
             'episode' => $this->episode,
-        ]);
+        ];
+
+        if (isset($this->episode->chapters->file_key)) {
+            /** @var FileManagerInterface $fileManager */
+            $fileManager = service('file_manager');
+            $episodeChaptersJsonString = (string) $fileManager->getFileContents($this->episode->chapters->file_key);
+
+            $chapters = json_decode($episodeChaptersJsonString, true);
+            $data['chapters'] = $chapters;
+        }
+
+        helper('form');
+        return view('episode/preview-chapters', $data);
+    }
+
+    public function transcript(): string
+    {
+        // get transcript from json file
+        $data = [
+            'podcast' => $this->episode->podcast,
+            'episode' => $this->episode,
+        ];
+
+        if ($this->episode->transcript !== null) {
+            $data['transcript'] = $this->episode->transcript;
+
+            if ($this->episode->transcript->json_key !== null) {
+                /** @var FileManagerInterface $fileManager */
+                $fileManager = service('file_manager');
+                $transcriptJsonString = (string) $fileManager->getFileContents(
+                    $this->episode->transcript->json_key
+                );
+
+                $data['captions'] = json_decode($transcriptJsonString, true);
+            }
+        }
+
+        helper('form');
+        return view('episode/preview-transcript', $data);
     }
 }

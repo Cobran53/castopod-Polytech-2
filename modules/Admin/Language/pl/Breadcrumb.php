@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Modules\Admin\Config\Admin;
-
 /**
  * @copyright  2020 Ad Aures
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html AGPL3
@@ -12,7 +10,7 @@ use Modules\Admin\Config\Admin;
 
 return [
     'label' => 'okruszki',
-    config(Admin::class)
+    config('Admin')
         ->gateway => 'Początek',
     'podcasts' => 'podcasty',
     'episodes' => 'odcinki',
@@ -32,25 +30,25 @@ return [
     'unpublish' => 'cofnij publikację',
     'delete' => 'usuń',
     'remove' => 'usuń',
-    'fediverse' => 'fediverse',
+    'fediverse' => 'fediwersum',
     'blocked-actors' => 'zablokowani aktorzy',
     'blocked-domains' => 'zablokowane domeny',
     'users' => 'użytkownicy',
     'my-account' => 'moje konto',
     'change-password' => 'zmień hasło',
-    'imports' => 'imports',
-    'sync-feeds' => 'synchronize feeds',
+    'imports' => 'importy',
+    'sync-feeds' => 'synchronizuj kanały',
     'platforms' => 'platformy',
     'social' => 'sieci społecznościowe',
     'funding' => 'finansowanie',
-    'monetization-other' => 'other monetization',
+    'monetization-other' => 'inna monetyzacja',
     'analytics' => 'analityka',
     'locations' => 'lokalizacje',
     'webpages' => 'strony internetowe',
     'unique-listeners' => 'unikalni słuchacze',
     'players' => 'odtwarzacze',
     'listening-time' => 'czas odsłuchu',
-    'time-periods' => 'okresy czasu',
+    'time-periods' => 'przedziały czasu',
     'soundbites' => 'zajawki',
     'video-clips' => 'klipy wideo',
     'embed' => 'odtwarzacz do osadzenia',

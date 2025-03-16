@@ -12,6 +12,7 @@ return [
     'toggle_sidebar' => 'Seitenleiste ein/aus',
     'go_to_website' => 'Gehe zur Webseite',
     'go_to_admin' => 'Gehe zu Admin',
+    'not-authorized' => 'Nicht berechtigt',
     'dashboard' => 'Übersicht',
     'admin' => 'Startseite',
     'podcasts' => 'Podcasts',

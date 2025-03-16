@@ -9,29 +9,27 @@ declare(strict_types=1);
  */
 
 return [
-    'feed' => 'RSS Podcast feed',
-    'season' => 'Season {seasonNumber}',
-    'list_of_episodes_year' => '{year} episodes ({episodeCount})',
+    'feed' => 'RSS PodCastフィード',
+    'season' => 'シーズン {seasonNumber}',
+    'list_of_episodes_year' => '{year} エピソード ({episodeCount})',
     'list_of_episodes_season' =>
-        'Season {seasonNumber} episodes ({episodeCount})',
-    'no_episode' => 'No episode found!',
-    'follow' => 'Follow',
-    'followTitle' => 'Follow {actorDisplayName} on the fediverse!',
+        'シーズン {seasonNumber} エピソード（{episodeCount}）',
+    'no_episode' => 'エピソードが見つかりませんでした',
+    'follow' => 'フォロー',
+    'followTitle' => 'Fediverseで {actorDisplayName} をフォロー！',
     'followers' => '{numberOfFollowers, plural,
-        one {# follower}
-        other {# followers}
+        other {# 人のフォロワー}
     }',
     'posts' => '{numberOfPosts, plural,
-        one {# post}
-        other {# posts}
+        other {#件の投稿}
     }',
-    'links' => 'Links',
-    'activity' => 'Activity',
-    'episodes' => 'Episodes',
-    'episodes_title' => 'Episodes of {podcastTitle}',
-    'about' => 'About',
+    'links' => 'リンク',
+    'activity' => 'アクティビティー',
+    'episodes' => 'エピソード',
+    'episodes_title' => '{podcastTitle} のエピソード',
+    'about' => '概要',
     'stats' => [
-        'title' => 'Stats',
+        'title' => '統計',
         'number_of_seasons' => '{0, plural,
             one {# season}
             other {# seasons}
@@ -40,16 +38,16 @@ return [
             one {# episode}
             other {# episodes}
         }',
-        'first_published_at' => 'First episode published on {0, date, medium}',
+        'first_published_at' => '初回は{0, date, medium} に投稿されました。',
     ],
-    'sponsor' => 'Sponsor',
-    'funding_links' => 'Funding links for {podcastTitle}',
-    'find_on' => 'Find {podcastTitle} on',
-    'listen_on' => 'Listen on',
+    'sponsor' => 'スポンサー',
+    'funding_links' => '{podcastTitle} のリンクを探す',
+    'find_on' => '{podcastTitle} を検索',
+    'listen_on' => '視聴中',
     'persons' => '{personsCount, plural,
         one {# person}
         other {# persons}
     }',
-    'persons_list' => 'Persons',
-    'castopod_website' => 'Castopod (website)',
+    'persons_list' => '人数',
+    'castopod_website' => 'Castopod (公式ページ)',
 ];

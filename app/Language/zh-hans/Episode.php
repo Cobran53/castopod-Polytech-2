@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @copyright  2020 Ad Aures
+ * @license    https://www.gnu.org/licenses/agpl-3.0.en.html AGPL3
+ * @link       https://castopod.org/
+ */
+
+return [
+    'season' => '第{seasonNumber} 季',
+    'season_abbr' => '第{seasonNumber} 季',
+    'number' => '第 {episodeNumber} 集',
+    'number_abbr' => '第 {episodeNumber} 集',
+    'season_episode' => '第 {seasonNumber} 季第 {episodeNumber} 集',
+    'season_episode_abbr' => '第 {seasonNumber} 季第 {episodeNumber} 集',
+    'persons' => '{personsCount, plural,
+        one {# 人}
+        other {# 人}
+    }',
+    'persons_list' => '人员',
+    'back_to_episodes' => '回到剧集 {podcast} 中',
+    'comments' => '评论',
+    'activity' => '活动',
+    'chapters' => 'Chapters',
+    'transcript' => 'Transcript',
+    'description' => '剧集描述',
+    'number_of_comments' => '{numberOfComments, plural,
+        other {# 评论}
+        other {# 评论}
+    }',
+    'all_podcast_episodes' => '所有播客剧集',
+    'back_to_podcast' => '返回播客',
+    'preview' => [
+        'title' => 'Preview',
+        'not_published' => 'Not published',
+        'text' => '{publication_status, select,
+            published {This episode is not yet published.}
+            scheduled {This episode is scheduled for publication on {publication_date}.}
+            with_podcast {This episode will be published at the same time as the podcast.}
+            other {This episode is not yet published.}
+        }',
+        'publish' => 'Publish',
+        'publish_edit' => 'Edit publication',
+    ],
+    'no_chapters' => 'No chapters are available for this episode.',
+    'download_transcript' => 'Download transcript ({extension})',
+    'no_transcript' => 'No transcript available for this episode.',
+];

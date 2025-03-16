@@ -24,7 +24,7 @@ use RuntimeException;
  * @property string $file_extension
  * @property int $file_size
  * @property string $file_mimetype
- * @property array|null $file_metadata
+ * @property array<mixed>|null $file_metadata
  * @property 'image'|'audio'|'video'|'document' $type
  * @property string|null $description
  * @property string|null $language_code
@@ -36,7 +36,7 @@ class BaseMedia extends Entity
     protected File $file;
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $dates = ['uploaded_at', 'updated_at'];
 

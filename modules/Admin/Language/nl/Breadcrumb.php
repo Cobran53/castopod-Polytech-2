@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Modules\Admin\Config\Admin;
-
 /**
  * @copyright  2020 Ad Aures
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html AGPL3
@@ -12,7 +10,7 @@ use Modules\Admin\Config\Admin;
 
 return [
     'label' => 'kruimelpad',
-    config(Admin::class)
+    config('Admin')
         ->gateway => 'Hoofdpagina',
     'podcasts' => 'podcasts',
     'episodes' => 'afleveringen',
@@ -39,11 +37,11 @@ return [
     'my-account' => 'mijn account',
     'change-password' => 'wachtwoord wijzigen',
     'imports' => 'imports',
-    'sync-feeds' => 'synchronize feeds',
+    'sync-feeds' => 'feeds synchroniseren',
     'platforms' => 'platformen',
     'social' => 'sociale netwerken',
     'funding' => 'financiering',
-    'monetization-other' => 'other monetization',
+    'monetization-other' => 'andere inkomsten',
     'analytics' => 'statistieken',
     'locations' => 'locaties',
     'webpages' => 'webpagina\'s',

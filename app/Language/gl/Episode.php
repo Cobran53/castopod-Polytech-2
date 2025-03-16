@@ -23,6 +23,8 @@ return [
     'back_to_episodes' => 'Volver aos episodios de {podcast}',
     'comments' => 'Comentarios',
     'activity' => 'Actividade',
+    'chapters' => 'Capítulos',
+    'transcript' => 'Transcript',
     'description' => 'Descrición do episodio',
     'number_of_comments' => '{numberOfComments, plural,
         one {# comentario}
@@ -34,12 +36,15 @@ return [
         'title' => 'Vista previa',
         'not_published' => 'Sen publicar',
         'text' => '{publication_status, select,
-            published {This episode is not yet published.}
-            scheduled {This episode is scheduled for publication on {publication_date}.}
-            with_podcast {This episode will be published at the same time as the podcast.}
-            other {This episode is not yet published.}
+            published {Episodio publicado correctamente.}
+            scheduled {Episodio programado correctamente para {publication_date}.}
+            with_podcast {Este episodio vaise publicar ao mesmo tempo que o podcast.}
+            other {Este episodio aínda non se publicou.}
         }',
         'publish' => 'Publicar',
         'publish_edit' => 'Editar publicación',
     ],
+    'no_chapters' => 'Non hai capítulos dispoñibles para este episodio.',
+    'download_transcript' => 'Download transcript ({extension})',
+    'no_transcript' => 'No transcript available for this episode.',
 ];

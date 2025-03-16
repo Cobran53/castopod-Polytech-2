@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Database;
 
+use CodeIgniter\Database\Seeder;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 use Tests\Support\Database\Seeds\ExampleSeeder;
@@ -14,7 +15,7 @@ class ExampleDatabaseTest extends CIUnitTestCase
     use DatabaseTestTrait;
 
     /**
-     * @var string
+     * @var class-string<Seeder>|list<class-string<Seeder>>
      */
     protected $seed = ExampleSeeder::class;
 
@@ -44,6 +45,7 @@ class ExampleDatabaseTest extends CIUnitTestCase
         $model->delete($object->id);
 
         // The model should no longer find it
+        // @phpstan-ignore-next-line
         $this->assertNull($model->find($object->id));
 
         // ... but it should still be in the database

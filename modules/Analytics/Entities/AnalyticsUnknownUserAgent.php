@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Modules\Analytics\Entities;
 
 use CodeIgniter\Entity\Entity;
+use CodeIgniter\I18n\Time;
 
 /**
  * @property int $id
@@ -24,7 +25,7 @@ use CodeIgniter\Entity\Entity;
 class AnalyticsUnknownUserAgent extends Entity
 {
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $dates = ['created_at', 'updated_at'];
 

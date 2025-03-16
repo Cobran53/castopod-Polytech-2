@@ -16,14 +16,11 @@ use App\Libraries\NoteObject;
 use App\Libraries\PodcastEpisode;
 use App\Models\EpisodeModel;
 use App\Models\PodcastModel;
-use App\Models\PostModel;
 use CodeIgniter\Database\BaseBuilder;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
 use Config\Embed;
-use Config\Images;
-use Config\Services;
 use Modules\Analytics\AnalyticsTrait;
 use Modules\Fediverse\Objects\OrderedCollectionObject;
 use Modules\Fediverse\Objects\OrderedCollectionPage;
@@ -106,9 +103,7 @@ class EpisodeController extends BaseController
 
             // The page cache is set to a decade so it is deleted manually upon podcast update
             return view('episode/comments', $data, [
-                'cache' => $secondsToNextUnpublishedEpisode
-                ? $secondsToNextUnpublishedEpisode
-                : DECADE,
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
                 'cache_name' => $cacheName,
             ]);
         }
@@ -157,9 +152,7 @@ class EpisodeController extends BaseController
 
             // The page cache is set to a decade so it is deleted manually upon podcast update
             return view('episode/activity', $data, [
-                'cache' => $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
                 'cache_name' => $cacheName,
             ]);
         }
@@ -167,7 +160,7 @@ class EpisodeController extends BaseController
         return $cachedView;
     }
 
-    public function chapters(): String
+    public function chapters(): string
     {
         // Prevent analytics hit when authenticated
         if (! auth()->loggedIn()) {
@@ -218,9 +211,71 @@ class EpisodeController extends BaseController
 
             // The page cache is set to a decade so it is deleted manually upon podcast update
             return view('episode/chapters', $data, [
-                'cache' => $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
+                'cache_name' => $cacheName,
+            ]);
+        }
+
+        return $cachedView;
+    }
+
+    public function transcript(): string
+    {
+        // Prevent analytics hit when authenticated
+        if (! auth()->loggedIn()) {
+            $this->registerPodcastWebpageHit($this->episode->podcast_id);
+        }
+
+        $cacheName = implode(
+            '_',
+            array_filter([
+                'page',
+                "podcast#{$this->podcast->id}",
+                "episode#{$this->episode->id}",
+                'transcript',
+                service('request')
+                    ->getLocale(),
+                is_unlocked($this->podcast->handle) ? 'unlocked' : null,
+                auth()
+                    ->loggedIn() ? 'authenticated' : null,
+            ]),
+        );
+
+        if (! ($cachedView = cache($cacheName))) {
+            // get transcript from json file
+            $data = [
+                'metatags' => get_episode_metatags($this->episode),
+                'podcast'  => $this->podcast,
+                'episode'  => $this->episode,
+            ];
+
+            if ($this->episode->transcript !== null) {
+                $data['transcript'] = $this->episode->transcript;
+
+                if ($this->episode->transcript->json_key !== null) {
+                    /** @var FileManagerInterface $fileManager */
+                    $fileManager = service('file_manager');
+                    $transcriptJsonString = (string) $fileManager->getFileContents(
+                        $this->episode->transcript->json_key
+                    );
+
+                    $data['captions'] = json_decode($transcriptJsonString, true);
+                }
+            }
+
+            $secondsToNextUnpublishedEpisode = (new EpisodeModel())->getSecondsToNextUnpublishedEpisode(
+                $this->podcast->id,
+            );
+
+            if (auth()->loggedIn()) {
+                helper('form');
+
+                return view('episode/transcript', $data);
+            }
+
+            // The page cache is set to a decade so it is deleted manually upon podcast update
+            return view('episode/transcript', $data, [
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
                 'cache_name' => $cacheName,
             ]);
         }
@@ -237,7 +292,7 @@ class EpisodeController extends BaseController
             $this->registerPodcastWebpageHit($this->episode->podcast_id);
         }
 
-        $session = Services::session();
+        $session = service('session');
 
         if (service('superglobals')->server('HTTP_REFERER') !== null) {
             $session->set('embed_domain', parse_url(service('superglobals')->server('HTTP_REFERER'), PHP_URL_HOST));
@@ -273,9 +328,7 @@ class EpisodeController extends BaseController
 
             // The page cache is set to a decade so it is deleted manually upon podcast update
             return view('embed', $data, [
-                'cache' => $secondsToNextUnpublishedEpisode
-                    ? $secondsToNextUnpublishedEpisode
-                    : DECADE,
+                'cache'      => $secondsToNextUnpublishedEpisode ?: DECADE,
                 'cache_name' => $cacheName,
             ]);
         }
@@ -295,15 +348,15 @@ class EpisodeController extends BaseController
             'author_url'    => $this->podcast->link,
             'html'          => '<iframe src="' .
                 $this->episode->embed_url .
-                '" width="100%" height="' . config(Embed::class)->height . '" frameborder="0" scrolling="no"></iframe>',
-            'width' => config(Embed::class)
+                '" width="100%" height="' . config('Embed')->height . '" frameborder="0" scrolling="no"></iframe>',
+            'width' => config('Embed')
                 ->width,
-            'height' => config(Embed::class)
+            'height' => config('Embed')
                 ->height,
             'thumbnail_url'   => $this->episode->cover->og_url,
-            'thumbnail_width' => config(Images::class)
+            'thumbnail_width' => config('Images')
                 ->podcastCoverSizes['og']['width'],
-            'thumbnail_height' => config(Images::class)
+            'thumbnail_height' => config('Images')
                 ->podcastCoverSizes['og']['height'],
         ]);
     }
@@ -320,8 +373,8 @@ class EpisodeController extends BaseController
         $oembed->addChild('author_name', $this->podcast->title);
         $oembed->addChild('author_url', $this->podcast->link);
         $oembed->addChild('thumbnail', $this->episode->cover->og_url);
-        $oembed->addChild('thumbnail_width', (string) config(Images::class)->podcastCoverSizes['og']['width']);
-        $oembed->addChild('thumbnail_height', (string) config(Images::class)->podcastCoverSizes['og']['height']);
+        $oembed->addChild('thumbnail_width', (string) config('Images')->podcastCoverSizes['og']['width']);
+        $oembed->addChild('thumbnail_height', (string) config('Images')->podcastCoverSizes['og']['height']);
         $oembed->addChild(
             'html',
             htmlspecialchars(
@@ -332,8 +385,8 @@ class EpisodeController extends BaseController
                     )->height . '" frameborder="0" scrolling="no"></iframe>',
             ),
         );
-        $oembed->addChild('width', (string) config(Embed::class)->width);
-        $oembed->addChild('height', (string) config(Embed::class)->height);
+        $oembed->addChild('width', (string) config('Embed')->width);
+        $oembed->addChild('height', (string) config('Embed')->height);
 
         // @phpstan-ignore-next-line
         return $this->response->setXML($oembed);
@@ -353,12 +406,10 @@ class EpisodeController extends BaseController
         /**
          * get comments: aggregated replies from posts referring to the episode
          */
-        $episodeComments = model(PostModel::class)
-            ->whereIn('in_reply_to_id', function (BaseBuilder $builder): BaseBuilder {
-                return $builder->select('id')
-                    ->from('fediverse_posts')
-                    ->where('episode_id', $this->episode->id);
-            })
+        $episodeComments = model('PostModel')
+            ->whereIn('in_reply_to_id', fn (BaseBuilder $builder): BaseBuilder => $builder->select('id')
+                ->from('fediverse_posts')
+                ->where('episode_id', $this->episode->id))
             ->where('`published_at` <= UTC_TIMESTAMP()', null, false)
             ->orderBy('published_at', 'ASC');
 

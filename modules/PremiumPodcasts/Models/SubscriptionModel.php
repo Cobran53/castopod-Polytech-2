@@ -28,7 +28,7 @@ class SubscriptionModel extends Model
     protected $primaryKey = 'id';
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $allowedFields = [
         'id',
@@ -55,17 +55,17 @@ class SubscriptionModel extends Model
     protected $useTimestamps = true;
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterInsert = ['clearCache'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $afterUpdate = ['clearCache'];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $beforeDelete = ['clearCache'];
 
@@ -116,11 +116,13 @@ class SubscriptionModel extends Model
 
         return $subscriptionModel
             ->where([
-                'token'      => hash('sha256', $token),
-                'status'     => 'active',
-                'expires_at' => null,
+                'token'  => hash('sha256', $token),
+                'status' => 'active',
             ])
+            ->groupStart()
+            ->where('expires_at', null)
             ->orWhere('`expires_at` > UTC_TIMESTAMP()', null, false)
+            ->groupEnd()
             ->first();
     }
 
@@ -131,7 +133,12 @@ class SubscriptionModel extends Model
      */
     protected function clearCache(array $data): array
     {
+        /** @var ?Subscription */
         $subscription = (new self())->find(is_array($data['id']) ? $data['id'][0] : $data['id']);
+
+        if (! $subscription instanceof Subscription) {
+            return $data;
+        }
 
         cache()
             ->delete("subscription#{$subscription->id}");

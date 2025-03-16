@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace Modules\Analytics;
 
-use Config\Services;
-
 trait AnalyticsTrait
 {
     protected function registerPodcastWebpageHit(int $podcastId): void
@@ -23,16 +21,14 @@ trait AnalyticsTrait
         set_user_session_referer();
         set_user_session_entry_page();
 
-        $session = Services::session();
+        $session = service('session');
 
         if (! $session->get('denyListIp')) {
             $db = db_connect();
 
             $referer = $session->get('referer');
             $domain =
-                parse_url((string) $referer, PHP_URL_HOST) === null
-                    ? '- Direct -'
-                    : parse_url((string) $referer, PHP_URL_HOST);
+                parse_url((string) $referer, PHP_URL_HOST) ?? '- Direct -';
             parse_str((string) parse_url((string) $referer, PHP_URL_QUERY), $queries);
             $keywords = $queries['q'] ?? null;
 

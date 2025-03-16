@@ -34,7 +34,8 @@ Polytech Nantes. Il est réalisé par des étudiants de la filière Informatique
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<table>
+
+<table class="all-contributors-table">
   <tbody>
     <tr>
       <td align="center" valign="top" width="25%"><a href="https://github.com/TanguyHue"><img src="https://avatars.githubusercontent.com/u/106544754?v=4?s=100" width="100px;" alt="Tanguy Hue"/><br /><sub><b>Tanguy Hue</b></sub></a><br /><a href="https://github.com/castopod-Polytech/TanguyHue/commits?author=tanguyhue" title="Code">💻</a> <a href="https://doc.dev.jetfm.fr/books/documentation-castopod" title="Documentation">📖</a> <a href="https://github.com/TanguyHue/castopod-Polytech/tree/illustration" title="Illustrations">🖼️</a> <a href="https://github.com/TanguyHue/castopod-Polytech/tree/nextcloud" title="Nextcloud">📁</a></td>
@@ -43,6 +44,8 @@ Polytech Nantes. Il est réalisé par des étudiants de la filière Informatique
     </tr>
   </tbody>
 </table>
+
+
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->

@@ -28,14 +28,14 @@ if (! function_exists('hint_tooltip')) {
     {
         $tooltip =
             '<span data-tooltip="bottom" tabindex="0" title="' .
-            $hintText .
+            esc($hintText) .
             '" class="inline-block align-middle opacity-75 focus:ring-accent';
 
         if ($class !== '') {
             $tooltip .= ' ' . $class;
         }
 
-        return $tooltip . '">' . icon('question') . '</span>';
+        return $tooltip . '">' . icon('question-fill') . '</span>';
     }
 }
 
@@ -136,7 +136,9 @@ if (! function_exists('publication_pill')) {
             $customClass .
             '">' .
             $label .
-            ($publicationStatus === 'with_podcast' ? '<Icon glyph="error-warning" class="flex-shrink-0 ml-1 text-lg" />' : '') .
+            ($publicationStatus === 'with_podcast' ? icon('error-warning-fill', [
+                'class' => 'flex-shrink-0 ml-1 text-lg',
+            ]) : '') .
             '</span>';
     }
 }
@@ -156,20 +158,20 @@ if (! function_exists('publication_button')) {
                 $label = lang('Episode.publish');
                 $route = route_to('episode-publish', $podcastId, $episodeId);
                 $variant = 'primary';
-                $iconLeft = 'upload-cloud';
+                $iconLeft = 'upload-cloud-fill'; // @icon("upload-cloud-fill")
                 break;
             case 'with_podcast':
             case 'scheduled':
                 $label = lang('Episode.publish_edit');
                 $route = route_to('episode-publish_edit', $podcastId, $episodeId);
                 $variant = 'warning';
-                $iconLeft = 'upload-cloud';
+                $iconLeft = 'upload-cloud-fill'; // @icon("upload-cloud-fill")
                 break;
             case 'published':
                 $label = lang('Episode.unpublish');
                 $route = route_to('episode-unpublish', $podcastId, $episodeId);
                 $variant = 'danger';
-                $iconLeft = 'cloud-off';
+                $iconLeft = 'cloud-off-fill'; // @icon("cloud-off-fill")
                 break;
             default:
                 $label = '';
@@ -350,7 +352,9 @@ if (! function_exists('location_link')) {
 
         return anchor(
             $location->url,
-            icon('map-pin', 'mr-2 flex-shrink-0') . '<span class="truncate">' . esc($location->name) . '</span>',
+            icon('map-pin-2-fill', [
+                'class' => 'mr-2 flex-shrink-0',
+            ]) . '<span class="truncate">' . esc($location->name) . '</span>',
             [
                 'class' => 'w-full overflow-hidden inline-flex items-baseline hover:underline focus:ring-accent' .
                     ($class === '' ? '' : " {$class}"),
@@ -377,7 +381,6 @@ if (! function_exists('audio_player')) {
                 id="castopod-vm-player"
                 theme="light"
                 language="{$language}"
-                icons="castopod-icons"
                 class="{$class} relative z-0"
                 style="--vm-player-box-shadow:0; --vm-player-theme: hsl(var(--color-accent-base)); --vm-control-focus-color: hsl(var(--color-accent-contrast)); --vm-control-spacing: 4px; --vm-menu-item-focus-bg: hsl(var(--color-background-highlight));"
             >
@@ -385,7 +388,7 @@ if (! function_exists('audio_player')) {
                     <source src="{$source}" type="{$mediaType}" />
                 </vm-audio>
                 <vm-ui>
-                    <vm-icon-library name="castopod-icons"></vm-icon-library>
+                    <vm-icon-library></vm-icon-library>
                     <vm-controls full-width>
                         <vm-playback-control></vm-playback-control>
                         <vm-volume-control></vm-volume-control>

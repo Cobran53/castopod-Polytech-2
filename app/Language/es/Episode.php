@@ -23,6 +23,8 @@ return [
     'back_to_episodes' => 'Volver a los episodios de {podcast}',
     'comments' => 'Comentarios',
     'activity' => 'Actividad',
+    'chapters' => 'Chapters',
+    'transcript' => 'Transcript',
     'description' => 'Descripción del episodio',
     'number_of_comments' => '{numberOfComments, plural,
         one {# comentario}
@@ -42,4 +44,7 @@ return [
         'publish' => 'Publish',
         'publish_edit' => 'Edit publication',
     ],
+    'no_chapters' => 'No chapters are available for this episode.',
+    'download_transcript' => 'Download transcript ({extension})',
+    'no_transcript' => 'No transcript available for this episode.',
 ];

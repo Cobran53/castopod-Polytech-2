@@ -17,7 +17,6 @@ use Modules\Fediverse\ActivityRequest;
 use Modules\Fediverse\Core\ObjectType;
 use Modules\Fediverse\Entities\Actor;
 use Modules\Fediverse\Entities\PreviewCard;
-use Modules\Fediverse\Models\ActivityModel;
 
 if (! function_exists('get_webfinger_data')) {
     /**
@@ -42,7 +41,7 @@ if (! function_exists('split_handle')) {
     /**
      * Splits handle into its parts (username, host and port)
      *
-     * @return array<string, string>|false
+     * @return array{0:string,username:non-empty-string,1:non-empty-string,domain:non-empty-string,2:non-empty-string,port?:non-falsy-string,3?:non-falsy-string}
      */
     function split_handle(string $handle): array | false
     {
@@ -79,7 +78,7 @@ if (! function_exists('accept_follow')) {
         $db = db_connect();
         $db->transStart();
 
-        $activityModel = model(ActivityModel::class, false);
+        $activityModel = model('ActivityModel', false);
         $activityId = $activityModel->newActivity(
             'Accept',
             $actor->id,
@@ -132,6 +131,7 @@ if (! function_exists('send_activity_to_followers')) {
      */
     function send_activity_to_followers(Actor $actor, string $activityPayload): void
     {
+        // TODO: send activities in parallel with https://www.php.net/manual/en/function.curl-multi-init.php
         foreach ($actor->followers as $follower) {
             send_activity_to_actor($actor, $follower, $activityPayload);
         }
@@ -175,12 +175,10 @@ if (! function_exists('create_preview_card_from_url')) {
 
                 // Check that, at least, the url and title are set
                 $newPreviewCard = new PreviewCard([
-                    'url'         => $mediaUrl,
-                    'title'       => $media['title'] ?? '',
-                    'description' => $media['description'] ?? '',
-                    'type'        => isset($typeMapping[$media['type']])
-                        ? $typeMapping[$media['type']]
-                        : 'link',
+                    'url'           => $mediaUrl,
+                    'title'         => $media['title'] ?? '',
+                    'description'   => $media['description'] ?? '',
+                    'type'          => $typeMapping[$media['type']] ?? 'link',
                     'author_name'   => $media['author_name'] ?? null,
                     'author_url'    => $media['author_url'] ?? null,
                     'provider_name' => $media['provider_name'] ?? '',
@@ -408,9 +406,9 @@ if (! function_exists('linkify')) {
                 ),
                 'handle' => preg_replace_callback(
                     '~(?<!\w)@(?<username>\w++)(?:@(?<domain>(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]))?~',
-                    static function (array $match) use (&$links) {
+                    static function (array $match) use (&$links): string {
                         // check if host is set and look for actor in database
-                        if (isset($match['host'])) {
+                        if (isset($match['domain'])) {
                             if (
                                 ($actor = model(
                                     'ActorModel',
@@ -490,7 +488,7 @@ if (! function_exists('linkify')) {
         return preg_replace_callback(
             '~<(\d+)>~',
             static function (array $match) use (&$links): string {
-                return $links[$match[1] - 1];
+                return $links[(int) $match[1] - 1];
             },
             (string) $text,
         );

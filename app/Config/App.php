@@ -16,7 +16,7 @@ class App extends BaseConfig
      * URL to your CodeIgniter root. Typically, this will be your base URL,
      * WITH a trailing slash:
      *
-     *    http://example.com/
+     * E.g., http://example.com/
      */
     public string $baseURL = 'http://localhost:8080/';
 
@@ -24,10 +24,10 @@ class App extends BaseConfig
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
      * If you want to accept multiple Hostnames, set this.
      *
-     * E.g. When your site URL ($baseURL) is 'http://example.com/', and your site
-     *      also accepts 'http://media.example.com/' and
-     *      'http://accounts.example.com/':
-     *          ['media.example.com', 'accounts.example.com']
+     * E.g.,
+     * When your site URL ($baseURL) is 'http://example.com/', and your site
+     * also accepts 'http://media.example.com/' and 'http://accounts.example.com/':
+     *     ['media.example.com', 'accounts.example.com']
      *
      * @var list<string>
      */
@@ -38,9 +38,9 @@ class App extends BaseConfig
      * Index File
      * --------------------------------------------------------------------------
      *
-     * Typically this will be your index.php file, unless you've renamed it to
-     * something else. If you are using mod_rewrite to remove the page set this
-     * variable so that it is blank.
+     * Typically, this will be your `index.php` file, unless you've renamed it to
+     * something else. If you have configured your web server to remove this file
+     * from your site URIs, set this variable to an empty string.
      */
     public string $indexPage = '';
 
@@ -50,16 +50,40 @@ class App extends BaseConfig
      * --------------------------------------------------------------------------
      *
      * This item determines which server global should be used to retrieve the
-     * URI string.  The default setting of 'REQUEST_URI' works for most servers.
+     * URI string. The default setting of 'REQUEST_URI' works for most servers.
      * If your links do not seem to work, try one of the other delicious flavors:
      *
-     * 'REQUEST_URI'    Uses $_SERVER['REQUEST_URI']
-     * 'QUERY_STRING'   Uses $_SERVER['QUERY_STRING']
-     * 'PATH_INFO'      Uses $_SERVER['PATH_INFO']
+     *  'REQUEST_URI': Uses $_SERVER['REQUEST_URI']
+     * 'QUERY_STRING': Uses $_SERVER['QUERY_STRING']
+     *    'PATH_INFO': Uses $_SERVER['PATH_INFO']
      *
      * WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
      */
     public string $uriProtocol = 'REQUEST_URI';
+
+    /*
+    *--------------------------------------------------------------------------
+    * Allowed URL Characters
+    *--------------------------------------------------------------------------
+    *
+    * This lets you specify which characters are permitted within your URLs.
+    * When someone tries to submit a URL with disallowed characters they will
+    * get a warning message.
+    *
+    * As a security measure you are STRONGLY encouraged to restrict URLs to
+    * as few characters as possible.
+    *
+    * By default, only these are allowed: `a-z 0-9~%.:_-`
+    *
+    * Set an empty string to allow all characters -- but only if you are insane.
+    *
+    * The configured value is actually a regular expression character group
+    * and it will be used as: '/\A[<permittedURIChars>]+\z/iu'
+    *
+    * DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
+    *
+    */
+    public string $permittedURIChars = 'a-z 0-9~%.:_\-@';
 
     /**
      * --------------------------------------------------------------------------
@@ -96,9 +120,21 @@ class App extends BaseConfig
      *
      * IncomingRequest::setLocale() also uses this list.
      *
-     * @var string[]
+     * @var list<string>
      */
-    public array $supportedLocales = ['en', 'fr', 'pl', 'de', 'pt-BR', 'nn-NO', 'es', 'zh-Hans', 'ca'];
+    public array $supportedLocales = [
+        'en',
+        'fr',
+        'pl',
+        'de',
+        'pt-br',
+        'nn-no',
+        'es',
+        'zh-hans',
+        'ca',
+        'br',
+        'sr-latn',
+    ];
 
     /**
      * --------------------------------------------------------------------------
@@ -108,7 +144,8 @@ class App extends BaseConfig
      * The default timezone that will be used in your application to display
      * dates with the date helper, and can be retrieved through app_timezone()
      *
-     * @see https://www.php.net/manual/en/timezones.php for list of timezones supported by PHP.
+     * @see https://www.php.net/manual/en/timezones.php for list of timezones
+     *      supported by PHP.
      */
     public string $appTimezone = 'UTC';
 
@@ -132,7 +169,7 @@ class App extends BaseConfig
      * If true, this will force every request made to this application to be
      * made via a secure connection (HTTPS). If the incoming request is not
      * secure, the user will be redirected to a secure version of the page
-     * and the HTTP Strict Transport Security header will be set.
+     * and the HTTP Strict Transport Security (HSTS) header will be set.
      */
     public bool $forceGlobalSecureRequests = true;
 
@@ -155,9 +192,9 @@ class App extends BaseConfig
      *         '192.168.5.0/24' => 'X-Real-IP',
      *     ]
      *
-     * @var array<string, string>
+     * @var array<string, string>|string
      */
-    public array $proxyIPs = [];
+    public $proxyIPs = [];
 
     /**
      * --------------------------------------------------------------------------
@@ -212,4 +249,36 @@ class App extends BaseConfig
     public ?int $bandwidthLimit = null;
 
     public ?string $legalNoticeURL = null;
+
+    /**
+     * AuthToken Config Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (is_string($this->proxyIPs)) {
+            $array = json_decode($this->proxyIPs, true);
+            if (is_array($array)) {
+                $this->proxyIPs = $array;
+            }
+        }
+    }
+
+    /**
+     * Override parent initEnvValue() to allow for direct setting to array properties values from ENV
+     *
+     * In order to set array properties via ENV vars we need to set the property to a string value first.
+     *
+     * @param mixed $property
+     */
+    protected function initEnvValue(&$property, string $name, string $prefix, string $shortPrefix): void
+    {
+        // if attempting to set property from ENV, first set to empty string
+        if ($name === 'proxyIPs' && $this->getEnvValue($name, $prefix, $shortPrefix) !== null) {
+            $property = '';
+        }
+
+        parent::initEnvValue($property, $name, $prefix, $shortPrefix);
+    }
 }

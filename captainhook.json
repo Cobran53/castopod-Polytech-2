@@ -18,12 +18,12 @@
     "enabled": true,
     "actions": [
       {
-        "action": "composer test -- --no-coverage",
+        "action": "composer test",
         "options": [],
         "conditions": []
       },
       {
-        "action": "composer analyse",
+        "action": "composer phpstan",
         "options": [],
         "conditions": []
       },

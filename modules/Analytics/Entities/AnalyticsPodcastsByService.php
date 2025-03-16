@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Modules\Analytics\Entities;
 
 use CodeIgniter\Entity\Entity;
+use CodeIgniter\I18n\Time;
 use Opawg\UserAgentsV2Php\UserAgentsRSS;
 
 /**
@@ -30,7 +31,7 @@ use Opawg\UserAgentsV2Php\UserAgentsRSS;
 class AnalyticsPodcastsByService extends Entity
 {
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $dates = ['date', 'created_at', 'updated_at'];
 

@@ -15,13 +15,11 @@ use App\Models\ActorModel;
 use App\Models\CategoryModel;
 use App\Models\EpisodeModel;
 use App\Models\PersonModel;
-use App\Models\PlatformModel;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\Shield\Entities\User;
-use Config\Images;
 use Exception;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
@@ -32,6 +30,8 @@ use League\CommonMark\MarkdownConverter;
 use Modules\Auth\Models\UserModel;
 use Modules\Media\Entities\Image;
 use Modules\Media\Models\MediaModel;
+use Modules\Platforms\Entities\Platform;
+use Modules\Platforms\Models\PlatformModel;
 use Modules\PremiumPodcasts\Entities\Subscription;
 use Modules\PremiumPodcasts\Models\SubscriptionModel;
 use RuntimeException;
@@ -78,7 +78,7 @@ use RuntimeException;
  * @property string|null $location_geo
  * @property string|null $location_osm
  * @property string|null $payment_pointer
- * @property array|null $custom_rss
+ * @property array<string|int,mixed>|null $custom_rss
  * @property bool $is_op3_enabled
  * @property string $op3_url
  * @property string $custom_rss_string
@@ -254,8 +254,8 @@ class Podcast extends Entity
         } else {
             $cover = new Image([
                 'file_key' => 'podcasts/' . $this->attributes['handle'] . '/cover.' . $file->getExtension(),
-                'sizes'    => config(Images::class)
-->podcastCoverSizes,
+                'sizes'    => config('Images')
+                    ->podcastCoverSizes,
                 'uploaded_by' => $this->attributes['updated_by'],
                 'updated_by'  => $this->attributes['updated_by'],
             ]);
@@ -297,8 +297,8 @@ class Podcast extends Entity
         } else {
             $banner = new Image([
                 'file_key' => 'podcasts/' . $this->attributes['handle'] . '/banner.' . $file->getExtension(),
-                'sizes'    => config(Images::class)
-->podcastBannerSizes,
+                'sizes'    => config('Images')
+                    ->podcastBannerSizes,
                 'uploaded_by' => $this->attributes['updated_by'],
                 'updated_by'  => $this->attributes['updated_by'],
             ]);
@@ -528,7 +528,7 @@ class Podcast extends Entity
         }
 
         if ($this->podcasting_platforms === null) {
-            $this->podcasting_platforms = (new PlatformModel())->getPodcastPlatforms($this->id, 'podcasting');
+            $this->podcasting_platforms = (new PlatformModel())->getPlatforms($this->id, 'podcasting');
         }
 
         return $this->podcasting_platforms;
@@ -546,7 +546,7 @@ class Podcast extends Entity
         }
 
         if ($this->social_platforms === null) {
-            $this->social_platforms = (new PlatformModel())->getPodcastPlatforms($this->id, 'social');
+            $this->social_platforms = (new PlatformModel())->getPlatforms($this->id, 'social');
         }
 
         return $this->social_platforms;
@@ -564,7 +564,7 @@ class Podcast extends Entity
         }
 
         if ($this->funding_platforms === null) {
-            $this->funding_platforms = (new PlatformModel())->getPodcastPlatforms($this->id, 'funding');
+            $this->funding_platforms = (new PlatformModel())->getPlatforms($this->id, 'funding');
         }
 
         return $this->funding_platforms;

@@ -14,7 +14,7 @@ return [
     'number' => 'Folge {episodeNumber}',
     'number_abbr' => 'E {episodeNumber}',
     'season_episode' => 'Staffel {seasonNumber} Episode {episodeNumber}',
-    'season_episode_abbr' => 'S{seasonNumber}F{episodeNumber}',
+    'season_episode_abbr' => 'S{seasonNumber}:E{episodeNumber}',
     'persons' => '{personsCount, plural,
         one {# Mitwirkender}
         other {# Mitwirkende}
@@ -23,12 +23,14 @@ return [
     'back_to_episodes' => 'Zurück zu Episoden von {podcast}',
     'comments' => 'Kommentare',
     'activity' => 'Aktivitäten',
+    'chapters' => 'Kapitel',
+    'transcript' => 'Protokoll',
     'description' => 'Beschreibung der Episode',
     'number_of_comments' => '{numberOfComments, plural,
         one {# Kommentar}
         other {# Kommentare}
     }',
-    'all_podcast_episodes' => 'Alle Podcast-Folgen',
+    'all_podcast_episodes' => 'Alle Podcast-Episoden',
     'back_to_podcast' => 'Zurück zum Podcast',
     'preview' => [
         'title' => 'Vorschau',
@@ -42,4 +44,7 @@ return [
         'publish' => 'Veröffentlichen',
         'publish_edit' => 'Veröffentlichung bearbeiten',
     ],
+    'no_chapters' => 'Für diese Episode sind keine Kapitel verfügbar.',
+    'download_transcript' => 'Protokoll herunterladen ({extension})',
+    'no_transcript' => 'Für diese Episode ist kein Protokoll verfügbar.',
 ];

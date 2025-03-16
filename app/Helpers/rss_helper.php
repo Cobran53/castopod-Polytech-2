@@ -11,12 +11,12 @@ use App\Entities\Category;
 use App\Entities\Location;
 use App\Entities\Podcast;
 use App\Libraries\SimpleRSSElement;
+use App\Models\PodcastModel;
 use CodeIgniter\I18n\Time;
 use Config\Mimes;
 use Modules\Media\Entities\Chapters;
 use Modules\Media\Entities\Transcript;
 use Modules\PremiumPodcasts\Entities\Subscription;
-use Modules\WebSub\Config\WebSub;
 
 if (! function_exists('get_rss_feed')) {
     /**
@@ -69,6 +69,16 @@ if (! function_exists('get_rss_feed')) {
         $channel->addChild('generator', 'Castopod - https://castopod.org/');
         $channel->addChild('docs', 'https://cyber.harvard.edu/rss/rss.html');
 
+        if ($podcast->guid === '') {
+            // FIXME: guid shouldn't be empty here as it should be filled upon Podcast creation
+            $uuid = service('uuid');
+            // 'ead4c236-bf58-58c6-a2c6-a6b28d128cb6' is the uuid of the podcast namespace
+            $podcast->guid = $uuid->uuid5('ead4c236-bf58-58c6-a2c6-a6b28d128cb6', $podcast->feed_url)
+                ->toString();
+
+            (new PodcastModel())->save($podcast);
+        }
+
         $channel->addChild('guid', $podcast->guid, $podcastNamespace);
         $channel->addChild('title', $podcast->title, null, false);
         $channel->addChildWithCDATA('description', $podcast->description_html);
@@ -109,6 +119,12 @@ if (! function_exists('get_rss_feed')) {
             $channel
                 ->addChild('locked', $podcast->is_locked ? 'yes' : 'no', $podcastNamespace)
                 ->addAttribute('owner', $podcast->owner_email);
+        }
+
+        if ($podcast->verify_txt !== null) {
+            $channel
+                ->addChild('txt', $podcast->verify_txt, $podcastNamespace)
+                ->addAttribute('purpose', 'verify');
         }
 
         if ($podcast->imported_feed_url !== null) {
@@ -244,12 +260,7 @@ if (! function_exists('get_rss_feed')) {
             $itunesNamespace,
         );
 
-        $channel->addChild(
-            'author',
-            $podcast->publisher ? $podcast->publisher : $podcast->owner_name,
-            $itunesNamespace,
-            false
-        );
+        $channel->addChild('author', $podcast->publisher ?: $podcast->owner_name, $itunesNamespace, false);
         $channel->addChild('link', $podcast->link);
 
         $owner = $channel->addChild('owner', null, $itunesNamespace);
@@ -263,7 +274,7 @@ if (! function_exists('get_rss_feed')) {
         $channel->addChild('type', $podcast->type, $itunesNamespace);
         $podcast->copyright &&
             $channel->addChild('copyright', $podcast->copyright);
-        if ($podcast->is_blocked) {
+        if ($podcast->is_blocked || $subscription instanceof Subscription) {
             $channel->addChild('block', 'Yes', $itunesNamespace);
         }
 
@@ -336,6 +347,21 @@ if (! function_exists('get_rss_feed')) {
             $episode->season_number &&
                 $item->addChild('season', (string) $episode->season_number, $itunesNamespace);
             $item->addChild('episodeType', $episode->type, $itunesNamespace);
+
+            // If episode is of type trailer, add podcast:trailer tag on channel level
+            if ($episode->type === 'trailer') {
+                $trailer = $channel->addChild('trailer', $episode->title, $podcastNamespace);
+                $trailer->addAttribute('pubdate', $episode->published_at->format(DATE_RFC2822));
+                $trailer->addAttribute(
+                    'url',
+                    $episode->audio_url . ($enclosureParams === '' ? '' : '?' . $enclosureParams),
+                );
+                $trailer->addAttribute('length', (string) $episode->audio->file_size);
+                $trailer->addAttribute('type', $episode->audio->file_mimetype);
+                if ($episode->season_number !== null) {
+                    $trailer->addAttribute('season', (string) $episode->season_number);
+                }
+            }
 
             // add podcast namespace tags for season and episode
             $episode->season_number &&
@@ -511,8 +537,7 @@ if (! function_exists('array_to_rss')) {
                 );
                 if (array_key_exists('attributes', $childArrayNode)) {
                     foreach (
-                        $childArrayNode['attributes']
-                        as $attributeKey => $attributeValue
+                        $childArrayNode['attributes'] as $attributeKey => $attributeValue
                     ) {
                         $childXmlNode->addAttribute($attributeKey, $attributeValue);
                     }

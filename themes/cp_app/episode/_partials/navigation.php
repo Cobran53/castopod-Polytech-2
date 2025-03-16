@@ -17,6 +17,11 @@ if ($episode->publication_status === 'published') {
             'label'     => lang('Episode.chapters'),
             'labelInfo' => $episode->chapters === null ? 0 : $episode->chapters->chapter_count,
         ],
+        [
+            'uri'       => route_to('episode-transcript', esc($podcast->handle), esc($episode->slug)),
+            'label'     => lang('Episode.transcript'),
+            'labelInfo' => $episode->transcript === null ? '&ndash;' : '✓',
+        ],
     ];
 } else {
     $navigationItems = [
@@ -35,6 +40,11 @@ if ($episode->publication_status === 'published') {
             'label'     => lang('Episode.chapters'),
             'labelInfo' => $episode->chapters === null ? 0 : $episode->chapters->chapter_count,
         ],
+        [
+            'uri'       => route_to('episode-preview-transcript', $episode->preview_id),
+            'label'     => lang('Episode.transcript'),
+            'labelInfo' => $episode->transcript === null ? '&ndash;' : '✓',
+        ],
     ];
 }
 
@@ -44,5 +54,5 @@ if ($episode->publication_status === 'published') {
         <?php $isActive = url_is($item['uri']); ?>
         <a href="<?= $item['uri'] ?>" class="px-4 py-1 text-sm font-semibold uppercase focus:ring-accent border-b-4<?= $isActive ? ' border-b-4 text-black border-accent-base' : ' text-skin-muted hover:text-skin-base hover:border-subtle border-transparent' ?>"><?= $item['label'] ?><span class="px-2 ml-1 font-semibold rounded-full bg-base"><?= $item['labelInfo'] ?></span></a>
     <?php endforeach; ?>
-    <button type="button" class="p-2 ml-auto rotate-180 rounded-full md:hidden focus:ring-accent" data-sidebar-toggler="toggler" aria-label="<?= lang('Navigation.toggle_sidebar') ?>"><?= icon('menu') ?></button>
+    <button type="button" class="p-2 ml-auto rotate-180 rounded-full md:hidden focus:ring-accent" data-sidebar-toggler="toggler" aria-label="<?= lang('Navigation.toggle_sidebar') ?>"><?= icon('menu-2-fill') ?></button>
 </nav>

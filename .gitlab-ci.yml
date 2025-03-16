@@ -69,17 +69,16 @@ lint-php:
 lint-js:
   stage: quality
   script:
-    - pnpm run prettier
+    - pnpm run format
     - pnpm run typecheck
     - pnpm run lint
-    - pnpm run lint:css
   dependencies:
     - js-dependencies
 
 tests:
   stage: quality
   services:
-    - mariadb
+    - mariadb:10.2
   variables:
     MYSQL_ROOT_PASSWORD: "R00Tp4ssW0RD"
     MYSQL_DATABASE: "test"
@@ -162,9 +161,6 @@ documentation:
   trigger:
     include: docs/.gitlab-ci.yml
     strategy: depend
-  only:
-    changes:
-      - docs/**/*
 
 docker:
   stage: build

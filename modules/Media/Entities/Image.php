@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace Modules\Media\Entities;
 
 use CodeIgniter\Files\File;
-use Config\Services;
+use GdImage;
 
 /**
- * @property array $sizes
+ * @property array<string, array<string, int|string>> $sizes
  */
 class Image extends BaseMedia
 {
@@ -129,7 +129,7 @@ class Image extends BaseMedia
         }
 
         // save derived sizes
-        $imageService = Services::image();
+        $imageService = service('image');
 
         foreach ($this->sizes as $name => $size) {
             $tempFilePath = tempnam(WRITEPATH . 'temp', 'img_');
@@ -137,6 +137,7 @@ class Image extends BaseMedia
                 ->withFile($this->attributes['file']->getRealPath())
                 ->resize($size['width'], $size['height']);
 
+            /** @var GdImage $resizedImageResource */
             $resizedImageResource = $resizedImage->getResource();
 
             // set resolution to 72 by 72 for all sizes

@@ -23,6 +23,8 @@ return [
     'back_to_episodes' => 'العودة إلى حلقات {podcast}',
     'comments' => 'التعليقات',
     'activity' => 'النشاط',
+    'chapters' => 'Chapters',
+    'transcript' => 'Transcript',
     'description' => 'وصف الحلقة',
     'number_of_comments' => '{numberOfComments, plural,
         one {# comment}
@@ -42,4 +44,7 @@ return [
         'publish' => 'Publish',
         'publish_edit' => 'Edit publication',
     ],
+    'no_chapters' => 'No chapters are available for this episode.',
+    'download_transcript' => 'Download transcript ({extension})',
+    'no_transcript' => 'No transcript available for this episode.',
 ];

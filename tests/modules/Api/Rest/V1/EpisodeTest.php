@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace modules\Api\Rest\V1;
 
 use App\Database\Seeds\FakeSinglePodcastApiSeeder;
+use CodeIgniter\Database\Seeder;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
-use Modules\Api\Rest\V1\Config\RestApi;
 
 class EpisodeTest extends CIUnitTestCase
 {
@@ -31,9 +31,9 @@ class EpisodeTest extends CIUnitTestCase
     protected $namespace;
 
     /**
-     * @var string
+     * @var class-string<Seeder>|list<class-string<Seeder>>
      */
-    protected $seed = 'FakeSinglePodcastApiSeeder';
+    protected $seed = FakeSinglePodcastApiSeeder::class;
 
     /**
      * @var string
@@ -55,7 +55,7 @@ class EpisodeTest extends CIUnitTestCase
 
         $this->episode['created_at'] = [];
         $this->episode['updated_at'] = [];
-        $this->apiUrl = config(RestApi::class)
+        $this->apiUrl = config('RestApi')
             ->gateway;
     }
 

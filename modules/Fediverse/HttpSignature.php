@@ -16,7 +16,6 @@ namespace Modules\Fediverse;
 
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\I18n\Time;
-use Config\Services;
 use Exception;
 use phpseclib\Crypt\RSA;
 
@@ -40,7 +39,7 @@ class HttpSignature
     public function __construct(IncomingRequest $request = null)
     {
         if (! $request instanceof IncomingRequest) {
-            $request = Services::request();
+            $request = service('request');
         }
 
         $this->request = $request;
@@ -142,9 +141,10 @@ class HttpSignature
         $strings[] = sprintf(
             '(request-target): %s %s%s',
             $this->request->getMethod(),
-            '/' . $this->request->uri->getPath(),
-            $this->request->uri->getQuery() !== ''
-                ? '?' . $this->request->uri->getQuery()
+            '/' . $this->request->getUri()->getPath(),
+            $this->request->getUri()
+                ->getQuery() !== ''
+                ? '?' . $this->request->getUri()->getQuery()
                 : '',
         );
 

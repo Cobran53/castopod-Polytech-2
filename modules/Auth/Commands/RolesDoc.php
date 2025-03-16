@@ -8,7 +8,6 @@ use Closure;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\View\Table;
-use Config\Services;
 use League\HTMLToMarkdown\Converter\TableConverter;
 use League\HTMLToMarkdown\HtmlConverter;
 use Modules\Auth\Config\AuthGroups;
@@ -43,10 +42,13 @@ class RolesDoc extends BaseCommand
     public function run(array $params): void
     {
         // loop over all files in path
-        $defaultFile = glob(ROOTPATH . 'docs/src/getting-started/auth.md');
-        $localizedFiles = glob(ROOTPATH . 'docs/src/**/getting-started/auth.md') ?? [];
-        $files = array_merge($defaultFile, $localizedFiles);
-        CLI::write(implode(', ', $files));
+        $files = glob(ROOTPATH . 'docs/src/content/docs/**/getting-started/auth.mdx');
+
+        if (! $files) {
+            $files = [];
+        }
+
+        CLI::write(implode(PHP_EOL, $files));
 
         if ($files === []) {
             return;
@@ -54,7 +56,7 @@ class RolesDoc extends BaseCommand
 
         foreach ($files as $file) {
             $locale = $this->detectLocaleFromPath($file);
-            $language = Services::language();
+            $language = service('language');
             $language->setLocale($locale);
 
             $authGroups = new AuthGroups();
@@ -62,7 +64,7 @@ class RolesDoc extends BaseCommand
             $fileContents = file_get_contents($file);
 
             foreach (self::COMMENT_BLOCK_IDS as $key => $block_id) {
-                $pattern = '/(<!--\s' . $block_id . ':START.*-->)[\S\s]*(<!--\s' . $block_id . ':END.*-->)/';
+                $pattern = '/(\{\/\*\s' . $block_id . ':START.*\*\/\})[\S\s]*(\{\/\*\s' . $block_id . ':END.*\*\/\})/';
 
                 $handleInjectMethod = 'handle' . str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $key)));
 
@@ -74,7 +76,7 @@ class RolesDoc extends BaseCommand
         }
     }
 
-    protected function handleInstanceRoles($authGroups, string $fileContents, string $pattern): string
+    protected function handleInstanceRoles(AuthGroups $authGroups, string $fileContents, string $pattern): string
     {
         $instanceMatrix = $authGroups->matrix;
         return $this->renderCommentBlock(
@@ -88,7 +90,7 @@ class RolesDoc extends BaseCommand
         );
     }
 
-    protected function handleInstancePermissions($authGroups, string $fileContents, string $pattern): string
+    protected function handleInstancePermissions(AuthGroups $authGroups, string $fileContents, string $pattern): string
     {
         return $this->renderCommentBlock(
             $fileContents,
@@ -101,7 +103,7 @@ class RolesDoc extends BaseCommand
         );
     }
 
-    protected function handlePodcastRoles($authGroups, string $fileContents, string $pattern): string
+    protected function handlePodcastRoles(AuthGroups $authGroups, string $fileContents, string $pattern): string
     {
         $podcastMatrix = $authGroups->podcastMatrix;
         return $this->renderCommentBlock(
@@ -115,7 +117,7 @@ class RolesDoc extends BaseCommand
         );
     }
 
-    protected function handlePodcastPermissions($authGroups, string $fileContents, string $pattern): string
+    protected function handlePodcastPermissions(AuthGroups $authGroups, string $fileContents, string $pattern): string
     {
         return $this->renderCommentBlock(
             $fileContents,
@@ -128,6 +130,10 @@ class RolesDoc extends BaseCommand
         );
     }
 
+    /**
+     * @param array<string> $tableHeading
+     * @param array<string, string>|array<string, array<string, string>> $data
+     */
     private function renderCommentBlock(
         string $fileContents,
         string $pattern,
@@ -155,7 +161,7 @@ class RolesDoc extends BaseCommand
         $converter = new HtmlConverter();
         $converter->getEnvironment()
             ->addConverter(new TableConverter());
-        $markdownTable = $converter->convert($table->generate());
+        $markdownTable = str_replace(['{', '}'], ['\{', '\}'], $converter->convert($table->generate()));
 
         // insert table between block comments
         $newFileContents = preg_replace(
@@ -171,11 +177,11 @@ class RolesDoc extends BaseCommand
         return $newFileContents;
     }
 
-    private function detectLocaleFromPath($fileKey): string
+    private function detectLocaleFromPath(string $fileKey): string
     {
         preg_match(
-            '~docs\/src\/(?:([a-z]{2}(?:-[A-Za-z]{2,})?)\/)getting-started\/auth\.md~',
-            (string) $fileKey,
+            '~docs\/src\/content\/docs\/(?:([a-z]{2}(?:-[A-Za-z]{2,})?)\/)getting-started\/auth\.mdx~',
+            $fileKey,
             $match
         );
 

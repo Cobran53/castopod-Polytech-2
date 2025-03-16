@@ -16,14 +16,22 @@ class ApiFilter implements FilterInterface
 {
     /**
      * @param Request $request
+     * @return RequestInterface|ResponseInterface|string|void
      */
     public function before(RequestInterface $request, $arguments = null)
     {
         /** @var RestApi $restApiConfig */
-        $restApiConfig = config(RestApi::class);
+        $restApiConfig = config('RestApi');
 
         if (! $restApiConfig->enabled) {
             throw PageNotFoundException::forPageNotFound();
+        }
+
+        if ($request->getMethod() === 'POST' && ! $restApiConfig->basicAuth) {
+            /** @var Response $response */
+            $response = service('response');
+            $response->setStatusCode(401);
+            return $response;
         }
 
         if ($restApiConfig->basicAuth) {
@@ -36,7 +44,7 @@ class ApiFilter implements FilterInterface
             }
 
             $authHeader = $request->getHeaderLine('Authorization');
-            if (substr($authHeader, 0, 6) !== 'Basic ') {
+            if (! str_starts_with($authHeader, 'Basic ')) {
                 $response->setStatusCode(401);
 
                 return $response;
@@ -44,7 +52,7 @@ class ApiFilter implements FilterInterface
 
             $auth_token = base64_decode(substr($authHeader, 6), true);
 
-            list($username, $password) = explode(':', (string) $auth_token);
+            [$username, $password] = explode(':', (string) $auth_token);
 
             if (! ($username === $restApiConfig->basicAuthUsername && $password === $restApiConfig->basicAuthPassword)) {
                 $response->setStatusCode(401);

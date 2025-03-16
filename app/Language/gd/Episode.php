@@ -25,6 +25,8 @@ return [
     'back_to_episodes' => 'Air ais dha na h-eapasodan aig {podcast}',
     'comments' => 'Beachdan',
     'activity' => 'Gnìomhachd',
+    'chapters' => 'Chapters',
+    'transcript' => 'Transcript',
     'description' => 'Tuairisgeul an eapasoid',
     'number_of_comments' => '{numberOfComments, plural,
         one {# bheachd}
@@ -46,4 +48,7 @@ return [
         'publish' => 'Publish',
         'publish_edit' => 'Edit publication',
     ],
+    'no_chapters' => 'No chapters are available for this episode.',
+    'download_transcript' => 'Download transcript ({extension})',
+    'no_transcript' => 'No transcript available for this episode.',
 ];
