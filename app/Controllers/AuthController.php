@@ -151,7 +151,7 @@ class AuthController extends BaseController
         if ($idUser === 0) {
             return redirect()->route('login')
                 ->withInput()
-                ->with('error', 'pas de compte associé');
+                ->with('error', 'pas de compte associé'); //TODO à la place, créer un compte
         }
 
         $_SESSION['test'] = 'bb';

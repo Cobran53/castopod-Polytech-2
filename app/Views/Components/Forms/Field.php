@@ -14,6 +14,8 @@ class Field extends FormComponent
 
     protected ?string $hint = null;
 
+    protected ?string $type = null;
+
     public function render(): string
     {
         $helperText = '';
