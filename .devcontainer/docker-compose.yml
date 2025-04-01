@@ -1,5 +1,11 @@
 version: "3"
 
+networks:
+  castopod:
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24
+
 services:
   app:
     build:
@@ -33,11 +39,19 @@ services:
     depends_on:
       - redis
       - mariadb
+    networks:
+      castopod:
+        ipv4_address: 172.31.0.2
 
   redis:
     image: redis:alpine
     volumes:
       - redis:/data
+    ports:
+      - 6379:6379
+    networks:
+      castopod:
+        ipv4_address: 172.31.0.3
 
   mariadb:
     image: mariadb:10.2
@@ -49,6 +63,9 @@ services:
       MYSQL_DATABASE: castopod
       MYSQL_USER: castopod
       MYSQL_PASSWORD: castopod
+    networks:
+      castopod:
+        ipv4_address: 172.31.0.4
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -62,6 +79,9 @@ services:
       - phpmyadmin:/sessions
     depends_on:
       - mariadb
+    networks:
+      castopod:
+        ipv4_address: 172.31.0.5
 
   mailpit:
     image: axllent/mailpit
@@ -76,9 +96,32 @@ services:
       MP_DATA_FILE: /data/mailpit.db
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      castopod:
+        ipv4_address: 172.31.0.6
+
+  nextcloud:
+    image: nextcloud:latest
+    container_name: castopod_nextcloud
+    environment:
+      - MYSQL_HOST=mariadb
+      - MYSQL_DATABASE=castopod
+      - MYSQL_USER=castopod
+      - MYSQL_PASSWORD=castopod
+    volumes:
+      - ./nextcloud/init_nextcloud.sh:/docker-entrypoint-hooks.d/before-starting/init_nextcloud.sh
+      - nextcloud:/var/www/html
+    ports:
+      - 8090:80
+    depends_on:
+      - mariadb
+    networks:
+      castopod:
+        ipv4_address: 172.31.0.7
 
 volumes:
   redis:
   mariadb:
   phpmyadmin:
   mailpit:
+  nextcloud:
