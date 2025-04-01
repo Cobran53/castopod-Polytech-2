@@ -56,8 +56,9 @@ class Person extends Entity
     /**
      * Saves the person avatar in `public/media/persons/`
      */
-    public function setAvatar(UploadedFile | File $file = null): static
-    {
+    public function setAvatar(
+        UploadedFile | File $file = null
+    ): static {
         if (! $file instanceof File || ($file instanceof UploadedFile && ! $file->isValid())) {
             return $this;
         }

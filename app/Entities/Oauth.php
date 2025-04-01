@@ -25,14 +25,13 @@ class Oauth
      */
     private const grant_type = 'authorization_code';
 
-    private string $refreshToken = '';
-
-    private string $email = '';
-
     protected ?string $host = null;
 
     protected ?string $access_token = null;
 
+    private string $refreshToken = '';
+
+    private string $email = '';
 
     public function __construct(
         protected string $url,
@@ -105,38 +104,38 @@ class Oauth
             $response = curl_exec($ch);
             if ($response === false) {
                 $curlError = curl_error($ch);
-                log_message("error", 'cURL Error: ' . $curlError);
+                log_message('error', 'cURL Error: ' . $curlError);
                 $_SESSION['erreur'] = 'Erreur cURL : ' . $curlError;
                 return null;
             }
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            log_message("debug", 'HTTP Code: ' . (string) $httpCode);
-            log_message("debug", 'Response: ' . (string) $response);
+            log_message('debug', 'HTTP Code: ' . (string) $httpCode);
+            log_message('debug', 'Response: ' . (string) $response);
             // log_message("debug", 'Request sent from domain: ' . $this->host);
 
             if ($httpCode === 200) {
-            $data = is_string($response) ? json_decode($response, true) : null;
+                $data = is_string($response) ? json_decode($response, true) : null;
 
-            if (is_array($data)) {
-                $this->access_token = $data['access_token'];
-                $this->refreshToken = $data['refresh_token'];
+                if (is_array($data)) {
+                    $this->access_token = $data['access_token'];
+                    $this->refreshToken = $data['refresh_token'];
 
-                $this->setRefreshTokenDatabase();
-                unset($_SESSION['erreur']);
+                    $this->setRefreshTokenDatabase();
+                    unset($_SESSION['erreur']);
 
-                return $this->refreshToken;
-            }
+                    return $this->refreshToken;
+                }
 
-            $_SESSION['erreur'] = 'Erreur lors de la récupération de l\'access_token.';
-            // log_message("error", 'Failed to retrieve access_token: ' . json_encode($data));
+                $_SESSION['erreur'] = 'Erreur lors de la récupération de l\'access_token.';
+                // log_message("error", 'Failed to retrieve access_token: ' . json_encode($data));
             } else {
-            $_SESSION['erreur'] = $httpCode . ' : ' . $response;
-            // log_message("error", 'HTTP Error: ' . $httpCode . ' - Response: ' . $response);
+                $_SESSION['erreur'] = $httpCode . ' : ' . $response;
+                // log_message("error", 'HTTP Error: ' . $httpCode . ' - Response: ' . $response);
             }
         } catch (\Exception $e) {
             $_SESSION['erreur'] = 'Erreur cURL getFirstToken : ' . $e->getMessage();
-            log_message("error", 'Exception in getFirstToken: ' . $e->getMessage());
+            log_message('error', 'Exception in getFirstToken: ' . $e->getMessage());
         } finally {
             curl_close($ch);
         }
@@ -250,7 +249,7 @@ class Oauth
             if ($httpCode === 200) {
                 $data = json_decode($response, true);
 
-                log_message("debug", 'User Data Response: ' . (string) $response);
+                log_message('debug', 'User Data Response: ' . (string) $response);
 
                 if (isset($data['ocs']['data']) && is_array($data['ocs']['data'])) {
                     $response = $data['ocs']['data'];

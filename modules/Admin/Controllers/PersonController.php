@@ -155,7 +155,9 @@ class PersonController extends BaseController
     {
         if ($this->person->avatar_id !== null) {
             // delete avatar to prevent collision if recreating person
-            (new MediaModel())->deleteMedia($this->person->avatar);
+            (new MediaModel())->deleteMedia(
+                $this->person->avatar
+            );
         }
 
         (new PersonModel())->delete($this->person->id);

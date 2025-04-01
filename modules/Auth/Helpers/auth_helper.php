@@ -22,8 +22,9 @@ if (! function_exists('auth')) {
      *
      * @param string|null $alias Authenticator alias
      */
-    function auth(?string $alias = null): Auth
-    {
+    function auth(
+        ?string $alias = null
+    ): Auth {
         /** @var Auth $auth */
         $auth = service('auth');
 
@@ -35,8 +36,9 @@ if (! function_exists('set_interact_as_actor')) {
     /**
      * Sets the actor id of which the user is acting as
      */
-    function set_interact_as_actor(int $actorId): void
-    {
+    function set_interact_as_actor(
+        int $actorId
+    ): void {
         if (auth()->loggedIn()) {
             session()
                 ->set('interact_as_actor_id', $actorId);
@@ -158,7 +160,10 @@ if (! function_exists('get_podcast_group')) {
 
         if ($removePrefix) {
             // strip the `podcast#{id}-` prefix when returning group
-            return substr((string) $podcastGroup, strlen('podcast#' . $podcastId . '-'));
+            return substr(
+                (string) $podcastGroup,
+                strlen('podcast#' . $podcastId . '-')
+            );
         }
 
         return $podcastGroup;
@@ -191,7 +196,11 @@ if (! function_exists('get_podcast_groups')) {
         // extract all podcast ids from groups
         foreach ($podcastGroups as $podcastGroup) {
             // extract podcast id from group and add it to the list of ids
-            preg_match('~podcast#(\d+)-[a-z]+~', (string) $podcastGroup, $matches);
+            preg_match(
+                '~podcast#(\d+)-[a-z]+~',
+                (string) $podcastGroup,
+                $matches
+            );
             $userPodcastIds[] = $matches[1];
         }
 
@@ -212,8 +221,9 @@ if (! function_exists('get_user_podcasts')) {
      *
      * @return Podcast[]
      */
-    function get_user_podcasts(User $user): array
-    {
+    function get_user_podcasts(
+        User $user
+    ): array {
         return (new PodcastModel())->getUserPodcasts($user->id, get_user_podcast_ids($user));
     }
 }
@@ -273,8 +283,9 @@ if (! function_exists('get_actor_ids_with_unread_notifications')) {
      *
      * @return int[]
      */
-    function get_actor_ids_with_unread_notifications(User $user): array
-    {
+    function get_actor_ids_with_unread_notifications(
+        User $user
+    ): array {
         if (($userPodcasts = get_user_podcasts($user)) === []) {
             return [];
         }
@@ -294,8 +305,10 @@ if (! function_exists('get_group_title')) {
     /**
      * @return array<'title'|'description', string>
      */
-    function get_group_info(string $group, ?int $podcastId = null): array
-    {
+    function get_group_info(
+        string $group,
+        ?int $podcastId = null
+    ): array {
         if ($podcastId === null) {
             return setting('AuthGroups.instanceGroups')[$group];
         }

@@ -24,8 +24,11 @@ class SimpleRSSElement extends SimpleXMLElement
      *
      * @return static The addChild method returns a SimpleXMLElement object representing the child added to the XML node.
      */
-    public function addChildWithCDATA(string $name, string $value = '', ?string $namespace = null): static
-    {
+    public function addChildWithCDATA(
+        string $name,
+        string $value = '',
+        ?string $namespace = null
+    ): static {
         $newChild = parent::addChild($name, null, $namespace);
         $node = dom_import_simplexml($newChild);
         $no = $node->ownerDocument;
@@ -47,8 +50,12 @@ class SimpleRSSElement extends SimpleXMLElement
      *
      * @return static The addChild method returns a SimpleXMLElement object representing the child added to the XML node.
      */
-    public function addChild($name, $value = null, $namespace = null, $escape = true): static
-    {
+    public function addChild(
+        $name,
+        $value = null,
+        $namespace = null,
+        $escape = true
+    ): static {
         $newChild = parent::addChild($name, null, $namespace);
         $node = dom_import_simplexml($newChild);
         $no = $node->ownerDocument;

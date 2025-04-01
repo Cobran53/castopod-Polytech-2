@@ -10,8 +10,10 @@ if (! function_exists('flatten_attributes')) {
      *
      * @param mixed $attributes string, array, object
      */
-    function flatten_attributes(mixed $attributes, bool $js = false): string
-    {
+    function flatten_attributes(
+        mixed $attributes,
+        bool $js = false
+    ): string {
         $atts = '';
 
         if ($attributes === null) {

@@ -41,8 +41,7 @@
     </form>
 </div>
 
-<?=
-data_table(
+<?= data_table(
     [
         [
             'header' => lang('Episode.list.episode'),
@@ -92,19 +91,19 @@ data_table(
                     'text-sm'
                 );
             },
-        ],
+                ],
         [
             'header' => lang('Episode.list.downloads'),
             'cell'   => function ($episode): string {
                 return downloads_abbr($episode->downloads_count);
             },
-        ],
+                ],
         [
             'header' => lang('Episode.list.comments'),
             'cell'   => function ($episode): int {
                 return $episode->comments_count;
             },
-        ],
+                ],
         [
             'header' => lang('Episode.list.actions'),
             'cell'   => function ($episode, $podcast) {
@@ -166,7 +165,7 @@ data_table(
                     '</button>' .
                     '<DropdownMenu id="more-dropdown-' . $episode->id . '-menu" labelledby="more-dropdown-' . $episode->id . '" offsetY="-24" items="' . esc(json_encode($items)) . '" />';
             },
-        ],
+                ],
     ],
     $episodes,
     'mb-6 mt-4',

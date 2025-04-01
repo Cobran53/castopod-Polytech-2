@@ -65,7 +65,10 @@ class PodcastImport extends BaseCommand
         }
 
         // Get the next queued import
-        $queuedImports = array_filter($importQueue, static fn ($task): bool => $task->status === TaskStatus::Queued);
+        $queuedImports = array_filter(
+            $importQueue,
+            static fn ($task): bool => $task->status === TaskStatus::Queued
+        );
         $nextImport = end($queuedImports);
 
         if (! $nextImport instanceof PodcastImportTask) {
@@ -95,7 +98,9 @@ class PodcastImport extends BaseCommand
     public function run(array $params): void
     {
         // FIXME: getting named routes doesn't work from v4.3 anymore, so loading all routes before importing
-        service('routes')
+        service(
+            'routes'
+        )
             ->loadRoutes();
 
         try {
@@ -436,13 +441,17 @@ class PodcastImport extends BaseCommand
         $episodesAlreadyImported = 0;
 
         // insert episodes in reverse order, from the last item in the list to the first
-        foreach (array_reverse($this->podcastFeed->channel->items) as $key => $item) {
+        foreach (array_reverse(
+            $this->podcastFeed->channel->items
+        ) as $key => $item) {
             CLI::showProgress(++$currEpisodesStep, $itemsCount);
 
             if (in_array($item->guid->getValue(), $importedGUIDs, true)) {
                 // do not import item if already imported
                 // (check that item with guid has already been inserted)
-                $this->importTask->setEpisodesAlreadyImported(++$episodesAlreadyImported);
+                $this->importTask->setEpisodesAlreadyImported(
+                    ++$episodesAlreadyImported
+                );
                 continue;
             }
 
@@ -529,8 +538,10 @@ class PodcastImport extends BaseCommand
     /**
      * @param PodcastPerson[] $persons
      */
-    private function importEpisodePersons(int $episodeId, array $persons): void
-    {
+    private function importEpisodePersons(
+        int $episodeId,
+        array $persons
+    ): void {
         foreach ($persons as $person) {
             $fullName = $person->getValue();
             $personModel = new PersonModel();

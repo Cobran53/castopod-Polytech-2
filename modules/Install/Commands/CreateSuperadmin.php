@@ -82,7 +82,9 @@ class CreateSuperadmin extends BaseCommand
         $data['password'] = $password;
 
         // Run validation if the user has passed username and/or email via command line
-        $validation = service('validation');
+        $validation = service(
+            'validation'
+        );
         $validation->setRules($this->validationRules);
 
         if (! $validation->run($data)) {
@@ -101,7 +103,9 @@ class CreateSuperadmin extends BaseCommand
         $user = $userModel->findById($userModel->getInsertID());
 
         // set newly created user as most powerful instance group (superadmin)
-        $user->addGroup(setting('AuthGroups.mostPowerfulGroup'));
+        $user->addGroup(
+            setting('AuthGroups.mostPowerfulGroup')
+        );
 
         $this->write('Super admin "' . $username . '" created', 'green');
     }

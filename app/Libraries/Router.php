@@ -29,8 +29,9 @@ class Router extends CodeIgniterRouter
      *
      * @return boolean Whether the route was matched or not.
      */
-    protected function checkRoutes(string $uri): bool
-    {
+    protected function checkRoutes(
+        string $uri
+    ): bool {
         $routes = $this->collection->getRoutes($this->collection->getHTTPVerb());
 
         // Don't waste any time
@@ -58,11 +59,15 @@ class Router extends CodeIgniterRouter
                 // Is this route supposed to redirect to another?
                 if ($this->collection->isRedirect($routeKey)) {
                     // replacing matched route groups with references: post/([0-9]+) -> post/$1
-                    $redirectTo = preg_replace_callback('/(\([^\(]+\))/', static function (): string {
-                        static $i = 1;
+                    $redirectTo = preg_replace_callback(
+                        '/(\([^\(]+\))/',
+                        static function (): string {
+                            static $i = 1;
 
-                        return '$' . $i++;
-                    }, (string) (is_array($handler) ? key($handler) : $handler));
+                            return '$' . $i++;
+                        },
+                        (string) (is_array($handler) ? key($handler) : $handler)
+                    );
 
                     throw new RedirectException(
                         preg_replace('#^' . $routeKey . '$#u', (string) $redirectTo, $uri),
@@ -83,7 +88,9 @@ class Router extends CodeIgniterRouter
                         && ! in_array($matched['locale'], config('App')->supportedLocales, true)) {
                         // Throw exception to prevent the autorouter, if enabled,
                         // from trying to find a route
-                        throw PageNotFoundException::forLocaleNotSupported($matched['locale']);
+                        throw PageNotFoundException::forLocaleNotSupported(
+                            $matched['locale']
+                        );
                     }
 
                     $this->detectedLocale = $matched['locale'];
@@ -93,7 +100,9 @@ class Router extends CodeIgniterRouter
                 // Are we using Closures? If so, then we need
                 // to collect the params into an array
                 // so it can be passed to the controller method later.
-                if (! is_string($handler) && is_callable($handler)) {
+                if (! is_string($handler) && is_callable(
+                    $handler
+                )) {
                     $this->controller = $handler;
 
                     // Remove the original string from the matches array
@@ -166,7 +175,9 @@ class Router extends CodeIgniterRouter
                 // Are we using Closures? If so, then we need
                 // to collect the params into an array
                 // so it can be passed to the controller method later.
-                if (! is_string($handler) && is_callable($handler)) {
+                if (! is_string($handler) && is_callable(
+                    $handler
+                )) {
                     $this->controller = $handler;
 
                     // Remove the original string from the matches array

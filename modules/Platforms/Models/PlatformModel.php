@@ -30,7 +30,14 @@ class PlatformModel extends Model
     /**
      * @var list<string>
      */
-    protected $allowedFields = ['podcast_id', 'type', 'slug', 'link_url', 'account_id', 'is_visible'];
+    protected $allowedFields = [
+        'podcast_id',
+        'type',
+        'slug',
+        'link_url',
+        'account_id',
+        'is_visible',
+    ];
 
     /**
      * @var string
@@ -50,8 +57,10 @@ class PlatformModel extends Model
     /**
      * @return Platform[]
      */
-    public function getPlatformsWithData(int $podcastId, string $platformType): array
-    {
+    public function getPlatformsWithData(
+        int $podcastId,
+        string $platformType
+    ): array {
         $cacheName = "podcast#{$podcastId}_platforms_{$platformType}_withData";
         if (! ($found = cache($cacheName))) {
             $platforms = service('platforms');
@@ -131,8 +140,11 @@ class PlatformModel extends Model
      *
      * @return int|false Number of rows inserted or FALSE on failure
      */
-    public function savePlatforms(int $podcastId, string $platformType, array $data): int | false
-    {
+    public function savePlatforms(
+        int $podcastId,
+        string $platformType,
+        array $data
+    ): int | false {
         $this->clearCache($podcastId);
 
         // delete all platforms given the type to overwrite them with data

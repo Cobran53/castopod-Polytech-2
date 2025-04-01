@@ -87,7 +87,16 @@ class Logger extends BaseConfig
             /*
              * The log levels that this handler will handle.
              */
-            'handles' => ['critical', 'alert', 'emergency', 'debug', 'error', 'info', 'notice', 'warning'],
+            'handles' => [
+                'critical',
+                'alert',
+                'emergency',
+                'debug',
+                'error',
+                'info',
+                'notice',
+                'warning',
+            ],
 
             /*
              * The default filename extension for log files.

@@ -42,10 +42,12 @@ if (! function_exists('write_audio_file_tags')) {
 
         // populate data array
         $TagData = [
-            'title'             => [esc($episode->title)],
-            'artist'            => [$episode->podcast->publisher ?? esc($episode->podcast->owner_name)],
-            'album'             => [esc($episode->podcast->title)],
-            'year'              => [$episode->published_at instanceof Time ? $episode->published_at->format('Y') : ''],
+            'title'  => [esc($episode->title)],
+            'artist' => [$episode->podcast->publisher ?? esc($episode->podcast->owner_name)],
+            'album'  => [esc($episode->podcast->title)],
+            'year'   => [
+                $episode->published_at instanceof Time ? $episode->published_at->format('Y') : '',
+            ],
             'genre'             => ['Podcast'],
             'comment'           => [$episode->description],
             'track_number'      => [(string) $episode->number],
@@ -75,7 +77,10 @@ if (! function_exists('write_audio_file_tags')) {
         if ($tagwriter->WriteTags()) {
             // Successfully wrote tags
             if ($tagwriter->warnings !== []) {
-                log_message('warning', 'There were some warnings:' . PHP_EOL . implode(PHP_EOL, $tagwriter->warnings));
+                log_message(
+                    'warning',
+                    'There were some warnings:' . PHP_EOL . implode(PHP_EOL, $tagwriter->warnings)
+                );
             }
         } else {
             log_message('critical', 'Failed to write tags!' . PHP_EOL . implode(PHP_EOL, $tagwriter->errors));

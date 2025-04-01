@@ -21,8 +21,10 @@ class PermissionFilter implements FilterInterface
      *
      * @return RequestInterface|ResponseInterface|string|void
      */
-    public function before(RequestInterface $request, $arguments = null)
-    {
+    public function before(
+        RequestInterface $request,
+        $arguments = null
+    ) {
         if ($arguments === null || $arguments === []) {
             return;
         }
@@ -41,8 +43,11 @@ class PermissionFilter implements FilterInterface
     /**
      * @param string[]|null $arguments
      */
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): void
-    {
+    public function after(
+        RequestInterface $request,
+        ResponseInterface $response,
+        $arguments = null
+    ): void {
     }
 
     /**
@@ -51,8 +56,9 @@ class PermissionFilter implements FilterInterface
      *
      * @param string[] $arguments
      */
-    protected function isAuthorized(array $arguments): bool
-    {
+    protected function isAuthorized(
+        array $arguments
+    ): bool {
         $result = true;
 
         foreach ($arguments as $permission) {

@@ -113,7 +113,9 @@ $routes->group(
             ]);
             // Podcast
             // Use ids in admin area to help permission and group lookups
-            $routes->group('(:num)', static function ($routes): void {
+            $routes->group('(:num)', static function (
+                $routes
+            ): void {
                 $routes->get('/', 'PodcastController::view/$1', [
                     'as'     => 'podcast-view',
                     'filter' => 'permission:podcast#.view',

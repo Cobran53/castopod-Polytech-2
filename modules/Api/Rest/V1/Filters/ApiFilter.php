@@ -18,8 +18,10 @@ class ApiFilter implements FilterInterface
      * @param Request $request
      * @return RequestInterface|ResponseInterface|string|void
      */
-    public function before(RequestInterface $request, $arguments = null)
-    {
+    public function before(
+        RequestInterface $request,
+        $arguments = null
+    ) {
         /** @var RestApi $restApiConfig */
         $restApiConfig = config('RestApi');
 

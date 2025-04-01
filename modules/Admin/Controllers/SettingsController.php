@@ -85,7 +85,11 @@ class SettingsController extends BaseController
             $ico_lib->save_ico($icoTempFilePath);
 
             // generate random hash to use as a suffix to renew browser cache
-            $randomHash = substr(bin2hex(random_bytes(18)), 0, 8);
+            $randomHash = substr(
+                bin2hex(random_bytes(18)),
+                0,
+                8
+            );
 
             // save ico
             $fileManager->save(new File($icoTempFilePath, true), "site/favicon.{$randomHash}.ico");

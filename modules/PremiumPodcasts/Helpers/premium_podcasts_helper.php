@@ -24,8 +24,9 @@ if (! function_exists('subscription')) {
     /**
      * Returns the Subscription instance for the currently active subscription.
      */
-    function subscription(string $podcastHandle): ?Subscription
-    {
+    function subscription(
+        string $podcastHandle
+    ): ?Subscription {
         /** @var PremiumPodcasts $premiumPodcast */
         $premiumPodcast = service('premium_podcasts');
         $premiumPodcast->check($podcastHandle);

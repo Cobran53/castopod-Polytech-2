@@ -71,41 +71,47 @@ Events::on('pre_system', static function (): void {
  * @param Actor $actor
  * @param Actor $targetActor
  */
-Events::on('on_follow', static function ($actor, $targetActor): void {
-    if ($actor->is_podcast) {
-        cache()
-            ->deleteMatching("podcast#{$actor->podcast->id}*");
-        cache()
-            ->deleteMatching("page_podcast#{$actor->podcast->id}*");
-    }
+Events::on(
+    'on_follow',
+    static function ($actor, $targetActor): void {
+        if ($actor->is_podcast) {
+            cache()
+                ->deleteMatching("podcast#{$actor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$actor->podcast->id}*");
+        }
 
-    if ($targetActor->is_podcast) {
-        cache()
-            ->deleteMatching("podcast#{$targetActor->podcast->id}*");
-        cache()
-            ->deleteMatching("page_podcast#{$targetActor->podcast->id}*");
+        if ($targetActor->is_podcast) {
+            cache()
+                ->deleteMatching("podcast#{$targetActor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$targetActor->podcast->id}*");
+        }
     }
-});
+);
 
 /**
  * @param Actor $actor
  * @param Actor $targetActor
  */
-Events::on('on_undo_follow', static function ($actor, $targetActor): void {
-    if ($actor->is_podcast) {
-        cache()
-            ->deleteMatching("podcast#{$actor->podcast->id}*");
-        cache()
-            ->deleteMatching("page_podcast#{$actor->podcast->id}*");
-    }
+Events::on(
+    'on_undo_follow',
+    static function ($actor, $targetActor): void {
+        if ($actor->is_podcast) {
+            cache()
+                ->deleteMatching("podcast#{$actor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$actor->podcast->id}*");
+        }
 
-    if ($targetActor->is_podcast) {
-        cache()
-            ->deleteMatching("podcast#{$targetActor->podcast->id}*");
-        cache()
-            ->deleteMatching("page_podcast#{$targetActor->podcast->id}*");
+        if ($targetActor->is_podcast) {
+            cache()
+                ->deleteMatching("podcast#{$targetActor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$targetActor->podcast->id}*");
+        }
     }
-});
+);
 
 /**
  * @param Post $post
@@ -252,51 +258,57 @@ Events::on('on_reply_remove', static function ($reply): void {
  * @param Actor $actor
  * @param Post $post
  */
-Events::on('on_post_favourite', static function ($actor, $post): void {
-    if ($post->actor->is_podcast) {
-        cache()
-            ->deleteMatching("podcast#{$post->actor->podcast->id}*");
-        cache()
-            ->deleteMatching("page_podcast#{$post->actor->podcast->id}*");
-    }
+Events::on(
+    'on_post_favourite',
+    static function ($actor, $post): void {
+        if ($post->actor->is_podcast) {
+            cache()
+                ->deleteMatching("podcast#{$post->actor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$post->actor->podcast->id}*");
+        }
 
-    cache()
-        ->deleteMatching("page_post#{$post->id}*");
-    if ($post->in_reply_to_id !== null) {
-        cache()->deleteMatching("page_post#{$post->in_reply_to_id}*");
-    }
-
-    if ($actor->is_podcast) {
-        cache()->deleteMatching("podcast#{$actor->podcast->id}*");
         cache()
-            ->deleteMatching("page_podcast#{$actor->podcast->id}*");
+            ->deleteMatching("page_post#{$post->id}*");
+        if ($post->in_reply_to_id !== null) {
+            cache()->deleteMatching("page_post#{$post->in_reply_to_id}*");
+        }
+
+        if ($actor->is_podcast) {
+            cache()->deleteMatching("podcast#{$actor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$actor->podcast->id}*");
+        }
     }
-});
+);
 
 /**
  * @param Actor $actor
  * @param Post $post
  */
-Events::on('on_post_undo_favourite', static function ($actor, $post): void {
-    if ($post->actor->is_podcast) {
-        cache()
-            ->deleteMatching("podcast#{$post->actor->podcast->id}*");
-        cache()
-            ->deleteMatching("page_podcast#{$post->actor->podcast->id}*");
-    }
+Events::on(
+    'on_post_undo_favourite',
+    static function ($actor, $post): void {
+        if ($post->actor->is_podcast) {
+            cache()
+                ->deleteMatching("podcast#{$post->actor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$post->actor->podcast->id}*");
+        }
 
-    cache()
-        ->deleteMatching("page_post#{$post->id}*");
-    if ($post->in_reply_to_id !== null) {
-        cache()->deleteMatching("page_post#{$post->in_reply_to_id}*");
-    }
-
-    if ($actor->is_podcast) {
-        cache()->deleteMatching("podcast#{$actor->podcast->id}*");
         cache()
-            ->deleteMatching("page_podcast#{$actor->podcast->id}*");
+            ->deleteMatching("page_post#{$post->id}*");
+        if ($post->in_reply_to_id !== null) {
+            cache()->deleteMatching("page_post#{$post->in_reply_to_id}*");
+        }
+
+        if ($actor->is_podcast) {
+            cache()->deleteMatching("podcast#{$actor->podcast->id}*");
+            cache()
+                ->deleteMatching("page_podcast#{$actor->podcast->id}*");
+        }
     }
-});
+);
 
 Events::on('on_block_actor', static function (int $actorId): void {
     cache()->deleteMatching('page_podcast*');

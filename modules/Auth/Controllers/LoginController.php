@@ -29,8 +29,10 @@ class LoginController extends ShieldLoginController
     /**
      * Attempts to log the user in with OAuth.
      */
-    public function loginActionOAuth(int $user, string $email): RedirectResponse
-    {
+    public function loginActionOAuth(
+        int $user,
+        string $email
+    ): RedirectResponse {
         $credentials['idUser'] = $user;
         $credentials['email'] = $email;
 

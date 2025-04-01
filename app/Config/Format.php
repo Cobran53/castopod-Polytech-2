@@ -72,8 +72,9 @@ class Format extends BaseConfig
      *
      * @deprecated This is an alias of `\CodeIgniter\Format\Format::getFormatter`. Use that instead.
      */
-    public function getFormatter(string $mime): FormatterInterface
-    {
+    public function getFormatter(
+        string $mime
+    ): FormatterInterface {
         return service('format')->getFormatter($mime);
     }
 }

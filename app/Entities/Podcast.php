@@ -174,7 +174,11 @@ class Podcast extends Entity
      * @var array<int, string>
      * @phpstan-var list<string>
      */
-    protected $dates = ['published_at', 'created_at', 'updated_at'];
+    protected $dates = [
+        'published_at',
+        'created_at',
+        'updated_at',
+    ];
 
     /**
      * @var array<string, string>
@@ -601,8 +605,9 @@ class Podcast extends Entity
     /**
      * Saves the location name and fetches OpenStreetMap info
      */
-    public function setLocation(?Location $location = null): static
-    {
+    public function setLocation(
+        ?Location $location = null
+    ): static {
         if (! $location instanceof Location) {
             $this->attributes['location_name'] = null;
             $this->attributes['location_geo'] = null;
@@ -662,8 +667,9 @@ class Podcast extends Entity
     /**
      * Saves custom rss tag into json
      */
-    public function setCustomRssString(string $customRssString): static
-    {
+    public function setCustomRssString(
+        string $customRssString
+    ): static {
         if ($customRssString === '') {
             $this->attributes['custom_rss'] = null;
             return $this;
@@ -690,7 +696,9 @@ class Podcast extends Entity
     public function getIsPremium(): bool
     {
         // podcast is premium if at least one of its episodes is set as premium
-        return (new EpisodeModel())->doesPodcastHavePremiumEpisodes($this->id);
+        return (new EpisodeModel())->doesPodcastHavePremiumEpisodes(
+            $this->id
+        );
     }
 
     public function getIsOp3Enabled(): bool

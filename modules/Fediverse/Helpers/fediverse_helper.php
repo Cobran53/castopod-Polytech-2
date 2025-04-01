@@ -22,8 +22,10 @@ if (! function_exists('get_webfinger_data')) {
     /**
      * Retrieve actor webfinger data from username and domain
      */
-    function get_webfinger_data(string $username, string $domain): ?object
-    {
+    function get_webfinger_data(
+        string $username,
+        string $domain
+    ): ?object {
         $webfingerUri = new URI();
         $webfingerUri->setScheme('https');
         $webfingerUri->setHost($domain);
@@ -43,8 +45,9 @@ if (! function_exists('split_handle')) {
      *
      * @return array{0:string,username:non-empty-string,1:non-empty-string,domain:non-empty-string,2:non-empty-string,port?:non-falsy-string,3?:non-falsy-string}
      */
-    function split_handle(string $handle): array | false
-    {
+    function split_handle(
+        string $handle
+    ): array | false {
         if (
             ! preg_match('~^@?(?P<username>[\w\.\-]+)@(?P<domain>[\w\.\-]+)(?P<port>:[\d]+)?$~', $handle, $matches)
         ) {
@@ -62,8 +65,11 @@ if (! function_exists('accept_follow')) {
      * @param Actor $actor Actor which accepts the follow
      * @param Actor $targetActor Actor which receives the accept follow
      */
-    function accept_follow(Actor $actor, Actor $targetActor, string $objectId): void
-    {
+    function accept_follow(
+        Actor $actor,
+        Actor $targetActor,
+        string $objectId
+    ): void {
         $acceptActivity = new AcceptActivity();
 
         $object = new ObjectType();
@@ -109,8 +115,11 @@ if (! function_exists('send_activity_to_actor')) {
     /**
      * Sends an activity to all actor followers
      */
-    function send_activity_to_actor(Actor $actor, Actor $targetActor, string $activityPayload): void
-    {
+    function send_activity_to_actor(
+        Actor $actor,
+        Actor $targetActor,
+        string $activityPayload
+    ): void {
         try {
             $acceptRequest = new ActivityRequest($targetActor->inbox_url, $activityPayload);
             if ($actor->private_key !== null) {
@@ -129,8 +138,10 @@ if (! function_exists('send_activity_to_followers')) {
     /**
      * Sends an activity to all actor followers
      */
-    function send_activity_to_followers(Actor $actor, string $activityPayload): void
-    {
+    function send_activity_to_followers(
+        Actor $actor,
+        string $activityPayload
+    ): void {
         // TODO: send activities in parallel with https://www.php.net/manual/en/function.curl-multi-init.php
         foreach ($actor->followers as $follower) {
             send_activity_to_actor($actor, $follower, $activityPayload);
@@ -144,8 +155,9 @@ if (! function_exists('extract_urls_from_message')) {
      *
      * @return string[]
      */
-    function extract_urls_from_message(string $message): array
-    {
+    function extract_urls_from_message(
+        string $message
+    ): array {
         preg_match_all('~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i', $message, $match);
 
         return $match[0];
@@ -156,8 +168,9 @@ if (! function_exists('create_preview_card_from_url')) {
     /**
      * Extract open graph metadata from given url and create preview card
      */
-    function create_preview_card_from_url(URI $url): ?PreviewCard
-    {
+    function create_preview_card_from_url(
+        URI $url
+    ): ?PreviewCard {
         $embera = new Embera();
         $mediaData = $embera->getUrlData((string) $url);
 
@@ -206,8 +219,9 @@ if (! function_exists('get_or_create_preview_card_from_url')) {
     /**
      * Extract open graph metadata from given url and create preview card
      */
-    function get_or_create_preview_card_from_url(URI $url): ?PreviewCard
-    {
+    function get_or_create_preview_card_from_url(
+        URI $url
+    ): ?PreviewCard {
         // check if preview card has already been generated
         if (
             ($previewCard = model('PreviewCardModel', false)
@@ -226,10 +240,16 @@ if (! function_exists('get_or_create_actor_from_uri')) {
      * Retrieves actor from database using the actor uri If Actor is not present, it creates the record in the database
      * and returns it.
      */
-    function get_or_create_actor_from_uri(string $actorUri): ?Actor
-    {
+    function get_or_create_actor_from_uri(
+        string $actorUri
+    ): ?Actor {
         // check if actor exists in database already and return it
-        if (($actor = model('ActorModel', false)->getActorByUri($actorUri)) instanceof Actor) {
+        if (($actor = model(
+            'ActorModel',
+            false
+        )->getActorByUri(
+            $actorUri
+        )) instanceof Actor) {
             return $actor;
         }
 
@@ -243,8 +263,10 @@ if (! function_exists('get_or_create_actor')) {
      * Retrieves actor from database using the actor username and domain If actor is not present, it creates the record
      * in the database and returns it.
      */
-    function get_or_create_actor(string $username, string $domain): ?Actor
-    {
+    function get_or_create_actor(
+        string $username,
+        string $domain
+    ): ?Actor {
         // check if actor exists in database already and return it
         if (
             ($actor = model('ActorModel', false)
@@ -265,8 +287,9 @@ if (! function_exists('create_actor_from_uri')) {
     /**
      * Creates actor record in database using the info gathered from the actorUri parameter
      */
-    function create_actor_from_uri(string $actorUri): ?Actor
-    {
+    function create_actor_from_uri(
+        string $actorUri
+    ): ?Actor {
         $activityRequest = new ActivityRequest($actorUri);
         $actorResponse = $activityRequest->get();
         $actorPayload = json_decode((string) $actorResponse->getBody(), false, 512, JSON_THROW_ON_ERROR);
@@ -343,8 +366,9 @@ if (! function_exists('get_message_from_object')) {
      *
      * TODO: store multiple languages, convert markdown
      */
-    function get_message_from_object(stdClass $object): string | false
-    {
+    function get_message_from_object(
+        stdClass $object
+    ): string | false {
         if (property_exists($object, 'content')) {
             extract_text_from_html($object->content);
             return $object->content;
@@ -353,7 +377,10 @@ if (! function_exists('get_message_from_object')) {
         $message = '';
         if (property_exists($object, 'contentMap')) {
             // TODO: update message to be json? (include all languages?)
-            if (property_exists($object->contentMap, 'en')) {
+            if (property_exists(
+                $object->contentMap,
+                'en'
+            )) {
                 extract_text_from_html($object->contentMap->en);
                 $message = $object->contentMap->en;
             } else {
@@ -371,8 +398,10 @@ if (! function_exists('linkify')) {
      *
      * @param string[] $protocols http/https, twitter
      */
-    function linkify(string $text, array $protocols = ['http', 'handle']): string
-    {
+    function linkify(
+        string $text,
+        array $protocols = ['http', 'handle']
+    ): string {
         $links = [];
 
         // Extract text links for each protocol

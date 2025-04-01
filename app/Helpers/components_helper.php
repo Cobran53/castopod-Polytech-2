@@ -24,8 +24,10 @@ if (! function_exists('hint_tooltip')) {
      *
      * @param string $hintText The hint text
      */
-    function hint_tooltip(string $hintText = '', string $class = ''): string
-    {
+    function hint_tooltip(
+        string $hintText = '',
+        string $class = ''
+    ): string {
         $tooltip =
             '<span data-tooltip="bottom" tabindex="0" title="' .
             esc($hintText) .
@@ -51,8 +53,12 @@ if (! function_exists('data_table')) {
      * @param mixed[] $data data to loop through and display in rows
      * @param mixed ...$rest Any other argument to pass to the `cell` function
      */
-    function data_table(array $columns, array $data = [], string $class = '', mixed ...$rest): string
-    {
+    function data_table(
+        array $columns,
+        array $data = [],
+        string $class = '',
+        mixed ...$rest
+    ): string {
         $table = new Table();
 
         $template = [
@@ -111,8 +117,11 @@ if (! function_exists('publication_pill')) {
      *
      * Shows the stylized publication datetime in regards to current datetime.
      */
-    function publication_pill(?Time $publicationDate, string $publicationStatus, string $customClass = ''): string
-    {
+    function publication_pill(
+        ?Time $publicationDate,
+        string $publicationStatus,
+        string $customClass = ''
+    ): string {
         $class = match ($publicationStatus) {
             'published'     => 'text-pine-500 border-pine-500 bg-pine-50',
             'scheduled'     => 'text-red-600 border-red-600 bg-red-50',
@@ -145,14 +154,19 @@ if (! function_exists('publication_pill')) {
 
 // ------------------------------------------------------------------------
 
-if (! function_exists('publication_button')) {
+if (! function_exists(
+    'publication_button'
+)) {
     /**
      * Publication button component for episodes
      *
      * Displays the appropriate publication button depending on the publication post.
      */
-    function publication_button(int $podcastId, int $episodeId, string $publicationStatus): string
-    {
+    function publication_button(
+        int $podcastId,
+        int $episodeId,
+        string $publicationStatus
+    ): string {
         switch ($publicationStatus) {
             case 'not_published':
                 $label = lang('Episode.publish');
@@ -189,14 +203,19 @@ if (! function_exists('publication_button')) {
 
 // ------------------------------------------------------------------------
 
-if (! function_exists('publication_status_banner')) {
+if (! function_exists(
+    'publication_status_banner'
+)) {
     /**
      * Publication status banner component for podcasts
      *
      * Displays the appropriate banner depending on the podcast's publication status.
      */
-    function publication_status_banner(?Time $publicationDate, int $podcastId, string $publicationStatus): string
-    {
+    function publication_status_banner(
+        ?Time $publicationDate,
+        int $podcastId,
+        string $publicationStatus
+    ): string {
         switch ($publicationStatus) {
             case 'not_published':
                 $bannerDisclaimer = lang('Podcast.publication_status_banner.draft_mode');
@@ -234,14 +253,18 @@ if (! function_exists('publication_status_banner')) {
 
 // ------------------------------------------------------------------------
 
-if (! function_exists('episode_publication_status_banner')) {
+if (! function_exists(
+    'episode_publication_status_banner'
+)) {
     /**
      * Publication status banner component for podcasts
      *
      * Displays the appropriate banner depending on the podcast's publication status.
      */
-    function episode_publication_status_banner(Episode $episode, string $class = ''): string
-    {
+    function episode_publication_status_banner(
+        Episode $episode,
+        string $class = ''
+    ): string {
         switch ($episode->publication_status) {
             case 'not_published':
                 $linkRoute = route_to('episode-publish', $episode->podcast_id, $episode->id);
@@ -286,7 +309,9 @@ if (! function_exists('episode_publication_status_banner')) {
 
 // ------------------------------------------------------------------------
 
-if (! function_exists('episode_numbering')) {
+if (! function_exists(
+    'episode_numbering'
+)) {
     /**
      * Returns relevant translated episode numbering.
      *
@@ -344,8 +369,10 @@ if (! function_exists('location_link')) {
     /**
      * Returns link to display from location info
      */
-    function location_link(?Location $location, string $class = ''): string
-    {
+    function location_link(
+        ?Location $location,
+        string $class = ''
+    ): string {
         if (! $location instanceof Location) {
             return '';
         }
@@ -371,8 +398,11 @@ if (! function_exists('audio_player')) {
     /**
      * Returns audio player
      */
-    function audio_player(string $source, string $mediaType, string $class = ''): string
-    {
+    function audio_player(
+        string $source,
+        string $mediaType,
+        string $class = ''
+    ): string {
         $language = service('request')
             ->getLocale();
 

@@ -42,8 +42,9 @@ class AnalyticsPodcastByPlayerModel extends Model
      *
      * @return AnalyticsPodcastsByPlayer[]
      */
-    public function getDataByAppWeekly(int $podcastId): array
-    {
+    public function getDataByAppWeekly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcasts_by_player_by_app_weekly"))
         ) {
@@ -71,8 +72,9 @@ class AnalyticsPodcastByPlayerModel extends Model
      *
      * @return AnalyticsPodcastsByPlayer[]
      */
-    public function getDataByAppYearly(int $podcastId): array
-    {
+    public function getDataByAppYearly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcasts_by_player_by_app_yearly"))
         ) {
@@ -100,8 +102,9 @@ class AnalyticsPodcastByPlayerModel extends Model
      *
      * @return AnalyticsPodcastsByPlayer[]
      */
-    public function getDataByOsWeekly(int $podcastId): array
-    {
+    public function getDataByOsWeekly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcasts_by_player_by_os_weekly"))
         ) {
@@ -130,8 +133,9 @@ class AnalyticsPodcastByPlayerModel extends Model
      *
      * @return AnalyticsPodcastsByPlayer[]
      */
-    public function getDataByDeviceWeekly(int $podcastId): array
-    {
+    public function getDataByDeviceWeekly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcasts_by_player_by_device_weekly"))
         ) {
@@ -159,8 +163,9 @@ class AnalyticsPodcastByPlayerModel extends Model
      *
      * @return AnalyticsPodcastsByPlayer[]
      */
-    public function getDataBots(int $podcastId): array
-    {
+    public function getDataBots(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcasts_by_player_bots"))
         ) {

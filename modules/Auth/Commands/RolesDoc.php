@@ -90,8 +90,11 @@ class RolesDoc extends BaseCommand
         );
     }
 
-    protected function handleInstancePermissions(AuthGroups $authGroups, string $fileContents, string $pattern): string
-    {
+    protected function handleInstancePermissions(
+        AuthGroups $authGroups,
+        string $fileContents,
+        string $pattern
+    ): string {
         return $this->renderCommentBlock(
             $fileContents,
             $pattern,
@@ -144,7 +147,10 @@ class RolesDoc extends BaseCommand
         // check if it has the start and end comments to insert roles table
         // looking for <AUTH-INSTANCE-ROLES-LIST:START> and <AUTH-INSTANCE-ROLES-LIST:END>
 
-        $hasInstanceInsertComments = preg_match($pattern, $fileContents);
+        $hasInstanceInsertComments = preg_match(
+            $pattern,
+            $fileContents
+        );
 
         if (! $hasInstanceInsertComments) {
             return $fileContents;

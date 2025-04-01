@@ -18,8 +18,10 @@ class FS implements FileManagerInterface
     /**
      * Saves a file to the corresponding folder in `public/media`
      */
-    public function save(File $file, string $key): string
-    {
+    public function save(
+        File $file,
+        string $key
+    ): string {
         helper('media');
 
         $path = $this->media_path_absolute($key);
@@ -33,7 +35,10 @@ class FS implements FileManagerInterface
         }
 
         // copy to media folder, overwrite file if already existing
-        $isCopySuccessful = copy($file->getRealPath(), $path);
+        $isCopySuccessful = copy(
+            $file->getRealPath(),
+            $path
+        );
 
         if (! $isCopySuccessful) {
             throw new Exception("Could not save file {$key} to {$path}");
@@ -134,8 +139,9 @@ class FS implements FileManagerInterface
      *
      * @param  string|string[] $uri URI string or array of URI segments
      */
-    private function media_path_absolute(string | array $uri = ''): string
-    {
+    private function media_path_absolute(
+        string | array $uri = ''
+    ): string {
         // convert segment array to string
         if (is_array($uri)) {
             $uri = implode('/', $uri);

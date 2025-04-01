@@ -21,13 +21,13 @@ helper('form');
         ->user(),
 ]) ?>
 
-<?php if(service('settings')->get('Nextcloud.nextcloudActive')): ?>
+<?php if (service('settings')->get('Nextcloud.nextcloudActive')): ?>
 <div class="px-4 py-5">
     <dt class="text-sm font-medium leading-5 text-skin-muted">
     Compte Nextcloud
     </dt>
     <dd class="mt-1 text-sm leading-5">
-        <?php if(isset($email)): ?>
+        <?php if (isset($email)): ?>
             Compte associé avec <?= $email ?>.
             <button onclick="confirmDelete()" class="inline-flex items-center justify-center p-1 mb-4 ml-4 text-sm text-red-500 transition duration-300 rounded-lg bg-red-50 hover:text-red-900 hover:bg-red-100 dark:text-red-400 dark:bg-red-800 dark:hover:bg-red-700 dark:hover:text-white">
                 Supprimer l'association
@@ -69,8 +69,7 @@ helper('form');
                 </Forms.Section>
             </form>
         <?php else: ?>
-            <a href="<?=
-                route_to('syncAccount') . '?redirectLink=my-account'
+            <a href="<?= route_to('syncAccount') . '?redirectLink=my-account'
             ?>" class="inline-flex items-center justify-center p-1 mb-4 text-sm text-gray-500 transition duration-300 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
                 <span class="w-full">Synchroniser son compte avec Nextcloud</span>
                 <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">

@@ -10,8 +10,10 @@ if (! function_exists('media_url')) {
      *
      * @param array<string>|string $relativePath URI string or array of URI segments
      */
-    function media_url(array|string $relativePath = '', ?string $scheme = null): string
-    {
+    function media_url(
+        array|string $relativePath = '',
+        ?string $scheme = null
+    ): string {
         // Convert array of segments to a string
         if (is_array($relativePath)) {
             $relativePath = implode('/', $relativePath);

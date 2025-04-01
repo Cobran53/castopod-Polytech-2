@@ -36,7 +36,10 @@ class EpisodePreviewController extends BaseController
 
         if ($episode->publication_status === 'published') {
             // redirect to episode page
-            return redirect()->route('episode', [$episode->podcast->handle, $episode->slug]);
+            return redirect()->route(
+                'episode',
+                [$episode->podcast->handle, $episode->slug]
+            );
         }
 
         unset($params[0]);

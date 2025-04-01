@@ -122,7 +122,9 @@ class PodcastModel extends Model
      *
      * @var list<string>
      */
-    protected $beforeUpdate = ['clearCache'];
+    protected $beforeUpdate = [
+        'clearCache',
+    ];
 
     /**
      * @var list<string>
@@ -205,8 +207,10 @@ class PodcastModel extends Model
      * @param string[] $userPodcastIds
      * @return Podcast[] podcasts
      */
-    public function getUserPodcasts(int $userId, array $userPodcastIds): array
-    {
+    public function getUserPodcasts(
+        int $userId,
+        array $userPodcastIds
+    ): array {
         $cacheName = "user{$userId}_podcasts";
         if (! ($found = cache($cacheName))) {
             $found = $userPodcastIds === [] ? [] : $this->whereIn('id', $userPodcastIds)
@@ -299,8 +303,9 @@ class PodcastModel extends Model
      *
      * @return array<string, mixed>|null
      */
-    public function getDefaultQuery(int $podcastId): ?array
-    {
+    public function getDefaultQuery(
+        int $podcastId
+    ): ?array {
         $cacheName = "podcast#{$podcastId}_defaultQuery";
         if (! ($defaultQuery = cache($cacheName))) {
             $seasons = $this->getSeasons($podcastId);
@@ -384,8 +389,9 @@ class PodcastModel extends Model
      *
      * @return mixed[]
      */
-    protected function createPodcastActor(array $data): array
-    {
+    protected function createPodcastActor(
+        array $data
+    ): array {
         $rsa = new RSA();
         $rsa->setHash('sha256');
 
@@ -425,8 +431,9 @@ class PodcastModel extends Model
      *
      * @return mixed[]
      */
-    protected function setActorAvatar(array $data): array
-    {
+    protected function setActorAvatar(
+        array $data
+    ): array {
         $podcast = (new self())->find((int) (is_array($data['id']) ? $data['id'][0] : $data['id']));
 
         if ($podcast instanceof Podcast) {
@@ -450,8 +457,9 @@ class PodcastModel extends Model
      *
      * @return mixed[]
      */
-    protected function updatePodcastActor(array $data): array
-    {
+    protected function updatePodcastActor(
+        array $data
+    ): array {
         $podcast = (new self())->find((int) (is_array($data['id']) ? $data['id'][0] : $data['id']));
 
         if ($podcast instanceof Podcast) {
@@ -484,8 +492,9 @@ class PodcastModel extends Model
      *
      * @return mixed[]
      */
-    protected function setPodcastGUID(array $data): array
-    {
+    protected function setPodcastGUID(
+        array $data
+    ): array {
         if (! array_key_exists(
             'guid',
             $data['data']
@@ -493,7 +502,10 @@ class PodcastModel extends Model
             $uuid = service('uuid');
             $feedUrl = url_to('podcast-rss-feed', $data['data']['handle']);
             // 'ead4c236-bf58-58c6-a2c6-a6b28d128cb6' is the uuid of the podcast namespace
-            $data['data']['guid'] = $uuid->uuid5('ead4c236-bf58-58c6-a2c6-a6b28d128cb6', $feedUrl)->toString();
+            $data['data']['guid'] = $uuid->uuid5(
+                'ead4c236-bf58-58c6-a2c6-a6b28d128cb6',
+                $feedUrl
+            )->toString();
         }
 
         return $data;

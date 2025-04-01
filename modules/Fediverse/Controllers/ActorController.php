@@ -76,7 +76,9 @@ class ActorController extends Controller
         $payload = $this->request->getJSON();
 
         // retrieve payload actor from database or create it if it doesn't exist
-        $payloadActor = get_or_create_actor_from_uri($payload->actor);
+        $payloadActor = get_or_create_actor_from_uri(
+            $payload->actor
+        );
 
         // store activity to database
         $activityId = model('ActivityModel', false)
@@ -104,7 +106,9 @@ class ActorController extends Controller
                     if ($replyToPost instanceof Post) {
                         // TODO: strip content from html to retrieve message
                         // remove all html tags and reconstruct message with mentions?
-                        $message = get_message_from_object($payload->object);
+                        $message = get_message_from_object(
+                            $payload->object
+                        );
 
                         $reply = new Post([
                             'uri'            => $payload->object->id,
@@ -149,7 +153,11 @@ class ActorController extends Controller
                     ->addFollower($payloadActor, $this->actor, false);
 
                 // Automatically accept follow by returning accept activity
-                accept_follow($this->actor, $payloadActor, $payload->id);
+                accept_follow(
+                    $this->actor,
+                    $payloadActor,
+                    $payload->id
+                );
 
                 // TODO: return 202 (Accepted) followed!
                 return $this->response->setStatusCode(202)
@@ -247,7 +255,9 @@ class ActorController extends Controller
                             ->setJSON([]);
                     default:
                         // return not handled undo error (501 = not implemented)
-                        return $this->response->setStatusCode(501)
+                        return $this->response->setStatusCode(
+                            501
+                        )
                             ->setJSON([]);
                 }
                 // no break

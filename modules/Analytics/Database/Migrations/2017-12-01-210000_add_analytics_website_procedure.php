@@ -20,7 +20,9 @@ class AddAnalyticsWebsiteProcedure extends BaseMigration
     {
         // Creates Procedure for data insertion
         // Example: CALL analytics_website(1,'FR','Firefox');
-        $procedureName = $this->db->prefixTable('analytics_website');
+        $procedureName = $this->db->prefixTable(
+            'analytics_website'
+        );
         $createQuery = <<<CODE_SAMPLE
         CREATE PROCEDURE `{$procedureName}` (
             IN `p_podcast_id` INT UNSIGNED,

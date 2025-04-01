@@ -39,7 +39,15 @@ class PostController extends FediversePostController
     /**
      * @var list<string>
      */
-    protected $helpers = ['auth', 'fediverse', 'svg', 'components', 'misc', 'seo', 'premium_podcasts'];
+    protected $helpers = [
+        'auth',
+        'fediverse',
+        'svg',
+        'components',
+        'misc',
+        'seo',
+        'premium_podcasts',
+    ];
 
     public function _remap(string $method, string ...$params): mixed
     {
@@ -262,6 +270,9 @@ class PostController extends FediversePostController
         helper('form');
 
         // NO VIEW CACHING: form has a CSRF token which should change on each request
-        return view('post/remote_action', $data);
+        return view(
+            'post/remote_action',
+            $data
+        );
     }
 }

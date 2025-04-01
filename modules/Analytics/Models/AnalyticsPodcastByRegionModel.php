@@ -42,8 +42,9 @@ class AnalyticsPodcastByRegionModel extends Model
      *
      * @return AnalyticsPodcastsByRegion[]
      */
-    public function getData(int $podcastId): array
-    {
+    public function getData(
+        int $podcastId
+    ): array {
         $locale = service('request')
             ->getLocale();
         if (

@@ -180,7 +180,9 @@ class VideoClipsController extends BaseController
         ]);
 
         // Check if video clip exists before inserting a new line
-        if ((new ClipModel())->doesVideoClipExist($videoClip)) {
+        if ((new ClipModel())->doesVideoClipExist(
+            $videoClip
+        )) {
             // video clip already exists
             return redirect()
                 ->back()
@@ -223,13 +225,19 @@ class VideoClipsController extends BaseController
 
         if ($videoClip->media === null) {
             // delete Clip directly
-            (new ClipModel())->deleteVideoClip($this->podcast->id, $this->episode->id, $videoClip->id);
+            (new ClipModel())->deleteVideoClip(
+                $this->podcast->id,
+                $this->episode->id,
+                $videoClip->id
+            );
         } else {
             (new ClipModel())->clearVideoClipCache($videoClip->id);
 
             $mediaModel = new MediaModel();
             // delete the videoClip file, the clip will be deleted on cascade
-            if (! $mediaModel->deleteMedia($videoClip->media)) {
+            if (! $mediaModel->deleteMedia(
+                $videoClip->media
+            )) {
                 return redirect()
                     ->back()
                     ->withInput()

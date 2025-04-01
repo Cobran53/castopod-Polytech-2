@@ -146,7 +146,11 @@ class Episode extends Entity
      * @var array<int, string>
      * @phpstan-var list<string>
      */
-    protected $dates = ['published_at', 'created_at', 'updated_at'];
+    protected $dates = [
+        'published_at',
+        'created_at',
+        'updated_at',
+    ];
 
     /**
      * @var array<string, string>
@@ -353,7 +357,9 @@ class Episode extends Entity
         );
 
         // Wrap episode url with OP3 if episode is public and OP3 is enabled on this podcast
-        if (! $this->is_premium && service('settings')->get(
+        if (! $this->is_premium && service(
+            'settings'
+        )->get(
             'Analytics.enableOP3',
             'podcast:' . $this->podcast_id
         )) {
@@ -571,8 +577,9 @@ class Episode extends Entity
     /**
      * Saves the location name and fetches OpenStreetMap info
      */
-    public function setLocation(?Location $location = null): static
-    {
+    public function setLocation(
+        ?Location $location = null
+    ): static {
         if (! $location instanceof Location) {
             $this->attributes['location_name'] = null;
             $this->attributes['location_geo'] = null;
@@ -634,8 +641,9 @@ class Episode extends Entity
     /**
      * Saves custom rss tag into json
      */
-    public function setCustomRssString(?string $customRssString = null): static
-    {
+    public function setCustomRssString(
+        ?string $customRssString = null
+    ): static {
         if ($customRssString === '') {
             $this->attributes['custom_rss'] = null;
             return $this;

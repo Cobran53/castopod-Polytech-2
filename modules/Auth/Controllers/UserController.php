@@ -117,7 +117,10 @@ class UserController extends BaseController
         $identityModel = model('UserIdentityModel');
 
         // Delete any previous magic-link identities
-        $identityModel->deleteIdentitiesByType($user, Session::ID_TYPE_MAGIC_LINK);
+        $identityModel->deleteIdentitiesByType(
+            $user,
+            Session::ID_TYPE_MAGIC_LINK
+        );
 
         // Generate the code and save it as an identity
         $token = random_string('crypto', 20);
@@ -242,7 +245,9 @@ class UserController extends BaseController
 
         // You cannot delete a superadmin
         // superadmin has to be demoted before being deleted
-        if ($this->user->inGroup(setting('AuthGroups.mostPowerfulPodcastGroup'))) {
+        if ($this->user->inGroup(
+            setting('AuthGroups.mostPowerfulPodcastGroup')
+        )) {
             return redirect()
                 ->back()
                 ->with('errors', [

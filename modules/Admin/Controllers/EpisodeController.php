@@ -568,7 +568,9 @@ class EpisodeController extends BaseController
             }
         } elseif ($this->podcast->publication_status === 'scheduled') {
             // podcast publication date has already been set
-            $this->episode->published_at = $this->podcast->published_at->addSeconds(1);
+            $this->episode->published_at = $this->podcast->published_at->addSeconds(
+                1
+            );
         } else {
             $this->episode->published_at = Time::now();
         }
@@ -674,7 +676,9 @@ class EpisodeController extends BaseController
             }
         } elseif ($this->podcast->publication_status === 'scheduled') {
             // podcast publication date has already been set
-            $this->episode->published_at = $this->podcast->published_at->addSeconds(1);
+            $this->episode->published_at = $this->podcast->published_at->addSeconds(
+                1
+            );
         } else {
             $this->episode->published_at = Time::now();
         }
@@ -902,9 +906,12 @@ class EpisodeController extends BaseController
         }
 
         // set podcast is_published_on_hubs to false to trigger websub push
-        (new PodcastModel())->update($this->episode->podcast->id, [
+        (new PodcastModel())->update(
+            $this->episode->podcast->id,
+            [
             'is_published_on_hubs' => 0,
-        ]);
+        ]
+        );
 
         $db->transComplete();
 

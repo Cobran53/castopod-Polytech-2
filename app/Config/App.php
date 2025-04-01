@@ -272,10 +272,18 @@ class App extends BaseConfig
      *
      * @param mixed $property
      */
-    protected function initEnvValue(&$property, string $name, string $prefix, string $shortPrefix): void
-    {
+    protected function initEnvValue(
+        &$property,
+        string $name,
+        string $prefix,
+        string $shortPrefix
+    ): void {
         // if attempting to set property from ENV, first set to empty string
-        if ($name === 'proxyIPs' && $this->getEnvValue($name, $prefix, $shortPrefix) !== null) {
+        if ($name === 'proxyIPs' && $this->getEnvValue(
+            $name,
+            $prefix,
+            $shortPrefix
+        ) !== null) {
             $property = '';
         }
 

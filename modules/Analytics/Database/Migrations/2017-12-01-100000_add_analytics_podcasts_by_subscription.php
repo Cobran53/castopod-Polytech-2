@@ -41,7 +41,9 @@ class AddAnalyticsPodcastsBySubscription extends BaseMigration
 
         $this->forge->addPrimaryKey(['podcast_id', 'episode_id', 'subscription_id', 'date']);
         // `created_at` and `updated_at` are created with SQL because Model class won’t be used for insertion (Procedure will be used instead)
-        $this->forge->addField('`created_at` timestamp NOT NULL DEFAULT current_timestamp()');
+        $this->forge->addField(
+            '`created_at` timestamp NOT NULL DEFAULT current_timestamp()'
+        );
         $this->forge->addField(
             '`updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()',
         );

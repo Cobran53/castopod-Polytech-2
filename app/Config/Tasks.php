@@ -34,8 +34,9 @@ class Tasks extends BaseTasks
      * Register any tasks within this method for the application.
      * Called by the TaskRunner.
      */
-    public function init(Scheduler $schedule): void
-    {
+    public function init(
+        Scheduler $schedule
+    ): void {
         $schedule->command('fediverse:broadcast')
             ->everyMinute()
             ->named('fediverse-broadcast');

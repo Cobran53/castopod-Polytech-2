@@ -18,8 +18,14 @@ class ActivityPubController extends Controller
     public function preflight(): ResponseInterface
     {
         return $this->response->setHeader('Access-Control-Allow-Origin', '*') // for allowing any domain, insecure
-            ->setHeader('Access-Control-Allow-Headers', '*') // for allowing any headers, insecure
-            ->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS') // allows GET and OPTIONS methods only
+            ->setHeader(
+                'Access-Control-Allow-Headers',
+                '*'
+            ) // for allowing any headers, insecure
+            ->setHeader(
+                'Access-Control-Allow-Methods',
+                'GET, OPTIONS'
+            ) // allows GET and OPTIONS methods only
             ->setHeader('Access-Control-Max-Age', '86400')
             ->setHeader('Cache-Control', 'public, max-age=86400')
             ->setStatusCode(200);

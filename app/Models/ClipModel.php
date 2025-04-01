@@ -213,8 +213,10 @@ class ClipModel extends Model
      *
      * @return Soundbite[]
      */
-    public function getEpisodeSoundbites(int $podcastId, int $episodeId): array
-    {
+    public function getEpisodeSoundbites(
+        int $podcastId,
+        int $episodeId
+    ): array {
         $cacheName = "podcast#{$podcastId}_episode#{$episodeId}_soundbites";
         if (! ($found = cache($cacheName))) {
             $found = $this->where([

@@ -28,7 +28,12 @@ class CategoryModel extends Model
     /**
      * @var list<string>
      */
-    protected $allowedFields = ['parent_id', 'code', 'apple_category', 'google_category'];
+    protected $allowedFields = [
+        'parent_id',
+        'code',
+        'apple_category',
+        'google_category',
+    ];
 
     /**
      * @var string
@@ -67,7 +72,9 @@ class CategoryModel extends Model
                 static function (array $result, Category $category): array {
                     $result[$category->id] = '';
                     if ($category->parent instanceof Category) {
-                        $result[$category->id] = lang('Podcast.category_options.' . $category->parent->code) . ' › ';
+                        $result[$category->id] = lang(
+                            'Podcast.category_options.' . $category->parent->code
+                        ) . ' › ';
                     }
 
                     $result[$category->id] .= lang('Podcast.category_options.' . $category->code);
@@ -90,8 +97,10 @@ class CategoryModel extends Model
      *
      * @return int|false Number of rows inserted or FALSE on failure
      */
-    public function setPodcastCategories(int $podcastId, array $categoriesIds = []): int | false
-    {
+    public function setPodcastCategories(
+        int $podcastId,
+        array $categoriesIds = []
+    ): int | false {
         cache()->delete("podcast#{$podcastId}_categories");
 
         // Remove already previously set categories to overwrite them
@@ -129,8 +138,9 @@ class CategoryModel extends Model
      *
      * @return Category[]
      */
-    public function getPodcastCategories(int $podcastId): array
-    {
+    public function getPodcastCategories(
+        int $podcastId
+    ): array {
         $cacheName = "podcast#{$podcastId}_categories";
         if (! ($categories = cache($cacheName))) {
             $categories = $this->select('categories.*')

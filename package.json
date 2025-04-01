@@ -106,7 +106,7 @@
       "prettier --write"
     ],
     "!(*.css|*.js|*.ts|*.php|*.neon|*.sh)": [
-      "prettier --write"
+      "prettier --write --ignore-unknown"
     ]
   },
   "config": {

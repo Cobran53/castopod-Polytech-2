@@ -50,7 +50,10 @@ return ECSConfig::configure()
 
         // crowdin enforces its own style for translation files
         // remove SingleQuoteFixer for Language files to prevent conflicts
-        SingleQuoteFixer::class => [__DIR__ . '/app/Language/*', __DIR__ . '/modules/**/Language/*'],
+        SingleQuoteFixer::class => [
+            __DIR__ . '/app/Language/*',
+            __DIR__ . '/modules/**/Language/*',
+        ],
 
         BinaryOperatorSpacesFixer::class => [__DIR__ . '/app/Language/*', __DIR__ . '/modules/**/Language/*'],
 

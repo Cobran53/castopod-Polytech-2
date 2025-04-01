@@ -66,7 +66,10 @@ class Generate extends BaseCommand
                 $clipModel = new ClipModel();
                 if ($exitCode === 0) {
                     // success, video was generated
-                    $scheduledClip->setMedia(new File($clipper->videoClipOutput), $clipper->videoClipFileKey);
+                    $scheduledClip->setMedia(
+                        new File($clipper->videoClipOutput),
+                        $clipper->videoClipFileKey
+                    );
                     $clipModel->update($scheduledClip->id, [
                         'media_id'     => $scheduledClip->media_id,
                         'status'       => 'passed',

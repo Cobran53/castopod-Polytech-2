@@ -71,7 +71,10 @@ class Vite
                 foreach ($manifestElement['imports'] as $importPath) {
                     if (array_key_exists($importPath, $this->manifestData)) {
                         // import css dependencies if any
-                        if (array_key_exists('css', $this->manifestData[$importPath])) {
+                        if (array_key_exists(
+                            'css',
+                            $this->manifestData[$importPath]
+                        )) {
                             foreach ($this->manifestData[$importPath]['css'] as $cssFile) {
                                 $html .= $this->getHtmlTag(
                                     '/' . config('Vite')->assetsRoot . '/' . $cssFile,

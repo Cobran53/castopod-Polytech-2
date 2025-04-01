@@ -47,8 +47,10 @@ class Services extends BaseService
      * The Negotiate class provides the content negotiation features for working the request to determine correct
      * language, encoding, charset, and more.
      */
-    public static function negotiator(?RequestInterface $request = null, bool $getShared = true): Negotiate
-    {
+    public static function negotiator(
+        ?RequestInterface $request = null,
+        bool $getShared = true
+    ): Negotiate {
         if ($getShared) {
             return static::getSharedInstance('negotiator', $request);
         }

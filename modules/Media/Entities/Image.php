@@ -120,7 +120,10 @@ class Image extends BaseMedia
             // no original file instance set to save sizes from
 
             // download image temporarily to generate sizes from
-            $tempImagePath = (string) tempnam(WRITEPATH . 'temp', 'img_');
+            $tempImagePath = (string) tempnam(
+                WRITEPATH . 'temp',
+                'img_'
+            );
             $imageContent = (string) service('file_manager')
                 ->getFileContents($this->file_key);
             file_put_contents($tempImagePath, $imageContent);

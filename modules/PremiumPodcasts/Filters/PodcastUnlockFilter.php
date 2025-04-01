@@ -21,8 +21,10 @@ class PodcastUnlockFilter implements FilterInterface
      *
      * @return RequestInterface|ResponseInterface|string|void
      */
-    public function before(RequestInterface $request, $arguments = null)
-    {
+    public function before(
+        RequestInterface $request,
+        $arguments = null
+    ) {
         if (! function_exists('is_unlocked')) {
             helper('premium_podcasts');
         }
@@ -41,7 +43,9 @@ class PodcastUnlockFilter implements FilterInterface
         }
 
         // Make sure this isn't already a premium podcast route
-        if (url_is((string) route_to('premium-podcast-unlock', $routerParams[0]))) {
+        if (url_is(
+            (string) route_to('premium-podcast-unlock', $routerParams[0])
+        )) {
             return;
         }
 
@@ -62,7 +66,9 @@ class PodcastUnlockFilter implements FilterInterface
         }
 
         // Episode should be embeddable even if it is premium
-        if (url_is((string) route_to('embed', $episode->podcast->handle, $episode->slug))) {
+        if (url_is(
+            (string) route_to('embed', $episode->podcast->handle, $episode->slug)
+        )) {
             return;
         }
 
@@ -79,7 +85,10 @@ class PodcastUnlockFilter implements FilterInterface
     /**
      * @param string[]|null $arguments
      */
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): void
-    {
+    public function after(
+        RequestInterface $request,
+        ResponseInterface $response,
+        $arguments = null
+    ): void {
     }
 }

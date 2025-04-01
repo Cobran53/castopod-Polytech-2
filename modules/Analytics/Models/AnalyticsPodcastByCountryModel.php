@@ -42,8 +42,9 @@ class AnalyticsPodcastByCountryModel extends Model
      *
      * @return AnalyticsPodcastsByCountry[]
      */
-    public function getDataWeekly(int $podcastId): array
-    {
+    public function getDataWeekly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcast_by_country_weekly"))
         ) {
@@ -70,8 +71,9 @@ class AnalyticsPodcastByCountryModel extends Model
      *
      * @return AnalyticsPodcastsByCountry[]
      */
-    public function getDataYearly(int $podcastId): array
-    {
+    public function getDataYearly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcast_by_country_yearly"))
         ) {

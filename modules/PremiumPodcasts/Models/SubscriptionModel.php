@@ -102,8 +102,10 @@ class SubscriptionModel extends Model
     /**
      * @param string $token plain-text token to be encrypted and matched against encrypted tokens in database
      */
-    public function validateSubscription(int|string $podcastIdOrHandle, string $token): ?Subscription
-    {
+    public function validateSubscription(
+        int|string $podcastIdOrHandle,
+        string $token
+    ): ?Subscription {
         $subscriptionModel = $this;
 
         if (is_int($podcastIdOrHandle)) {
@@ -131,10 +133,13 @@ class SubscriptionModel extends Model
      *
      * @return mixed[]
      */
-    protected function clearCache(array $data): array
-    {
+    protected function clearCache(
+        array $data
+    ): array {
         /** @var ?Subscription */
-        $subscription = (new self())->find(is_array($data['id']) ? $data['id'][0] : $data['id']);
+        $subscription = (new self())->find(
+            is_array($data['id']) ? $data['id'][0] : $data['id']
+        );
 
         if (! $subscription instanceof Subscription) {
             return $data;

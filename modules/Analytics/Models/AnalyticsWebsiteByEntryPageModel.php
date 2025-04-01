@@ -42,8 +42,9 @@ class AnalyticsWebsiteByEntryPageModel extends Model
      *
      * @return AnalyticsWebsiteByEntryPage[]
      */
-    public function getData(int $podcastId): array
-    {
+    public function getData(
+        int $podcastId
+    ): array {
         if (! ($found = cache("{$podcastId}_analytics_website_by_entry_page"))) {
             $oneWeekAgo = date('Y-m-d', strtotime('-1 week'));
             $found = $this->select("IF(entry_page_url='/','/',SUBSTRING_INDEX(entry_page_url,'/',-1)) as labels")

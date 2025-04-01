@@ -229,7 +229,9 @@ class ContributorController extends BaseController
             ->delete("podcast#{$this->podcast->id}_contributors");
 
         // remove contributor from podcast group
-        $this->contributor->removeGroup(get_podcast_group($this->contributor, $this->podcast->id, false));
+        $this->contributor->removeGroup(
+            get_podcast_group($this->contributor, $this->podcast->id, false)
+        );
 
         return redirect()
             ->route('contributor-list', [$this->podcast->id])

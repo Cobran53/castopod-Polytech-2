@@ -8,7 +8,9 @@ declare(strict_types=1);
  * @link       https://castopod.org/
  */
 
-if (! function_exists('add_suffix_to_path')) {
+if (! function_exists(
+    'add_suffix_to_path'
+)) {
     function change_file_path(string $path, string $suffix = '', ?string $newExtension = null): string
     {
         if ($newExtension === null) {

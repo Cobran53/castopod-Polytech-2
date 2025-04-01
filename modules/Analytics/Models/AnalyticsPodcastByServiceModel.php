@@ -42,8 +42,9 @@ class AnalyticsPodcastByServiceModel extends Model
      *
      * @return AnalyticsPodcastsByService[]
      */
-    public function getDataByServiceWeekly(int $podcastId): array
-    {
+    public function getDataByServiceWeekly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_podcasts_by_service_weekly"))
         ) {

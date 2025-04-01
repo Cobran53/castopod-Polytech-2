@@ -68,8 +68,9 @@ class Subscription extends Entity
      *
      * @return $this
      */
-    public function suspend(string $reason): static
-    {
+    public function suspend(
+        string $reason
+    ): static {
         $this->attributes['status'] = 'suspended';
         $this->attributes['status_message'] = $reason;
 

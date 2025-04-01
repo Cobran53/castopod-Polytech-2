@@ -452,16 +452,19 @@ class Platforms
     /**
      * @return array<string,array{label:string,home_url:string,submit_url:?string}>
      */
-    public function getPlatformsByType(string $type): array
-    {
+    public function getPlatformsByType(
+        string $type
+    ): array {
         return self::DATA[$type] ?? [];
     }
 
     /**
      * @return null|array{label:string,home_url:string,submit_url:?string}
      */
-    public function findPlatformBySlug(string $type, string $slug): ?array
-    {
+    public function findPlatformBySlug(
+        string $type,
+        string $slug
+    ): ?array {
         $data = self::DATA[$type] ?? [];
 
         if (! array_key_exists($slug, $data)) {

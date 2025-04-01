@@ -152,13 +152,19 @@ class SoundbiteController extends BaseController
 
         if ($soundbite->media === null) {
             // delete Clip directly
-            (new ClipModel())->deleteSoundbite($this->podcast->id, $this->episode->id, $soundbite->id);
+            (new ClipModel())->deleteSoundbite(
+                $this->podcast->id,
+                $this->episode->id,
+                $soundbite->id
+            );
         } else {
             (new ClipModel())->clearSoundbiteCache($this->podcast->id, $this->episode->id, $soundbite->id);
 
             $mediaModel = new MediaModel();
             // delete the soundbite file, the clip will be deleted on cascade
-            if (! $mediaModel->deleteMedia($soundbite->media)) {
+            if (! $mediaModel->deleteMedia(
+                $soundbite->media
+            )) {
                 return redirect()
                     ->back()
                     ->withInput()

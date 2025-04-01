@@ -113,6 +113,8 @@ class Credit extends Entity
         }
 
         /** @var string */
-        return lang("PersonsTaxonomy.persons.{$this->person_group}.roles.{$this->person_role}.label");
+        return lang(
+            "PersonsTaxonomy.persons.{$this->person_group}.roles.{$this->person_role}.label"
+        );
     }
 }

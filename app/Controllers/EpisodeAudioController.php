@@ -41,7 +41,9 @@ class EpisodeAudioController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = ['analytics'];
+    protected $helpers = [
+        'analytics',
+    ];
 
     protected Podcast $podcast;
 
@@ -98,7 +100,9 @@ class EpisodeAudioController extends Controller
         $subscription = null;
 
         // check if podcast is already unlocked before any token validation
-        if ($this->episode->is_premium && ! ($subscription = service('premium_podcasts')->subscription(
+        if ($this->episode->is_premium && ! ($subscription = service(
+            'premium_podcasts'
+        )->subscription(
             $this->episode->podcast->handle
         )) instanceof Subscription) {
             // look for token as GET parameter

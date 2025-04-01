@@ -58,7 +58,9 @@ class InstallController extends Controller
                 fclose($envFile);
             } catch (Throwable) {
                 // Could not create the .env file, redirect to a view with instructions on how to add it manually
-                return view('manual_config');
+                return view(
+                    'manual_config'
+                );
             }
         }
 
@@ -67,7 +69,9 @@ class InstallController extends Controller
         $dotenv->load();
 
         // Check if the created .env file is writable to continue install process
-        if (is_really_writable(ROOTPATH . '.env')) {
+        if (is_really_writable(
+            ROOTPATH . '.env'
+        )) {
             try {
                 $dotenv->required(['app.baseURL', 'analytics.salt', 'admin.gateway', 'auth.gateway']);
             } catch (ValidationException) {
@@ -115,7 +119,12 @@ class InstallController extends Controller
             $db = db_connect();
 
             // Check if instance owner has been created, meaning install was completed
-            if ($db->tableExists('users') && (new UserModel())->where('is_owner', true)
+            if ($db->tableExists(
+                'users'
+            ) && (new UserModel())->where(
+                'is_owner',
+                true
+            )
                 ->first() instanceof User
             ) {
                 // if so, show a 404 page
@@ -175,7 +184,9 @@ class InstallController extends Controller
         helper('text');
 
         // redirect to full install url with new baseUrl input
-        return redirect()->to(reduce_double_slashes($baseUrl . '/' . config('Install')->gateway));
+        return redirect()->to(
+            reduce_double_slashes($baseUrl . '/' . config('Install')->gateway)
+        );
     }
 
     public function databaseConfig(): string
@@ -312,7 +323,9 @@ class InstallController extends Controller
         $user = $userModel->findById($userModel->getInsertID());
 
         // set newly created user as most powerful instance group (superadmin)
-        $user->addGroup(setting('AuthGroups.mostPowerfulGroup'));
+        $user->addGroup(
+            setting('AuthGroups.mostPowerfulGroup')
+        );
 
         // Success!
         // set redirect_url session as admin area to go to after login
@@ -329,8 +342,9 @@ class InstallController extends Controller
      *
      * @param array<string, string> $configData key/value config pairs
      */
-    public static function writeEnv(array $configData): void
-    {
+    public static function writeEnv(
+        array $configData
+    ): void {
         $envData = file(ROOTPATH . '.env'); // reads an array of lines
 
         foreach ($configData as $key => $value) {

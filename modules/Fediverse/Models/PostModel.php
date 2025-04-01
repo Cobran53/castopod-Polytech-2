@@ -115,8 +115,9 @@ class PostModel extends UuidModel
      *
      * @return Post[]
      */
-    public function getActorPublishedPosts(int $actorId): array
-    {
+    public function getActorPublishedPosts(
+        int $actorId
+    ): array {
         $cacheName =
             config('Fediverse')
                 ->cachePrefix .
@@ -143,8 +144,9 @@ class PostModel extends UuidModel
      * Returns the timestamp difference in seconds between the next post to publish and the current timestamp. Returns
      * false if there's no post to publish
      */
-    public function getSecondsToNextUnpublishedPosts(int $actorId): int | false
-    {
+    public function getSecondsToNextUnpublishedPosts(
+        int $actorId
+    ): int | false {
         $result = $this->builder()
             ->select('TIMESTAMPDIFF(SECOND, UTC_TIMESTAMP(), `published_at`) as timestamp_diff')
             ->where([
@@ -165,8 +167,10 @@ class PostModel extends UuidModel
      *
      * @return Post[]
      */
-    public function getPostReplies(string $postId, bool $withBlocked = false): array
-    {
+    public function getPostReplies(
+        string $postId,
+        bool $withBlocked = false
+    ): array {
         $cacheName =
             config('Fediverse')
                 ->cachePrefix .
@@ -197,8 +201,9 @@ class PostModel extends UuidModel
      *
      * @return Post[]
      */
-    public function getPostReblogs(string $postId): array
-    {
+    public function getPostReblogs(
+        string $postId
+    ): array {
         $cacheName =
             config('Fediverse')
                 ->cachePrefix . "post#{$postId}_reblogs";
@@ -348,8 +353,10 @@ class PostModel extends UuidModel
     /**
      * Removes a post from the database and decrements meta data
      */
-    public function removePost(Post $post, bool $registerActivity = true): BaseResult | bool
-    {
+    public function removePost(
+        Post $post,
+        bool $registerActivity = true
+    ): BaseResult | bool {
         $this->db->transStart();
 
         // remove all post reblogs
@@ -697,8 +704,9 @@ class PostModel extends UuidModel
      * @param array<string, array<string|int, mixed>> $data
      * @return array<string, array<string|int, mixed>>
      */
-    protected function setPostId(array $data): array
-    {
+    protected function setPostId(
+        array $data
+    ): array {
         $uuid4 = $this->uuid->{$this->uuidVersion}();
         $data['data']['id'] = $uuid4->toString();
 

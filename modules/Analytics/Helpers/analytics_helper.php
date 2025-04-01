@@ -280,7 +280,10 @@ if (! function_exists('podcast_hit')) {
                     // [0-1] bytes range requests are used (by Apple) to check that file exists and that 206 partial content is working.
                     // We don't count these requests.
                     // We calculate how many bytes are being downloaded based on HTTP_RANGE values:
-                    $ranges = explode(',', substr((string) $httpRange, 6));
+                    $ranges = explode(
+                        ',',
+                        substr((string) $httpRange, 6)
+                    );
                     foreach ($ranges as $range) {
                         $parts = explode('-', $range);
                         $downloadedBytes += array_key_exists(1, $parts)
@@ -351,7 +354,10 @@ if (! function_exists('podcast_hit')) {
             }
         } catch (Exception $exception) {
             // If things go wrong the show must go on and the user must be able to download the file
-            log_message('critical', $exception->getMessage());
+            log_message(
+                'critical',
+                $exception->getMessage()
+            );
         }
     }
 }

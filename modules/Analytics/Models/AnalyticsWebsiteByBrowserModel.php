@@ -42,8 +42,9 @@ class AnalyticsWebsiteByBrowserModel extends Model
      *
      * @return AnalyticsWebsiteByBrowser[]
      */
-    public function getData(int $podcastId): array
-    {
+    public function getData(
+        int $podcastId
+    ): array {
         if (! ($found = cache("{$podcastId}_analytics_website_by_browser"))) {
             $oneWeekAgo = date('Y-m-d', strtotime('-1 week'));
             $found = $this->select('browser as labels')

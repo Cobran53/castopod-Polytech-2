@@ -282,8 +282,9 @@ class EpisodeModel extends UuidModel
     /**
      * Returns number of episodes of a podcast
      */
-    public function getPodcastEpisodesCount(int $podcastId): int|string
-    {
+    public function getPodcastEpisodesCount(
+        int $podcastId
+    ): int|string {
         return $this
             ->where([
                 'podcast_id' => $podcastId,
@@ -297,8 +298,9 @@ class EpisodeModel extends UuidModel
      *
      * @return int|false seconds
      */
-    public function getSecondsToNextUnpublishedEpisode(int $podcastId): int | false
-    {
+    public function getSecondsToNextUnpublishedEpisode(
+        int $podcastId
+    ): int | false {
         $result = $this->builder()
             ->select('TIMESTAMPDIFF(SECOND, UTC_TIMESTAMP(), `published_at`) as timestamp_diff')
             ->where([
@@ -344,8 +346,9 @@ class EpisodeModel extends UuidModel
     /**
      * @return array{number_of_seasons: int, number_of_episodes: int, first_published_at?: Time}
      */
-    public function getPodcastStats(int $podcastId): array
-    {
+    public function getPodcastStats(
+        int $podcastId
+    ): array {
         $result = $this->builder()
             ->select(
                 'COUNT(DISTINCT season_number) as number_of_seasons, COUNT(*) as number_of_episodes, MIN(published_at) as first_published_at'
@@ -513,8 +516,9 @@ class EpisodeModel extends UuidModel
      *
      * @return mixed[]
      */
-    protected function writeEnclosureMetadata(array $data): array
-    {
+    protected function writeEnclosureMetadata(
+        array $data
+    ): array {
         /** @var int|null $episodeId */
         $episodeId = is_array($data['id']) ? $data['id'][0] : $data['id'];
 

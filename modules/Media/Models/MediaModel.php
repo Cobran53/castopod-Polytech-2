@@ -68,7 +68,9 @@ class MediaModel extends Model
      *
      * @var list<string>
      */
-    protected $beforeUpdate = ['clearCache'];
+    protected $beforeUpdate = [
+        'clearCache',
+    ];
 
     /**
      * @var list<string>
@@ -112,8 +114,9 @@ class MediaModel extends Model
     /**
      * @param Document|Audio|Video|Image|Transcript|Chapters $media
      */
-    public function saveMedia(object $media): int | false
-    {
+    public function saveMedia(
+        object $media
+    ): int | false {
         // save file first
         $media->saveFile();
 
@@ -133,8 +136,9 @@ class MediaModel extends Model
     /**
      * @param Document|Audio|Video|Image|Transcript|Chapters $media
      */
-    public function updateMedia(object $media): bool
-    {
+    public function updateMedia(
+        object $media
+    ): bool {
         // save file first
         // FIXME: what if file is not set?
         $media->saveFile();
@@ -161,8 +165,9 @@ class MediaModel extends Model
     /**
      * @param Document|Audio|Video|Image|Transcript|Chapters $media
      */
-    public function deleteMedia($media): bool|BaseResult
-    {
+    public function deleteMedia(
+        $media
+    ): bool|BaseResult {
         if (! $media->deleteFile()) {
             return false;
         }
@@ -175,8 +180,9 @@ class MediaModel extends Model
      *
      * @return mixed[]
      */
-    protected function clearCache(array $data): array
-    {
+    protected function clearCache(
+        array $data
+    ): array {
         $mediaId = (is_array($data['id']) ? $data['id'][0] : $data['id']);
 
         cache()

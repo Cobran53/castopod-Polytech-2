@@ -20,7 +20,9 @@ class AddAnalyticsUnknownUseragentsProcedure extends BaseMigration
     {
         // Creates Procedure for data insertion
         // Example: CALL analytics_unknown_useragents('Podcasts/1430.46 CFNetwork/1125.2 Darwin/19.4.0');
-        $procedureName = $this->db->prefixTable('analytics_unknown_useragents');
+        $procedureName = $this->db->prefixTable(
+            'analytics_unknown_useragents'
+        );
         $createQuery = <<<CODE_SAMPLE
         CREATE PROCEDURE `{$procedureName}` (IN `p_useragent` VARCHAR(191)) MODIFIES SQL DATA
         DETERMINISTIC

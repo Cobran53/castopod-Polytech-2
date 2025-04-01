@@ -21,8 +21,10 @@ class EpisodeAnalyticsController extends Controller
     /**
      * @deprecated Replaced by EpisodeAudioController::index method
      */
-    public function hit(string $base64EpisodeData, string ...$audioPath): RedirectResponse
-    {
+    public function hit(
+        string $base64EpisodeData,
+        string ...$audioPath
+    ): RedirectResponse {
         $episodeData = unpack(
             'IpodcastId/IepisodeId/IbytesThreshold/IfileSize/Iduration/IpublicationDate',
             base64_url_decode($base64EpisodeData),

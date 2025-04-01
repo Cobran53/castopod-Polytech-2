@@ -104,7 +104,11 @@ class Toolbar extends BaseConfig
      *
      * @var list<string>
      */
-    public array $watchedDirectories = ['app', 'modules', 'themes'];
+    public array $watchedDirectories = [
+        'app',
+        'modules',
+        'themes',
+    ];
 
     /**
      * --------------------------------------------------------------------------
@@ -116,5 +120,13 @@ class Toolbar extends BaseConfig
      *
      * @var list<string>
      */
-    public array $watchedExtensions = ['php', 'css', 'js', 'html', 'svg', 'json', 'env'];
+    public array $watchedExtensions = [
+        'php',
+        'css',
+        'js',
+        'html',
+        'svg',
+        'json',
+        'env',
+    ];
 }

@@ -46,8 +46,9 @@ class Theme
     /**
      * Returns the path to the specified theme folder. If no theme is provided, will use the current theme.
      */
-    public static function path(string $theme = null): string
-    {
+    public static function path(
+        string $theme = null
+    ): string {
         if ($theme === null) {
             $theme = static::current();
         }

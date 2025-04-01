@@ -60,7 +60,12 @@ class BaseClip extends Entity
      * @var array<int, string>
      * @phpstan-var list<string>
      */
-    protected $dates = ['created_at', 'updated_at', 'job_started_at', 'job_ended_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'job_started_at',
+        'job_ended_at',
+    ];
 
     /**
      * @var array<string, string>

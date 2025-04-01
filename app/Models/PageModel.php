@@ -28,7 +28,13 @@ class PageModel extends Model
     /**
      * @var list<string>
      */
-    protected $allowedFields = ['id', 'title', 'slug', 'content_markdown', 'content_html'];
+    protected $allowedFields = [
+        'id',
+        'title',
+        'slug',
+        'content_markdown',
+        'content_html',
+    ];
 
     /**
      * @var string
@@ -64,7 +70,9 @@ class PageModel extends Model
      *
      * @var list<string>
      */
-    protected $beforeUpdate = ['clearCache'];
+    protected $beforeUpdate = [
+        'clearCache',
+    ];
 
     /**
      * @var list<string>
@@ -76,8 +84,9 @@ class PageModel extends Model
      *
      * @return array<string, array<string|int, mixed>>
      */
-    protected function clearCache(array $data): array
-    {
+    protected function clearCache(
+        array $data
+    ): array {
         // Clear the cache of all pages
         cache()
             ->deleteMatching('page*');

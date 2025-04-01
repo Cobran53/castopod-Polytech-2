@@ -8,15 +8,18 @@ declare(strict_types=1);
  * @link       https://castopod.org/
  */
 
-if (! function_exists('render_breadcrumb')) {
+if (! function_exists(
+    'render_breadcrumb'
+)) {
     /**
      * Renders the breadcrumb navigation through the Breadcrumb service
      *
      * @param string|null $class to be added to the breadcrumb nav
      * @return string html breadcrumb
      */
-    function render_breadcrumb(string $class = null): string
-    {
+    function render_breadcrumb(
+        string $class = null
+    ): string {
         $breadcrumb = service('breadcrumb');
         return $breadcrumb->render($class);
     }

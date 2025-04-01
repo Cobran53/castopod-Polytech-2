@@ -107,8 +107,9 @@ class PremiumPodcasts
     /**
      * Returns the Subscription instance for the current logged in user.
      */
-    public function subscription(string $podcastHandle): ?Subscription
-    {
+    public function subscription(
+        string $podcastHandle
+    ): ?Subscription {
         return $this->isUnlocked($podcastHandle) ? $this->subscriptions[$podcastHandle] : null;
     }
 }

@@ -65,7 +65,10 @@ if (! function_exists('get_rss_feed')) {
         }
 
         // the last build date corresponds to the creation of the feed.xml cache
-        $channel->addChild('lastBuildDate', (new Time('now'))->format(DATE_RFC1123));
+        $channel->addChild(
+            'lastBuildDate',
+            (new Time('now'))->format(DATE_RFC1123)
+        );
         $channel->addChild('generator', 'Castopod - https://castopod.org/');
         $channel->addChild('docs', 'https://cyber.harvard.edu/rss/rss.html');
 
@@ -73,7 +76,10 @@ if (! function_exists('get_rss_feed')) {
             // FIXME: guid shouldn't be empty here as it should be filled upon Podcast creation
             $uuid = service('uuid');
             // 'ead4c236-bf58-58c6-a2c6-a6b28d128cb6' is the uuid of the podcast namespace
-            $podcast->guid = $uuid->uuid5('ead4c236-bf58-58c6-a2c6-a6b28d128cb6', $podcast->feed_url)
+            $podcast->guid = $uuid->uuid5(
+                'ead4c236-bf58-58c6-a2c6-a6b28d128cb6',
+                $podcast->feed_url
+            )
                 ->toString();
 
             (new PodcastModel())->save($podcast);
@@ -370,7 +376,11 @@ if (! function_exists('get_rss_feed')) {
                 $item->addChild('episode', (string) $episode->number, $podcastNamespace);
 
             // add link to episode comments as podcast-activity format
-            $comments = $item->addChild('comments', null, $podcastNamespace);
+            $comments = $item->addChild(
+                'comments',
+                null,
+                $podcastNamespace
+            );
             $comments->addAttribute('uri', url_to('episode-comments', $podcast->handle, $episode->slug));
             $comments->addAttribute('contentType', 'application/podcast-activity+json');
 
@@ -405,7 +415,10 @@ if (! function_exists('get_rss_feed')) {
                 // Castopod only allows for captions (SubRip files)
                 $transcriptElement->addAttribute('rel', 'captions');
                 // TODO: allow for multiple languages
-                $transcriptElement->addAttribute('language', $podcast->language_code);
+                $transcriptElement->addAttribute(
+                    'language',
+                    $podcast->language_code
+                );
             }
 
             if ($episode->getChapters() instanceof Chapters) {
@@ -416,7 +429,11 @@ if (! function_exists('get_rss_feed')) {
 
             foreach ($episode->soundbites as $soundbite) {
                 // TODO: differentiate video from soundbites?
-                $soundbiteElement = $item->addChild('soundbite', $soundbite->title, $podcastNamespace);
+                $soundbiteElement = $item->addChild(
+                    'soundbite',
+                    $soundbite->title,
+                    $podcastNamespace
+                );
                 $soundbiteElement->addAttribute('startTime', (string) $soundbite->start_time);
                 $soundbiteElement->addAttribute('duration', (string) round($soundbite->duration, 3));
             }
@@ -462,8 +479,10 @@ if (! function_exists('add_category_tag')) {
     /**
      * Adds <itunes:category> and <category> tags to node for a given category
      */
-    function add_category_tag(SimpleXMLElement $node, Category $category): void
-    {
+    function add_category_tag(
+        SimpleXMLElement $node,
+        Category $category
+    ): void {
         $itunesNamespace = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
         $itunesCategory = $node->addChild('category', null, $itunesNamespace);
@@ -492,8 +511,9 @@ if (! function_exists('rss_to_array')) {
      *
      * @return array<string, mixed>
      */
-    function rss_to_array(SimpleXMLElement $rssNode): array
-    {
+    function rss_to_array(
+        SimpleXMLElement $rssNode
+    ): array {
         $nameSpaces = ['', 'http://www.itunes.com/dtds/podcast-1.0.dtd', 'https://podcastindex.org/namespace/1.0'];
         $arrayNode = [];
         $arrayNode['name'] = $rssNode->getName();
@@ -524,8 +544,10 @@ if (! function_exists('array_to_rss')) {
      * @param array<string, mixed> $arrayNode
      * @param SimpleRSSElement $xmlNode The XML parent node where this arrayNode should be attached
      */
-    function array_to_rss(array $arrayNode, SimpleRSSElement &$xmlNode): SimpleRSSElement
-    {
+    function array_to_rss(
+        array $arrayNode,
+        SimpleRSSElement &$xmlNode
+    ): SimpleRSSElement {
         if (array_key_exists('elements', $arrayNode)) {
             foreach ($arrayNode['elements'] as $childArrayNode) {
                 $childXmlNode = $xmlNode->addChild(

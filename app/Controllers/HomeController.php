@@ -53,7 +53,9 @@ class HomeController extends BaseController
         }
 
         // --- Can Castopod connect to the cache handler
-        if (config('Cache')->handler !== 'dummy' && cache()->getCacheInfo() === null) {
+        if (config(
+            'Cache'
+        )->handler !== 'dummy' && cache()->getCacheInfo() === null) {
             $errors[] = 'Unable connect to the cache handler.';
         }
 

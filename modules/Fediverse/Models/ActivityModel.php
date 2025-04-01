@@ -136,10 +136,13 @@ class ActivityModel extends UuidModel
      * @param array<mixed> $data
      * @return array<string, array<string|int, mixed>>
      */
-    protected function notify(array $data): array
-    {
+    protected function notify(
+        array $data
+    ): array {
         /** @var ?Activity $activity */
-        $activity = (new self())->find(is_array($data['id']) ? $data['id'][0] : $data['id']);
+        $activity = (new self())->find(
+            is_array($data['id']) ? $data['id'][0] : $data['id']
+        );
 
         if (! $activity instanceof Activity) {
             return $data;

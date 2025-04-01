@@ -18,7 +18,10 @@ class ActorObject extends ObjectType
     /**
      * @var string|string[]
      */
-    protected string | array $context = ['https://www.w3.org/ns/activitystreams', 'https://w3id.org/security/v1'];
+    protected string | array $context = [
+        'https://www.w3.org/ns/activitystreams',
+        'https://w3id.org/security/v1',
+    ];
 
     protected string $type = 'Person';
 

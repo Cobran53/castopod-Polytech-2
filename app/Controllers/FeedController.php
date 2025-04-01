@@ -57,7 +57,10 @@ class FeedController extends Controller
             $service = UserAgentsRSS::find(service('superglobals')->server('HTTP_USER_AGENT'));
         } catch (Exception $exception) {
             // If things go wrong the show must go on and the user must be able to download the file
-            log_message('critical', $exception->getMessage());
+            log_message(
+                'critical',
+                $exception->getMessage()
+            );
         }
 
         $serviceSlug = '';

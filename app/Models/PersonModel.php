@@ -73,7 +73,9 @@ class PersonModel extends Model
      *
      * @var list<string>
      */
-    protected $beforeUpdate = ['clearCache'];
+    protected $beforeUpdate = [
+        'clearCache',
+    ];
 
     /**
      * @var list<string>
@@ -102,8 +104,11 @@ class PersonModel extends Model
     /**
      * @return object[]
      */
-    public function getPersonRoles(int $personId, int $podcastId, ?int $episodeId): array
-    {
+    public function getPersonRoles(
+        int $personId,
+        int $podcastId,
+        ?int $episodeId
+    ): array {
         if ($episodeId !== null) {
             $cacheName = "podcast#{$podcastId}_episode#{$episodeId}_person#{$personId}_roles";
 
@@ -285,8 +290,11 @@ class PersonModel extends Model
      *
      * @return bool|int Number of rows inserted or FALSE on failure
      */
-    public function addPodcastPersons(int $podcastId, array $personIds = [], array $roles = []): int | bool
-    {
+    public function addPodcastPersons(
+        int $podcastId,
+        array $personIds = [],
+        array $roles = []
+    ): int | bool {
         if ($personIds === []) {
             return 0;
         }
@@ -330,8 +338,10 @@ class PersonModel extends Model
      *
      * @return string|bool Number of rows inserted or FALSE on failure
      */
-    public function removePersonFromPodcast(int $podcastId, int $personId): string | bool
-    {
+    public function removePersonFromPodcast(
+        int $podcastId,
+        int $personId
+    ): string | bool {
         cache()->deleteMatching("podcast#{$podcastId}_person#{$personId}*");
         cache()
             ->delete("podcast#{$podcastId}_persons");
@@ -354,8 +364,12 @@ class PersonModel extends Model
      *
      * @return bool|int Number of rows inserted or FALSE on failure
      */
-    public function addEpisodePersons(int $podcastId, int $episodeId, array $personIds, array $roles): bool | int
-    {
+    public function addEpisodePersons(
+        int $podcastId,
+        int $episodeId,
+        array $personIds,
+        array $roles
+    ): bool | int {
         if ($personIds !== []) {
             cache()
                 ->delete("podcast#{$podcastId}_episode#{$episodeId}_persons");
@@ -417,8 +431,9 @@ class PersonModel extends Model
      *
      * @return array<string, array<string|int, mixed>>
      */
-    protected function clearCache(array $data): array
-    {
+    protected function clearCache(
+        array $data
+    ): array {
         $personId = is_array($data['id']) ? $data['id'][0] : $data['id'];
 
         cache()

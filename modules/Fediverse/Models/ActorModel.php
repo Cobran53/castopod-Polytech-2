@@ -68,8 +68,10 @@ class ActorModel extends Model
     /**
      * Looks for actor with username and domain, if no domain has been specified, the current host will be used
      */
-    public function getActorByUsername(string $username, ?string $domain = null): ?Actor
-    {
+    public function getActorByUsername(
+        string $username,
+        ?string $domain = null
+    ): ?Actor {
         // TODO: is there a better way?
         helper('fediverse');
 
@@ -134,8 +136,9 @@ class ActorModel extends Model
     /**
      * Check if an existing actor is blocked using its uri. Returns FALSE if the actor doesn't exist
      */
-    public function isActorBlocked(string $actorUri): bool
-    {
+    public function isActorBlocked(
+        string $actorUri
+    ): bool {
         if (($actor = $this->getActorByUri($actorUri)) instanceof Actor) {
             return $actor->is_blocked;
         }
@@ -227,7 +230,10 @@ class ActorModel extends Model
             $tablePrefix = config('Database')
                 ->default['DBPrefix'];
             $result = $this->builder()
-                ->select('COUNT(DISTINCT `' . $tablePrefix . 'fediverse_actors`.`id`) as `total_active_actors`', false)
+                ->select(
+                    'COUNT(DISTINCT `' . $tablePrefix . 'fediverse_actors`.`id`) as `total_active_actors`',
+                    false
+                )
                 ->join(
                     $tablePrefix . 'fediverse_posts',
                     $tablePrefix . 'fediverse_actors.id = ' . $tablePrefix . 'fediverse_posts.actor_id',

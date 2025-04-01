@@ -47,8 +47,11 @@ class FollowModel extends Model
      * @param Actor $actor Actor that is following
      * @param Actor $targetActor Actor that is being followed
      */
-    public function addFollower(Actor $actor, Actor $targetActor, bool $registerActivity = true): void
-    {
+    public function addFollower(
+        Actor $actor,
+        Actor $targetActor,
+        bool $registerActivity = true
+    ): void {
         try {
             $this->db->transStart();
 
@@ -104,8 +107,11 @@ class FollowModel extends Model
      * @param Actor $actor Actor that is unfollowing
      * @param Actor $targetActor Actor that is being unfollowed
      */
-    public function removeFollower(Actor $actor, Actor $targetActor, bool $registerActivity = true): void
-    {
+    public function removeFollower(
+        Actor $actor,
+        Actor $targetActor,
+        bool $registerActivity = true
+    ): void {
         $this->db->transStart();
 
         $this->where([

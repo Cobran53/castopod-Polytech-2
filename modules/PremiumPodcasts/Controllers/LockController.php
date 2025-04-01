@@ -75,7 +75,10 @@ class LockController extends BaseController
         $token = $validData['token'];
 
         // attempt unlocking the podcast with the token
-        if (! $this->premiumPodcasts->unlock($this->podcast->handle, $token)) {
+        if (! $this->premiumPodcasts->unlock(
+            $this->podcast->handle,
+            $token
+        )) {
             // bad key or subscription is not active
             return redirect()->back()
                 ->withInput()

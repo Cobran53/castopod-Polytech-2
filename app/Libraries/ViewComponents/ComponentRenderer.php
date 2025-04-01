@@ -40,8 +40,9 @@ class ComponentRenderer
     /**
      * Finds and renders self-closing tags, i.e. <Foo />
      */
-    private function renderSelfClosingTags(string $output): string
-    {
+    private function renderSelfClosingTags(
+        string $output
+    ): string {
         // Pattern borrowed and adapted from Laravel's ComponentTagCompiler
         // Should match any Component tags <Component />
         $pattern = "/
@@ -82,16 +83,20 @@ class ComponentRenderer
             $matches[name] = tag name
             $matches[attributes] = array of attribute string (class="foo")
          */
-        return preg_replace_callback($pattern, function (array $match): string {
-            $view = $this->locateView($match['name']);
-            $attributes = $this->parseAttributes($match['attributes']);
+        return preg_replace_callback(
+            $pattern,
+            function (array $match): string {
+                $view = $this->locateView($match['name']);
+                $attributes = $this->parseAttributes($match['attributes']);
 
-            $component = $this->factory($match['name'], $view, $attributes);
+                $component = $this->factory($match['name'], $view, $attributes);
 
-            return $component instanceof Component
-                ? $component->render()
-                : $this->renderView($view, $attributes);
-        }, $output) ?? '';
+                return $component instanceof Component
+                    ? $component->render()
+                    : $this->renderView($view, $attributes);
+            },
+            $output
+        ) ?? '';
     }
 
     private function renderPairedTags(string $output): string
@@ -104,17 +109,21 @@ class ComponentRenderer
             $matches[attributes] = string of tag attributes (class="foo")
             $matches[slot] = the content inside the tags
          */
-        return preg_replace_callback($pattern, function (array $match): string {
-            $view = $this->locateView($match['name']);
-            $attributes = $this->parseAttributes($match['attributes']);
-            $attributes['slot'] = $match['slot'];
+        return preg_replace_callback(
+            $pattern,
+            function (array $match): string {
+                $view = $this->locateView($match['name']);
+                $attributes = $this->parseAttributes($match['attributes']);
+                $attributes['slot'] = $match['slot'];
 
-            $component = $this->factory($match['name'], $view, $attributes);
+                $component = $this->factory($match['name'], $view, $attributes);
 
-            return $component instanceof Component
-                ? $component->render()
-                : $this->renderView($view, $attributes);
-        }, $output) ?? (string) preg_last_error();
+                return $component instanceof Component
+                    ? $component->render()
+                    : $this->renderView($view, $attributes);
+            },
+            $output
+        ) ?? (string) preg_last_error();
     }
 
     /**
@@ -122,8 +131,9 @@ class ComponentRenderer
      *
      * Looks for class and view file components in the current module before checking the default app module
      */
-    private function locateView(string $name): string
-    {
+    private function locateView(
+        string $name
+    ): string {
         // TODO: Is there a better way to locate components local to current module?
         $pathsToDiscover = [];
         $lookupPaths = $this->config->lookupPaths;
@@ -156,8 +166,9 @@ class ComponentRenderer
      *
      * @return array<string, string>
      */
-    private function parseAttributes(string $attributeString): array
-    {
+    private function parseAttributes(
+        string $attributeString
+    ): array {
         // Pattern borrowed from Laravel's ComponentTagCompiler
         $pattern = '/
             (?<attribute>[\w\-:.@]+)
@@ -200,8 +211,11 @@ class ComponentRenderer
      *
      * @param array<string, mixed> $attributes
      */
-    private function factory(string $name, string $view, array $attributes): ?Component
-    {
+    private function factory(
+        string $name,
+        string $view,
+        array $attributes
+    ): ?Component {
         // Locate the class in the same folder as the view
         $class = $name . '.php';
         $fileKey = str_replace($name . '.php', $class, $view);
@@ -229,8 +243,10 @@ class ComponentRenderer
      *
      * @param array<string, string> $data
      */
-    private function renderView(string $view, array $data): string
-    {
+    private function renderView(
+        string $view,
+        array $data
+    ): string {
         return (static function (string $view, $data): string {
             extract($data);
             ob_start();

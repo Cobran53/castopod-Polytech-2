@@ -197,8 +197,9 @@ class EpisodeCommentModel extends UuidModel
      *
      * @return EpisodeComment[]
      */
-    public function getEpisodeComments(int $episodeId): array
-    {
+    public function getEpisodeComments(
+        int $episodeId
+    ): array {
         // TODO: merge with replies from posts linked to episode linked
         $episodeCommentsBuilder = $this->builder();
         $episodeComments = $episodeCommentsBuilder->select('*, 0 as is_from_post')
@@ -240,10 +241,14 @@ class EpisodeCommentModel extends UuidModel
      *
      * @return EpisodeComment[]
      */
-    public function getCommentReplies(string $commentId): array
-    {
+    public function getCommentReplies(
+        string $commentId
+    ): array {
         // TODO: get all replies for a given comment
-        return $this->where('in_reply_to_id', $this->uuid->fromString($commentId)->getBytes())
+        return $this->where(
+            'in_reply_to_id',
+            $this->uuid->fromString($commentId)->getBytes()
+        )
             ->orderBy('created_at', 'ASC')
             ->findAll();
     }
@@ -285,8 +290,9 @@ class EpisodeCommentModel extends UuidModel
      * @param array<string, array<string|int, mixed>> $data
      * @return array<string, array<string|int, mixed>>
      */
-    protected function setCommentId(array $data): array
-    {
+    protected function setCommentId(
+        array $data
+    ): array {
         $uuid4 = $this->uuid->{$this->uuidVersion}();
         $data['data']['id'] = $uuid4->toString();
 

@@ -54,8 +54,9 @@ class Breadcrumb
      *
      * @param string[] $newParams
      */
-    public function replaceParams(array $newParams): void
-    {
+    public function replaceParams(
+        array $newParams
+    ): void {
         foreach ($this->links as $key => $link) {
             if (is_numeric($link['text'])) {
                 $this->links[$key]['text'] = $newParams[0];
@@ -67,8 +68,9 @@ class Breadcrumb
     /**
      * Renders the breadcrumb object as an accessible html breadcrumb nav
      */
-    public function render(string $class = null): string
-    {
+    public function render(
+        string $class = null
+    ): string {
         $listItems = '';
         $keys = array_keys($this->links);
         foreach ($this->links as $key => $link) {

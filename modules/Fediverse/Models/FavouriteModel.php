@@ -163,8 +163,10 @@ class FavouriteModel extends UuidModel
     /**
      * Adds or removes favourite from database
      */
-    public function toggleFavourite(Actor $actor, Post $post): void
-    {
+    public function toggleFavourite(
+        Actor $actor,
+        Post $post
+    ): void {
         if (
             $this->where([
                 'actor_id' => $actor->id,

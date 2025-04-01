@@ -19,7 +19,9 @@ use Modules\Fediverse\Entities\PreviewCard;
  * @link       https://castopod.org/
  */
 
-if (! function_exists('get_podcast_metatags')) {
+if (! function_exists(
+    'get_podcast_metatags'
+)) {
     function get_podcast_metatags(Podcast $podcast, string $page): string
     {
         $category = '';
@@ -257,7 +259,7 @@ if (! function_exists('get_remote_actions_metatags')) {
         $metatags
             ->title(lang('Fediverse.' . $action . '.title', [
                 'actorDisplayName' => $post->actor->display_name,
-            ],))
+            ], ))
             ->description($post->message)
             ->image($post->actor->avatar_image_url)
             ->canonical((string) current_url())

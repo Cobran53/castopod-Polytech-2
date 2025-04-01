@@ -77,7 +77,7 @@ $routes->group(
             ]);
             $routes->get('change-password', 'MyAccountController::changePassword', [
                 'as' => 'change-password',
-            ],);
+            ], );
             $routes->post('change-password', 'MyAccountController::attemptChange');
         });
 

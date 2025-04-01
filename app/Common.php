@@ -15,7 +15,9 @@ use ViewThemes\Theme;
  * @see: https://codeigniter.com/user_guide/extending/common.html
  */
 
-if (! function_exists('view')) {
+if (! function_exists(
+    'view'
+)) {
     /**
      * Grabs the current RendererInterface-compatible class and tells it to render the specified view. Simply provides a
      * convenience method that can be used in Controllers, libraries, and routed closures.
@@ -25,8 +27,11 @@ if (! function_exists('view')) {
      * @param array<string, mixed>  $data
      * @param array<string, mixed>  $options Unused - reserved for third-party extensions.
      */
-    function view(string $name, array $data = [], array $options = []): string
-    {
+    function view(
+        string $name,
+        array $data = [],
+        array $options = []
+    ): string {
         if (array_key_exists('theme', $options)) {
             Theme::setTheme($options['theme']);
         }

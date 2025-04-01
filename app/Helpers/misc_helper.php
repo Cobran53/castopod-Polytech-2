@@ -14,15 +14,18 @@ use Modules\Media\Entities\Image;
  * @link       https://castopod.org/
  */
 
-if (! function_exists('get_browser_language')) {
+if (! function_exists(
+    'get_browser_language'
+)) {
     /**
      * Gets the browser default language using the request header key `HTTP_ACCEPT_LANGUAGE`. Returns Castopod's default
      * locale if `HTTP_ACCEPT_LANGUAGE` is null.
      *
      * @return string ISO 639-1 language code
      */
-    function get_browser_language(?string $httpAcceptLanguage = null): string
-    {
+    function get_browser_language(
+        ?string $httpAcceptLanguage = null
+    ): string {
         if ($httpAcceptLanguage === null) {
             return config('App')->defaultLocale;
         }
@@ -56,8 +59,10 @@ if (! function_exists('format_duration')) {
      *
      * @param int $seconds seconds to format
      */
-    function format_duration(int $seconds, bool $showLeadingZeros = false): string
-    {
+    function format_duration(
+        int $seconds,
+        bool $showLeadingZeros = false
+    ): string {
         if ($showLeadingZeros) {
             return gmdate('H:i:s', $seconds);
         }
@@ -88,8 +93,9 @@ if (! function_exists('format_duration_symbol')) {
      *
      * @param int $seconds seconds to format
      */
-    function format_duration_symbol(int $seconds): string
-    {
+    function format_duration_symbol(
+        int $seconds
+    ): string {
         if ($seconds < 60) {
             return $seconds . 's';
         }
@@ -160,10 +166,16 @@ if (! function_exists('parse_size')) {
     function parse_size(string $size): float
     {
         $unit = (string) preg_replace('~[^bkmgtpezy]~i', '', $size); // Remove the non-unit characters from the size.
-        $size = (float) preg_replace('~[^0-9\.]~', '', $size); // Remove the non-numeric characters from the size.
+        $size = (float) preg_replace(
+            '~[^0-9\.]~',
+            '',
+            $size
+        ); // Remove the non-numeric characters from the size.
         if ($unit !== '') {
             // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-            return round($size * 1024 ** ((float) stripos('bkmgtpezy', $unit[0])));
+            return round(
+                $size * 1024 ** ((float) stripos('bkmgtpezy', $unit[0]))
+            );
         }
 
         return round($size);
@@ -174,8 +186,11 @@ if (! function_exists('format_bytes')) {
     /**
      * Adapted from https://stackoverflow.com/a/2510459
      */
-    function formatBytes(float $bytes, bool $is_binary = false, int $precision = 2): string
-    {
+    function formatBytes(
+        float $bytes,
+        bool $is_binary = false,
+        int $precision = 2
+    ): string {
         $units = $is_binary ? ['B', 'KiB', 'MiB', 'GiB', 'TiB'] : ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
@@ -237,7 +252,10 @@ if (! function_exists('get_podcast_banner_mimetype')) {
             helper('filesystem');
 
             // return default site icon url
-            return array_key_exists('mimetype', $sizeConfig) ? $sizeConfig['mimetype'] : config(
+            return array_key_exists(
+                'mimetype',
+                $sizeConfig
+            ) ? $sizeConfig['mimetype'] : config(
                 Images::class
             )->podcastBannerDefaultMimeType;
         }
@@ -262,7 +280,9 @@ if (! function_exists('get_avatar_url')) {
             helper('filesystem');
 
             // return default avatar url
-            return base_url(change_file_path($defaultAvatarPath, '_' . $size, $sizeConfig['extension'] ?? null));
+            return base_url(
+                change_file_path($defaultAvatarPath, '_' . $size, $sizeConfig['extension'] ?? null)
+            );
         }
 
         $sizeKey = $size . '_url';

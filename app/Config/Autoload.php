@@ -95,7 +95,9 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $files = [APPPATH . 'Libraries/ViewComponents/Helpers/view_components_helper.php'];
+    public $files = [
+        APPPATH . 'Libraries/ViewComponents/Helpers/view_components_helper.php',
+    ];
 
     /**
      * -------------------------------------------------------------------
@@ -108,5 +110,8 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = ['auth', 'setting'];
+    public $helpers = [
+        'auth',
+        'setting',
+    ];
 }

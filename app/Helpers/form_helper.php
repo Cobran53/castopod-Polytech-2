@@ -6,8 +6,11 @@ if (! function_exists('form_textarea')) {
     /**
      * Adapted textarea field from CI4 core: without value escaping.
      */
-    function form_textarea(mixed $data = '', string $value = '', mixed $extra = ''): string
-    {
+    function form_textarea(
+        mixed $data = '',
+        string $value = '',
+        mixed $extra = ''
+    ): string {
         $defaults = [
             'name' => is_array($data) ? '' : $data,
             'cols' => '40',
@@ -21,7 +24,14 @@ if (! function_exists('form_textarea')) {
         }
 
         // Unsets default rows and cols if defined in extra field as array or string.
-        if ((is_array($extra) && array_key_exists('rows', $extra)) || (is_string($extra) && stripos(
+        if ((is_array(
+            $extra
+        ) && array_key_exists(
+            'rows',
+            $extra
+        )) || (is_string(
+            $extra
+        ) && stripos(
             (string) preg_replace('~\s+~', '', $extra),
             'rows='
         ) !== false)) {
@@ -50,8 +60,10 @@ if (! function_exists('parse_form_attributes')) {
      * @param array<string, string>|string $attributes List of attributes
      * @param array<string, mixed>        $default    Default values
      */
-    function parse_form_attributes(array|string $attributes, array $default): string
-    {
+    function parse_form_attributes(
+        array|string $attributes,
+        array $default
+    ): string {
         if (is_array($attributes)) {
             foreach (array_keys($default) as $key) {
                 if (isset($attributes[$key])) {

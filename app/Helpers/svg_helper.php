@@ -8,7 +8,9 @@ declare(strict_types=1);
  * @link       https://castopod.org/
  */
 
-if (! function_exists('svg')) {
+if (! function_exists(
+    'svg'
+)) {
     /**
      * Returns the inline svg image
      *
@@ -16,8 +18,10 @@ if (! function_exists('svg')) {
      * @param string|null $class to be added to the svg string
      * @return string svg contents
      */
-    function svg(string $name, ?string $class = null): string
-    {
+    function svg(
+        string $name,
+        ?string $class = null
+    ): string {
         $svgContents = file_get_contents('assets/images/' . $name . '.svg');
         if ($class) {
             return str_replace('<svg', '<svg class="' . $class . '"', $svgContents);

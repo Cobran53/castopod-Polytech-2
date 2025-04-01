@@ -72,7 +72,11 @@ class HttpSignature
         }
 
         // compute body digest and compare with header digest
-        $bodyDigest = hash('sha256', (string) $this->request->getBody(), true);
+        $bodyDigest = hash(
+            'sha256',
+            (string) $this->request->getBody(),
+            true
+        );
         $digest = 'SHA-256=' . base64_encode($bodyDigest);
         if ($digest !== $digestHeader->getValue()) {
             throw new Exception('Request digest is incorrect.');
@@ -104,10 +108,17 @@ class HttpSignature
 
         // Create a comparison string from the plaintext headers we got
         // in the same order as was given in the signature header,
-        $data = $this->getPlainText(explode(' ', trim($headers)));
+        $data = $this->getPlainText(
+            explode(' ', trim($headers))
+        );
 
         // Verify the data string using the public key and the original signature.
-        return $this->verifySignature($publicKeyPem, $data, $signature, $algorithm);
+        return $this->verifySignature(
+            $publicKeyPem,
+            $data,
+            $signature,
+            $algorithm
+        );
     }
 
     /**
@@ -115,8 +126,9 @@ class HttpSignature
      *
      * @return array<string, string>|false
      */
-    private function splitSignature(string $signature): bool|array
-    {
+    private function splitSignature(
+        string $signature
+    ): bool|array {
         if (! preg_match(self::SIGNATURE_PATTERN, $signature, $matches, PREG_UNMATCHED_AS_NULL)) {
             // Signature pattern failed
             return false;
@@ -135,8 +147,9 @@ class HttpSignature
      *
      * @param string[] $headers HTTP header keys
      */
-    private function getPlainText(array $headers): string
-    {
+    private function getPlainText(
+        array $headers
+    ): string {
         $strings = [];
         $strings[] = sprintf(
             '(request-target): %s %s%s',

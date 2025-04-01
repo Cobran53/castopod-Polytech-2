@@ -153,8 +153,10 @@ class LikeModel extends UuidModel
     /**
      * Adds or removes likes from database
      */
-    public function toggleLike(Actor $actor, EpisodeComment $comment): void
-    {
+    public function toggleLike(
+        Actor $actor,
+        EpisodeComment $comment
+    ): void {
         if (
             $this->where([
                 'actor_id'   => $actor->id,

@@ -268,7 +268,9 @@ class EpisodeController extends Controller
             }
         } elseif ($episode->podcast->publication_status === 'scheduled') {
             // podcast publication date has already been set
-            $episode->published_at = $episode->podcast->published_at->addSeconds(1);
+            $episode->published_at = $episode->podcast->published_at->addSeconds(
+                1
+            );
         } else {
             $episode->published_at = Time::now();
         }

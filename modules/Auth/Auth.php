@@ -19,8 +19,10 @@ class Auth extends ShieldAuth
      *
      * @param array{except?:list<string>} $config
      */
-    public function routes(RouteCollection &$routes, array $config = []): void
-    {
+    public function routes(
+        RouteCollection &$routes,
+        array $config = []
+    ): void {
         $authRoutes = config('AuthRoutes')
             ->routes;
 

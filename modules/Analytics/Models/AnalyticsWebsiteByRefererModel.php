@@ -42,8 +42,9 @@ class AnalyticsWebsiteByRefererModel extends Model
      *
      * @return AnalyticsWebsiteByReferer[]
      */
-    public function getData(int $podcastId): array
-    {
+    public function getData(
+        int $podcastId
+    ): array {
         if (! ($found = cache("{$podcastId}_analytics_website_by_referer"))) {
             $oneWeekAgo = date('Y-m-d', strtotime('-1 week'));
             $found = $this->select('referer_url as labels')
@@ -67,8 +68,9 @@ class AnalyticsWebsiteByRefererModel extends Model
      *
      * @return AnalyticsWebsiteByReferer[]
      */
-    public function getDataByDomainWeekly(int $podcastId): array
-    {
+    public function getDataByDomainWeekly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_website_by_domain_weekly"))
         ) {
@@ -94,8 +96,9 @@ class AnalyticsWebsiteByRefererModel extends Model
      *
      * @return AnalyticsWebsiteByReferer[]
      */
-    public function getDataByDomainYearly(int $podcastId): array
-    {
+    public function getDataByDomainYearly(
+        int $podcastId
+    ): array {
         if (
             ! ($found = cache("{$podcastId}_analytics_website_by_domain_yearly"))
         ) {

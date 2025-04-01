@@ -45,7 +45,7 @@
 
 <div class="flex flex-col items-center py-4 text-sm text-center">
     
-<?php if(service('settings')->get('Nextcloud.nextcloudActive')): ?>
+<?php if (service('settings')->get('Nextcloud.nextcloudActive')): ?>
 <a href="<?= route_to('authenticate') ?>" class="inline-flex items-center justify-center p-2 mb-4 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
     <span class="w-full">Utiliser Nextcloud pour se connecter</span>
     <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">

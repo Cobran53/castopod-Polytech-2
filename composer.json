@@ -32,7 +32,7 @@
     "yassinedoghri/podcast-feed": "dev-main"
   },
   "require-dev": {
-    "captainhook/captainhook": "^5.24.1",
+    "captainhook/captainhook": "^5.25",
     "codeigniter/phpstan-codeigniter": "v1.5.1",
     "mikey179/vfsstream": "v1.6.12",
     "phpstan/extension-installer": "^1.4.3",

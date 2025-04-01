@@ -92,7 +92,10 @@ class VideoClipper
         $this->episodeCoverPath = $fileManager->getFileInput($this->episode->cover->file_key);
 
         // Temporary files to generate clip
-        $tempFile = tempnam(WRITEPATH . 'temp', "{$this->episode->slug}-{$this->start}-{$this->end}");
+        $tempFile = tempnam(
+            WRITEPATH . 'temp',
+            "{$this->episode->slug}-{$this->start}-{$this->end}"
+        );
 
         if (! $tempFile) {
             throw new Exception(
@@ -518,8 +521,10 @@ class VideoClipper
     /**
      * Copied and adapted from https://stackoverflow.com/a/52626818
      */
-    private function roundCorners(GdImage $source, int $radius): GdImage | false
-    {
+    private function roundCorners(
+        GdImage $source,
+        int $radius
+    ): GdImage | false {
         $ws = imagesx($source);
         $hs = imagesy($source);
 
@@ -658,15 +663,24 @@ class VideoClipper
      *
      * @return array<string, mixed>|false
      */
-    private function calculateTextBox(int $fontSize, int $fontAngle, string $fontFile, string $text): array|bool
-    {
+    private function calculateTextBox(
+        int $fontSize,
+        int $fontAngle,
+        string $fontFile,
+        string $text
+    ): array|bool {
         /************
         simple function that calculates the *exact* bounding box (single pixel precision).
         The function returns an associative array with these keys:
         left, top:  coordinates you will pass to imagettftext
         width, height: dimension of the image you have to create
         *************/
-        $bbox = imagettfbbox($fontSize, $fontAngle, $fontFile, $text);
+        $bbox = imagettfbbox(
+            $fontSize,
+            $fontAngle,
+            $fontFile,
+            $text
+        );
         if (! $bbox) {
             return false;
         }
@@ -730,8 +744,9 @@ class VideoClipper
      * This helps getting a truly transparent background for images with transparency:
      * https://stackoverflow.com/a/2611911
      */
-    private function cleanTransparency(GdImage $image): GdImage | false
-    {
+    private function cleanTransparency(
+        GdImage $image
+    ): GdImage | false {
         $imageBg = imagecolorallocate($image, 0, 0, 0);
         if ($imageBg === false) {
             return false;

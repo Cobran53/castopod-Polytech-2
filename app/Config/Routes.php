@@ -12,7 +12,10 @@ use CodeIgniter\Router\RouteCollection;
  * --------------------------------------------------------------------
  */
 
-$routes->addPlaceholder('podcastHandle', '[a-zA-Z0-9\_]{1,32}');
+$routes->addPlaceholder(
+    'podcastHandle',
+    '[a-zA-Z0-9\_]{1,32}'
+);
 $routes->addPlaceholder('slug', '[a-zA-Z0-9\-]{1,128}');
 $routes->addPlaceholder('base64', '[A-Za-z0-9\.\_]+\-{0,2}');
 $routes->addPlaceholder('postAction', '\bfavourite|\breblog|\breply');
@@ -28,9 +31,13 @@ $routes->addPlaceholder(
  * --------------------------------------------------------------------
  */
 
-$routes->get('manifest.webmanifest', 'WebmanifestController', [
+$routes->get(
+    'manifest.webmanifest',
+    'WebmanifestController',
+    [
     'as' => 'webmanifest',
-]);
+]
+);
 $routes->get('themes/colors', 'ColorsController', [
     'as' => 'themes-colors-css',
 ]);
@@ -179,7 +186,7 @@ $routes->group('@(:podcastHandle)', static function ($routes): void {
             ]);
             $routes->get('(:embedTheme)', 'EpisodeController::embed/$1/$2/$3', [
                 'as' => 'embed-theme',
-            ],);
+            ], );
         });
     });
     $routes->head('feed.xml', 'FeedController::index/$1', [

@@ -13,23 +13,34 @@ class AllowCorsFilter implements FilterInterface
     /**
      * @param string[]|null $arguments
      */
-    public function before(RequestInterface $request, $arguments = null): void
-    {
+    public function before(
+        RequestInterface $request,
+        $arguments = null
+    ): void {
         // Do something here
     }
 
     /**
      * @param string[]|null $arguments
      */
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): void
-    {
+    public function after(
+        RequestInterface $request,
+        ResponseInterface $response,
+        $arguments = null
+    ): void {
         if (! $response->hasHeader('Cache-Control')) {
             $response->setHeader('Cache-Control', 'public, max-age=86400');
         }
 
         $response->setHeader('Access-Control-Allow-Origin', '*') // for allowing any domain, insecure
-            ->setHeader('Access-Control-Allow-Headers', '*') // for allowing any headers, insecure
-            ->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS') // allows GET and OPTIONS methods only
+            ->setHeader(
+                'Access-Control-Allow-Headers',
+                '*'
+            ) // for allowing any headers, insecure
+            ->setHeader(
+                'Access-Control-Allow-Methods',
+                'GET, OPTIONS'
+            ) // allows GET and OPTIONS methods only
             ->setHeader('Access-Control-Max-Age', '86400');
     }
 }

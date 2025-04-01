@@ -300,9 +300,12 @@ class AuthController extends BaseController
         $files = json_decode($filesResponse, true);
 
         // Maintenant, vous pouvez afficher ces informations dans votre vue ou retourner la réponse sous forme de chaîne
-        return view('explorer', [
+        return view(
+            'explorer',
+            [
             'folders' => $folders,
             'files'   => $files,
+        
         ]);
     }
 

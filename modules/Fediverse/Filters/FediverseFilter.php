@@ -23,8 +23,10 @@ class FediverseFilter implements FilterInterface
      * @param string[]|null                         $params
      * @return RequestInterface|ResponseInterface|string|void
      */
-    public function before(RequestInterface $request, $params = null)
-    {
+    public function before(
+        RequestInterface $request,
+        $params = null
+    ) {
         if ($params === null) {
             return;
         }
@@ -80,8 +82,11 @@ class FediverseFilter implements FilterInterface
      *
      * @param string[]|null                          $arguments
      */
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): void
-    {
+    public function after(
+        RequestInterface $request,
+        ResponseInterface $response,
+        $arguments = null
+    ): void {
     }
 
     //--------------------------------------------------------------------

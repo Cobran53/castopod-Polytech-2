@@ -41,7 +41,9 @@ class DevSuperadminSeeder extends Seeder
         $users->save($user);
 
         // To get the complete user object with ID, we need to get from the database
-        $user = $users->findById($users->getInsertID());
+        $user = $users->findById(
+            $users->getInsertID()
+        );
 
         $user->addGroup(setting('AuthGroups.mostPowerfulGroup'));
     }
