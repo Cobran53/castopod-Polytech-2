@@ -149,9 +149,13 @@ class AuthController extends BaseController
 
         $idUser = $this->getUserId();
         if ($idUser === 0) {
-            return redirect()->route('login')
-                ->withInput()
-                ->with('error', 'pas de compte associé'); //TODO à la place, créer un compte
+            log_message('info', 'A new user has been created with email: ' . $this->email);
+            $username = $this->oauth->getDisplayName();
+            $email = $this->email;
+            $role = 'podcaster'; // Default role
+            $refreshToken = $this->oauth->getRefreshToken();
+
+            return (new \Modules\Auth\Controllers\UserController())->linkNextcloudAccount($username, $email, $role, $refreshToken);
         }
 
         $_SESSION['test'] = 'bb';

@@ -165,6 +165,60 @@ class UserController extends BaseController
             ]));
     }
 
+   /**
+     * Links a Nextcloud account to a Castopod user.
+     * This function is called when trying to connect to Nextcloud but no Castopod account is linked to the Nextcloud account.
+     */
+    public function linkNextcloudAccount(string $username, string $email, string $role, string $refreshToken): RedirectResponse
+    {
+        helper(['text']);
+
+        $db = db_connect();
+        $db->transStart();
+
+        $userModel = new UserModel();
+
+        $password = random_string('alnum', 32);
+
+        log_message('info', 'Generated password for Nextcloud account linking: ' . $password);
+
+        // Save the user
+        $user = new User([
+            'username' => $username,
+            'email'    => $email,
+            // set a random password
+            'password' => $password,
+        ]);
+
+        try {
+            $userModel->save($user);
+        } catch (ValidationException) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $userModel->errors());
+        }
+
+        $user = $userModel->findById($userModel->getInsertID());
+        $user->addGroup($role);
+
+        // Link the Nextcloud account
+        $oauthModel = new \App\Models\OAuthModel();
+        $oauthModel->insert([
+            'email'            => $user->email,
+            'idUser'           => $user->id,
+            'lastRefreshToken' => $refreshToken,
+        ]);
+
+        $db->transComplete();
+
+        // Success!
+        return redirect()
+            ->route('user-list')
+            ->with('message', lang('User.messages.linkNextcloudSuccess', [
+                'username' => $user->username,
+            ]));
+    }
+
     public function edit(): string
     {
         helper('form');
