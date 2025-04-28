@@ -178,16 +178,12 @@ class UserController extends BaseController
 
         $userModel = new UserModel();
 
-        $password = random_string('alnum', 32);
-
-        log_message('info', 'Generated password for Nextcloud account linking: ' . $password);
-
         // Save the user
         $user = new User([
             'username' => $username,
             'email'    => $email,
             // set a random password
-            'password' => $password,
+            'password' => random_string('alnum', 32),
         ]);
 
         try {
@@ -211,12 +207,13 @@ class UserController extends BaseController
 
         $db->transComplete();
 
-        // Success!
+        // Log in the user
+        auth('session')->login($user);
+
+        // Redirect to the user's account page
         return redirect()
-            ->route('user-list')
-            ->with('message', lang('User.messages.linkNextcloudSuccess', [
-                'username' => $user->username,
-            ]));
+            ->route('my-account')
+            ->with('message', 'Compte créé !');
     }
 
     public function edit(): string

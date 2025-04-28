@@ -190,7 +190,7 @@ You do not wish to use the VSCode devcontainer? No problem!
    > - `castopod_s3`: a mock s3 server to work on the s3 fileManager
 
 2. Run any command inside the containers by prefixing them with
-   `docker-compose run --rm ccpp`:
+   `docker-compose run --rm`:
 
    ```bash
    # use PHP
