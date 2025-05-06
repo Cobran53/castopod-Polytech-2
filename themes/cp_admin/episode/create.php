@@ -56,7 +56,9 @@
             </a>
         <?php endif; ?>
 
-        <Forms.Field name="cover" label="<?= esc(lang('Episode.form.cover')) ?>" hint="<?= esc(lang('Episode.form.cover_hint')) ?>" helper="<?= esc(lang('Episode.form.cover_size_hint')) ?>" type="file" accept=".jpg,.jpeg,.png" />
+        <?php if ($podcast->allow_cover_upload) : ?>
+            <Forms.Field name="cover" label="<?= esc(lang('Episode.form.cover')) ?>" hint="<?= esc(lang('Episode.form.cover_hint')) ?>" helper="<?= esc(lang('Episode.form.cover_size_hint')) ?>" type="file" accept=".jpg,.jpeg,.png" />
+        <?php endif; ?>
 
         <Forms.Field name="title" label="<?= esc(lang('Episode.form.title')) ?>" hint="<?= esc(lang('Episode.form.title_hint')) ?>" required="true" data-slugify="title" />
 
@@ -179,5 +181,6 @@
     <Button class="self-end" variant="primary" type="submit"><?= lang('Episode.form.submit_create') ?></Button>
 
 </form>
+
 
 <?= $this->endSection() ?>

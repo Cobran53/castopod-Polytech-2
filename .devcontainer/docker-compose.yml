@@ -25,7 +25,7 @@ services:
       auth_gateway: cp-auth
       analytics_salt: dev_analytics_salt
       database_default_hostname: mariadb
-      database_default_database: castopod
+      database_default_database: castopod 
       database_default_username: castopod
       database_default_password: castopod
       database_default_DBPrefix: cp_

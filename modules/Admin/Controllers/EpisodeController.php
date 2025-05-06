@@ -169,11 +169,11 @@ class EpisodeController extends BaseController
         $rules = [
             'title'           => 'required',
             'slug'            => 'required|max_length[128]',
-            'cover'           => 'is_image[cover]|ext_in[cover,jpg,jpeg,png]|min_dims[cover,1400,1400]|is_image_ratio[cover,1,1]',
+            //'cover'           => 'is_image[cover]|ext_in[cover,jpg,jpeg,png]|min_dims[cover,1400,1400]|is_image_ratio[cover,1,1]',
             'transcript_file' => 'ext_in[transcript_file,srt,vtt]',
             'chapters_file'   => 'ext_in[chapters_file,json]|is_json[chapters_file]',
         ];
-
+ 
         if ($this->request->getPost('audio_file_link')) {
             $audioFileLink = $this->request->getPost('audio_file_link');
             $downloadedFilePath = $this->downloadFile($audioFileLink);
